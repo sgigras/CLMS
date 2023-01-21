@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<!-- <head>
+	<title></title>
+	<link rel="stylesheet" href="<?php echo base_url(); ?>asset/bootstrap.min.css" />
+	<script src="<?php echo base_url(); ?>asset/jquery.min.js"></script>
+</head> -->
+<style>
+	.main-card{
+		padding:20px;
+	}
+	/* .inside-card{
+		display:inline;
+	} */
+</style>
+<body>
+	<div class="container">
+		<br />
+		<div class='card main-card' >
+			<h4>Import Excel Data</h4>
+			<br>
+			<!-- <form method="post" id="import_form" enctype="multipart/form-data"> -->
+			<?php echo form_open(base_url('admin/Import_excel/import'),  array("id" => "import_form", "class" => "form-horizontal"));?>
+				
+				<div class='row' style='margin:20px;'>
+					<center><p><span>Select Excel File</span>
+					<input type="file" name="file" id="file" required accept=".xls, .xlsx" /></p></center>
+				
+					<input type="submit" name="import" value="Import" class="btn" style='background-color:#dc3545;color:white;width:120px;height:40px;border-radius:20px;'  />
+				</div>
+			
+			<?php echo form_close();?>
+			<!-- </form> -->
+			
+		</div>
+		
+	</div>
+</body>
+<script>
+	var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
+	var csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
+	var baseurl = "<?php echo base_url(); ?>";
+</script>
+</html>
+<script src="<?php echo base_url(); ?>assets/js/module/import_excel.js"></script>

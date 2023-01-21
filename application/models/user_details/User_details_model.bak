@@ -1,0 +1,30 @@
+<?php
+
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ * Description of Cart_model
+ *
+ * @author ATS-16
+ */
+class User_details_model extends CI_Model
+{
+
+    // to fetch cartDetails
+    public function fetchUserDetails()
+    {
+        $db = $this->db;
+        $query = "SELECT ca.username as registration_status,bh.irla,bh.name,bh.mobile_no,bh.date_of_birth,bh.rank,bh.present_appoitment,bh.status,bh.location_name,bh.district_name,
+		bh.state_name,bh.email_id,bh.creation_time FROM bsf_hrms_data bh
+        LEFT JOIN ci_admin ca on bh.irla=ca.username order by id desc";
+        $response = $db->query($query);
+        $result = $response->result_array();
+        return $result;
+    }
+    // public function 
+}

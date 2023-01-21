@@ -1,0 +1,54 @@
+<div class="form-background">
+  <div class="register-box">
+    <!-- <div class="register-logo">
+      <h2><a href="<?//= base_url('admin'); ?>"></a></h2>
+    </div> -->
+
+    <div class="card register-card-body1">
+      <div class="card-body register-card-body">
+        <div class="row">
+          
+          <div class="col-12 register-details">
+            <!-- <p class="login-box-msg">Register</p> -->
+            <center>
+              <h2 class="login-label">Register</h2>
+            </center>
+
+            <?php
+            if (null!=($this->session->flashdata('errors'))) {
+
+
+              $this->load->view('admin/includes/_messages.php');
+            }
+            ?>
+             <?php $validation = $this->session->flashdata('error'); ?>
+
+            <?php echo form_open(base_url('admin/auth/register'), 'class="login-form" '); ?>
+            <br>
+            <div class="form-group has-feedback">
+              <label>IRLA No</label>
+              <input type="text" name="irlano" id="irlano" class="form-control login-fields" placeholder="Enter IRLA No"  value="<?php echo $this->session->flashdata('irlano'); ?>">
+              <?php echo isset($validation) ? $validation['irlano'] : "" ?>
+            </div>
+
+            <div class="form-group has-feedback">
+              <label>Date of Birth</label>
+              <input type="date" name="dob" id="dob" value="<?= set_value('dob') ?>" class="form-control login-fields" placeholder=""  value="<?php echo $this->session->flashdata('dob'); ?>">
+              <?php echo isset($validation) ? $validation['dob'] : "" ?>
+            </div>
+            <br>
+            <center> <button id="submit" name="submit"  type="submit" class="btn login-button" value="register">Register</button></center>
+            <br>
+
+            <?php echo form_close(); ?>
+
+            <center>
+              <p> Already have an Account? <a class="register" href="<?= base_url('admin/auth/login'); ?>" class="text-center">Login</a></p>
+            </center>
+          </div>
+        </div>
+      </div>
+      <!-- /.form-box -->
+    </div><!-- /.card -->
+  </div>
+</div>

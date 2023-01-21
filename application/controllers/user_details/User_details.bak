@@ -1,0 +1,34 @@
+<?php
+
+
+class User_details extends My_Controller
+{
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->model('user_details/User_details_model', 'user_details_model');
+    }
+
+    public function index()
+    {
+        $response = $this->user_details_model->fetchUserDetails();
+        $user_details_array = array();
+        // echo '<pre>';
+        // print_r($response);
+        // echo '</pre>';
+        foreach ($response as $row) {
+            if ($row['registration_status'] == null) {
+
+                $row['registration_status'] = 'Not Registered';
+            } else {
+                $row['registration_status'] = 'Registered';
+            }
+            $user_details_array[] = $row;
+        }
+
+        $this->load->view('admin/includes/_header');
+        $this->load->view('master/master_user', array('user_details' => $user_details_array));
+        $this->load->view('admin/includes/_footer');
+    }
+}

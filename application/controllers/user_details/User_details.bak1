@@ -1,0 +1,88 @@
+<?php
+
+
+class User_details extends My_Controller
+{
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->model('user_details/User_details_model', 'user_details_model');
+    }
+
+    public function index()
+    {
+
+
+        // $this->load->view('admin/includes/_header');
+        $this->load->view('master/master_user');
+        // $this->load->view('admin/includes/_footer');
+    }
+
+    public function GetIrlaNumber()
+    {
+        $searchterm = $this->input->get('q');
+        $response = $this->user_details_model->GetIrlaNumber($searchterm);
+        echo json_encode($response);
+    }
+
+    public function GetUserdetails()
+    {
+        $draw = intval($this->input->get("draw"));
+        $start = intval($this->input->get("start"));
+        $i = intval($this->input->get("start"));
+        $length = intval($this->input->get("length"));
+        $searchValue = $this->input->get('search[value]'); // Search value
+        $searchQuery = " ";
+        if ($searchValue != '') {
+            $searchQuery = " WHERE (bh.irla like '%" . $searchValue . "%' or 
+        bh.name like '%" . $searchValue . "%' or 
+        bh.mobile_no like'%" . $searchValue . "%' ) ";
+        }
+
+        $response = $this->user_details_model->fetchUserDetails($start, $length, $searchQuery);
+        $count_response = $this->user_details_model->fetchCountUserDetails();
+        // $user_details_array = array();
+        // echo '<pre>';
+        // print_r($response);
+        // echo '</pre>';
+        // $i=1;
+        foreach ($response as $row) {
+            if ($row['registration_status'] == null) {
+
+                $row['registration_status'] = 'Not Registered';
+            } else {
+                $row['registration_status'] = 'Registered';
+            }
+            $row['sr_no'] = ++$i;
+            $user_details_array[] = array(
+                $row['sr_no'],
+                $row['registration_status'],
+                $row['irla'],
+                $row['name'],
+                $row['mobile_no'],
+                $row['date_of_birth'],
+                $row['rank'],
+                $row['present_appoitment'],
+                $row['status'],
+                $row['location_name'],
+                $row['district_name'],
+                $row['state_name'],
+                $row['email_id'],
+                $row['creation_time']
+            );
+        }
+
+        $result = array(
+            "draw" => $draw,
+            "start" => $start,
+            "length" => $length,
+            "recordsTotal" => $count_response[0]->count_data,
+            "recordsFiltered" => $count_response[0]->count_data,
+            "data" => $user_details_array
+        );
+
+
+        echo json_encode($result);
+    }
+}

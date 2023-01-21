@@ -1,0 +1,43 @@
+1.cart session managment
+    1.from order page check at viewSessionCart CartDetails
+    [session_cart_details] => Array
+            (
+                [cart_id] => 2
+                [cart_type] => consumer
+            )
+        redirects at  =>fetchCartDetails ->cart.php
+
+    2.cart.php
+        function ->checkOut
+        session->set->cart_summary_session
+        redirects to cartDetails->displaySessionOrder
+        SP->SP_CART_CHECK_OUT
+
+
+
+    3.displaySessionOrder
+        session->get->cart_summary_session
+        mode='cart_summary'
+        redirects =>displayCartSummary->summary.php
+        list_fiel_helper->CART_SUMMARY
+
+    4.summary.php
+        function->placeOrder
+        SP->SP_CART_PLACE_ORDER
+        sesssion->set->order_code_summary_session
+        at success
+        redirects => cartDetails/orderCodeDisplay
+
+    5.orderCodeDisplay
+        session->get->order_code_summary_session
+        mode='order_summary'
+        list_fiel_helper->ORDER_SUMMARY
+        redirects => displayCartSummary->summary.php
+        swal message with order code
+
+ ****************************************
+ Order sessions       
+
+2.
+
+

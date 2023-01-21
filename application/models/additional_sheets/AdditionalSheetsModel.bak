@@ -1,0 +1,46 @@
+<?php
+defined('BASEPATH') or exit('No direct script access allowed');
+
+class AdditionalSheetsModel extends CI_Model
+{
+
+    function fetchSalesTypeData($sales_type, $search)
+    {
+        $result = [];
+        $db = $this->db;
+        if ($sales_type == "mess") {
+            $query = "SELECT id, mess_type as select_type FROM mess_types WHERE mess_type LIKE '%$search%'";
+            $response = $db->query($query);
+            $result = $response->result_array();
+            // print_r($result);
+            // die();
+        } elseif ($sales_type == "user") {
+            $query = "SELECT admin_id as id, username  as select_type from ci_admin WHERE username LIKE '%$search%'";
+            $response = $db->query($query);
+            $result = $response->result_array();
+            // print_r($result);
+            // die();
+        }
+
+
+        $json = array();
+        foreach ($result as $value) {
+            $json[] = array('id' => $value['id'], 'text' => $value['select_type']);
+        }
+
+        $db->close();
+        return $json;
+    }
+
+    public function createNewAdditionalSheet($data)
+    {
+        $db = $this->db;
+        $query = "CALL SP_ADDITIONAL_SHEETS('$data')";
+        // echo $query;
+        // die;
+        $response = $db->query($query);
+        $db->close();
+        $result = $response->result();
+        return $result;
+    }
+}

@@ -1,0 +1,243 @@
+<?php
+
+
+class User_details extends My_Controller
+{
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->model('user_details/User_details_model', 'user_details_model');
+        $this->load->model('admin/dashboard_model', 'dashboard_model');
+    }
+
+    // public function index()
+    // {
+
+
+    //     // $this->load->view('admin/includes/_header');
+    //     $this->load->view('master/master_user');
+    //     // $this->load->view('admin/includes/_footer');
+    // }
+
+    public function index()
+    {
+
+        $data['all_users'] = $this->dashboard_model->get_all_users();
+
+        $data['active_users'] = $this->dashboard_model->get_active_users();
+
+        $data['deactive_users'] = $this->dashboard_model->get_deactive_users();
+
+
+        $data['title'] = 'Dashboard';
+
+        $this->load->view('admin/includes/_header', $data);
+
+        $this->load->view('admin/dashboard/index', $data);
+
+        $this->load->view('admin/includes/_footer');
+    }
+
+
+
+    public function viewRetireeeVerificationCanteenWiseDetails()
+    {
+        $data['canteen_data_array'] = $this->user_details_model->fetchCanteens();
+        $data['title'] = "verification_status";
+
+        $this->load->view('admin/includes/_header');
+        $this->load->view('user_details/canteen_retiree_verification', $data);
+        $this->load->view('admin/includes/_footer');
+    }
+
+    public function fetchVerificationDetails()
+    {
+        $entity_id = $this->input->post('entity_id');
+        $mode = $this->input->post('mode');
+        $response = $this->user_details_model->fetchVerificationDetails($entity_id, $mode);
+        echo json_encode($response);
+    }
+
+
+    public function GetIrlaNumber()
+    {
+        $searchterm = $this->input->get('q');
+        $response = $this->user_details_model->GetIrlaNumber($searchterm);
+        echo json_encode($response);
+    }
+
+    public function update_user()
+    {
+        $irla = $this->input->post("irla");
+        $dob = $this->input->post("dob");
+        $mobile = $this->input->post("mobile");
+        $email = $this->input->post("email");
+        $response = $this->user_details_model->update_user($irla, $dob, $mobile, $email);
+        echo json_encode($response);
+    }
+
+    public function GetUserdetails()
+    {
+        $irla_no = $this->input->post("irlano");
+
+        // echo $irla_no;
+        $response = $this->user_details_model->fetchUserDetails($irla_no);
+        // $count_response= $this->user_details_model->fetchCountUserDetails();
+        $user_details_array = array();
+        // echo '<pre>';
+        // print_r($response);
+        // echo '</pre>';
+        $i = 1;
+        foreach ($response as $row) {
+            $row['sr_no'] = $i++;
+            if ($row['registration_status'] == null) {
+
+                $row['registration_status'] = 'Not Registered';
+            } else {
+                $row['registration_status'] = 'Registered';
+            }
+            $user_details_array[] = $row;
+        }
+        // echo '<pre>';
+        // print_r($user_details_array);
+        // echo '</pre>';die();
+        $this->load->view('master_forms/edit_user', array("user_details_array" => $user_details_array));
+    }
+
+    public function GetPostingUnit()
+    {
+        $searchterm = $this->input->get('q');
+        $response = $this->user_details_model->GetPostingUnit($searchterm);
+        echo json_encode($response);
+    }
+
+    public function GetPostingunitdata()
+    {
+        $posting_unit = $this->input->post("posting_unit");
+        $response = $this->user_details_model->fetchUserDetailsPostingUnit($posting_unit);
+
+        foreach ($response as $row) {
+            if ($row['registration_status'] == null) {
+
+                $row['registration_status'] = 'Not Registered';
+            } else {
+                $row['registration_status'] = 'Registered';
+            }
+            $user_details_array[] = $row;
+        }
+
+        $this->load->view('master/master_user', array("user_details_array" => $user_details_array));
+        //    echo json_encode($user_details_array);
+    }
+
+
+    public function viewPostinUnit()
+    {
+        $data['posting_unit_data'] = $this->user_details_model->fetch_posting_units();
+        $data['title'] = trans('user_report');
+        $this->load->view('admin/includes/_header');
+        $this->load->view('user_details/viewPostingWise', $data);
+        $this->load->view('admin/includes/_footer');
+    }
+
+
+    public function GetPostingWise()
+    {
+        $posting_unit = $this->input->post("posting_unit");
+        $mode = $this->input->post("mode");
+        $personnel_type = $this->input->post("personnel_type");
+        // $posting_unit = "FTR HQ MALDA";
+        // $mode = "unregistered";
+        $response = $this->user_details_model->getPostingWise($posting_unit, $mode, $personnel_type);
+        echo json_encode($response);
+        // foreach ($response as $row) {
+        //     if ($row['registration_status'] == null) {
+
+        //         $row['registration_status'] = 'Not Registered';
+        //     } else {
+        //         $row['registration_status'] = 'Registered';
+        //     }
+        //     $user_details_array[] = $row;
+        // }
+
+        // $this->load->view('master/master_user', array("user_details_array" => $user_details_array));
+        //    echo json_encode($user_details_array);
+    }
+
+    public function getRetireeReport(){
+        $data['title'] = trans('all_canteen');
+        $this->load->view('admin/includes/_header');
+        $this->load->view('user_details/Get_RetireeMasterView',$data);
+        $this->load->view('admin/includes/_footer');
+    }
+
+    public function getRetireeData()
+    {
+        
+        $report_type=$this->input->post('report_type');
+        $data = $this->user_details_model->fetchRetireeDetails($report_type);
+        $this->load->view('user_details/Get_RetireeReportTable',$data);
+    }
+
+
+    //     public function GetUserdetails()
+    //     {
+    //         $draw = intval($this->input->get("draw"));
+    //         $start = intval($this->input->get("start"));
+    //         $i = intval($this->input->get("start"));
+    //         $length = intval($this->input->get("length"));
+    //         $searchValue = $this->input->get('search[value]'); // Search value
+    //         $searchQuery = " ";
+    //         if($searchValue != ''){
+    //         $searchQuery = " WHERE (bh.irla like '%".$searchValue."%' or 
+    //         bh.name like '%".$searchValue."%' or 
+    //         bh.mobile_no like'%".$searchValue."%' ) ";
+    //         }
+
+    //         $response = $this->user_details_model->fetchUserDetails($start,$length,$searchQuery);
+    //         $count_response= $this->user_details_model->fetchCountUserDetails();
+    //         // $user_details_array = array();
+    //         // echo '<pre>';
+    //         // print_r($response);
+    //         // echo '</pre>';
+    //         // $i=1;
+    //         foreach ($response as $row) {
+    //             if ($row['registration_status'] == null) {
+
+    //                 $row['registration_status'] = 'Not Registered';
+    //             } else {
+    //                 $row['registration_status'] = 'Registered';
+    //             }
+    //             $row['sr_no']= ++$i;
+    //             $user_details_array[] = array(
+    //                 $row['sr_no'],
+    //                 $row['registration_status'],
+    //                 $row['irla'],
+    //                 $row['name'],
+    //                 $row['mobile_no'],
+    //                 $row['date_of_birth'],
+    //                 $row['rank'],
+    //                 $row['present_appoitment'],
+    //                 $row['status'],
+    //                 $row['location_name'],
+    //                 $row['district_name'],
+    //                 $row['state_name'],
+    //                 $row['email_id'],
+    //                 $row['creation_time']
+    //             );
+    //         }
+
+    //         $result = array(
+    //             "draw" => $draw,
+    //             "start"=>$start,
+    //             "length"=>$length,
+    //               "recordsTotal" => $count_response[0]->count_data,
+    //               "recordsFiltered" => $count_response[0]->count_data,
+    //               "data" => $user_details_array
+    //          );
+
+
+    //    echo json_encode($result);
+    //     }
+}

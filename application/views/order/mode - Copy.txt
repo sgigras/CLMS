@@ -1,0 +1,20 @@
+
+1.cart_footer_button_mode
+1. 'place order'
+ buttons
+    1. continue shopping
+    2. place order
+
+2.Order delivery summary
+1.deliver_order
+    1.edit cart
+    
+    2.deliver product
+
+3.    
+
+header for cart
+
+
+
+butt

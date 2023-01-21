@@ -1,0 +1,26 @@
+<?php
+class Import_model extends CI_Model
+{
+	public function select()
+	{
+		$this->db->order_by('id', 'DESC');
+		$query = $this->db->get('bsf_hrms_data');
+		return $query;
+	}
+
+	public function insert($data)
+	{
+		$json_array = json_encode($data);
+
+		// return $json_array;
+		// $query = "CALL SP_IMPORT_UPDATE_EXCEL_DATA(?)";
+		$query = "CALL SP_IMPORT_UPDATE_EXCEL_DATA('$json_array')";
+		// return $query;
+		// echo $query;
+		$response = $this->db->query($query, array($json_array));
+		$result = $response->result();
+		$this->db->close();
+
+		return $result;
+	}
+}

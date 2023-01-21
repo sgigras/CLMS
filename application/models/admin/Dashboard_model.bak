@@ -1,0 +1,68 @@
+<?php
+class Dashboard_model extends CI_Model
+{
+
+	public function get_all_users()
+	{
+		return $this->db->count_all('ci_users');
+	}
+	public function get_active_users()
+	{
+		$this->db->where('is_active', 1);
+		return $this->db->count_all_results('ci_users');
+	}
+	public function get_deactive_users()
+	{
+		$this->db->where('is_active', 0);
+		return $this->db->count_all_results('ci_users');
+	}
+	public function getrankid()
+	{
+
+		$this->db->from('master_rank');
+		$this->db->where('rank', $this->session->userdata('rank'));
+		$query = $this->db->get();
+		$result = $query->result_array();
+
+		return $result[0]['id'];
+	}
+	public function get_userquota()
+	{
+		$rankid = $this->getrankid();
+		$this->db->from('liquor_rank_quota_mapping');
+		$this->db->where('rankid', $rankid);
+		$query = $this->db->get();
+		$resultarray = $query->result_array();
+		return $resultarray[0]['quota'];
+	}
+
+	public function get_user_used_quota_liqour_deatils($userid)
+	{
+		$db = $this->db;
+		$query = "SELECT IFNULL(SUM(luq.liquor_count),0) as liquor_consumed FROM 
+		liquor_user_used_quota luq
+		WHERE userid='$userid' AND MONTH(luq.insert_time)= MONTH(NOW()) AND luq.order_status!=3";
+		$response = $db->query($query);
+
+		$result['liquor_consumed'] = $response->result_array();
+
+		$liquor_details_query = "SELECT cd.id as cart_id,Concat(ld.brand,'<br>',ld.liquor_description,'<br>',ld.bottle_size,'<br>',ld.liquor_ml,' ml') as liquor_name,cd.order_code as order_code,
+			ld.liquor_description_id as liquor_id,
+			cd.cart_type,ld.liquor_type,ld.liquor_ml,ld.liquor_image,cl.liquor_entity_id,cd.liquor_count,
+			concat(cl.quantity,'_',lem.id,'_',cd.id) as quantity, 
+			unit_cost_lot_size as unit_lot_cost, 
+			total_cost_bottles as total_quantity_cost,cd.ordered_to_entity_id,cd.order_from_id,
+			CONCAT(entity_name,' - ',city_district_name,',',state) AS canteen_details,
+			cl.is_liquor_removed as is_liquor_removed FROM 
+			cart_details cd 
+			INNER JOIN  cart_liquor cl ON cd.id=cl.cart_id 
+			INNER JOIN liquor_entity_mapping lem ON lem.id=cl.liquor_entity_id
+			INNER JOIN entity_location_mapping elm on elm.entity_id=cd.ordered_to_entity_id
+			INNER JOIN liquor_details ld ON ld.liquor_description_id=lem.liquor_description_id 
+			where order_from_id='$userid' and  cl.is_liquor_removed=0 order by cd.id desc limit 1";
+		$liquor_details_response = $db->query($liquor_details_query);
+		$result['liquor_details'] = $liquor_details_response->result_array();
+
+		return $result;
+	}
+}
