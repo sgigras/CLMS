@@ -35,42 +35,29 @@ define("alcohol_brand_tablehead", serialize(array("id" => "ID", "alcohol_type" =
 define("alcohol_ml_tablehead", serialize(array("id" => "ID", "alcohol_quantity" => "Liquor Quantity", "action" => "Action")));
 define("tax_master", serialize(array("title" => "Add Tax Name", "heading" => "Tax Type", "label" => "Tax Name", "placeholder" => "Enter tax name")));
 define("tax_master_tablehead", serialize(array("id" => "ID", "tax_type" => "Tax Type", "action" => "Action")));
-// define("tax_master_tablehead", serialize(array("id" => "ID","tax_category" => "Tax Category","action" => "Action")));
 define("city_master", serialize(array("title" => "Add City", "heading" => "City", "label" => "City", "placeholder" => "Enter city name", "label1" => "State", "placeholder1" => "Select State")));
 define("city_master_tablehead", serialize(array("id" => "ID", "city" => "City", "state" => "State", "action" => "Action")));
 define("bottle_description", serialize(array("title" => "Add Bottle Description", "heading" => "Bottle Description", "label" => "Bottle Size", "placeholder" => "Enter bottle size")));
 define("bottle_description_tablehead", serialize(array("id" => "ID", "bottle_description" => "Bottle Description", "action" => "Action")));
 
+//Change - add brewery name field here for displaying in the table
 define("LIQUOR_MASTER_LIST", serialize(array("brewery_name:brewery_name","liquor_brand:liquor_brand", "liquor_name:liquor_name", "liquor_type:liquor_type", "bottle_size:bottle_size")));
 
 define("CANTEEN_MASTER_LIST", serialize(array("canteen_name:entity_name","unit_type:battalion_unit" , "establishment_type:canteen_club", "state:state", "canteen_chairman:chairman", "canteen_executive:executive", "canteen_supervisor:supervisor")));
-// define("LIQUOR_MASTER_LIST", serialize(array("liquor_name:liquor_name", "liquor_type:liquor_type", "liquor_image:liquor_image")));
-// define("ENTITY_CART_TABLE", serialize(array("cart_product_id_hidden:quantity", "cart_liquor_image:liquor_image", "cart_table_liquor_name:liquor_name", "liquor_type:liquor_type", "cart_quantity_in_lot_buttons:quantity", "cart_unit_in_lot:unit_lot_cost", "cart_total_quantity:total_quantity_cost", "remove:is_liquor_removed")));
 define("ENTITY_CART_TABLE", serialize(array("cart_product_id_hidden:quantity", "cart_liquor_image:liquor_image", "cart_table_liquor_name:liquor_name", "liquor_type:liquor_type", "cart_quantity_buttons:quantity", "cart_unit_cost:unit_lot_cost", "cart_total_cost:total_quantity_cost", "remove:is_liquor_removed")));
 define("CONSUMER_CART_TABLE", serialize(array("cart_product_id_hidden:quantity", "cart_liquor_image:liquor_image", "cart_table_liquor_name:liquor_name", "liquor_type:liquor_type", "cart_quantity_buttons:quantity", "cart_unit_cost:unit_lot_cost", "cart_total_cost:total_quantity_cost", "remove:is_liquor_removed")));
-// define("ENTITY_CART_TOTAL_TABLE", serialize(array("cart_table_liquor_name:liquor_name", "liquor_type:liquor_type", "cart_quantity_in_lot_buttons:quantity", "cart_unit_in_lot:unit_lot_cost", "cart_unit_cost:selling_price", "cart_total_quantity:total_quantity_cost", "cart_total_cost:total_cost")));
-// define("CONSUMER_CART_TOTAL_TABLE", serialize(array("cart_table_liquor_name:liquor_name", "liquor_type:liquor_type", "cart_quantity_buttons:quantity", "cart_unit_cost:unit_lot_cost", "cart_total_cost:total_quantity_cost")));
 define("ENTITY_CART_TOTAL_TABLE", serialize(array("cart_table_liquor_name:liquor_name", "liquor_type:liquor_type", "cart_quantity_buttons:quantity", "cart_unit_cost:selling_price", "cart_total_cost:total_quantity_cost")));
 define("CONSUMER_CART_TOTAL_TABLE", serialize(array("cart_table_liquor_name:liquor_name", "liquor_type:liquor_type", "cart_quantity_buttons:quantity", "cart_unit_cost:unit_lot_cost", "cart_total_cost:total_quantity_cost")));
-// define("TAX_MASTER", serialize(array("tax_name:tax_name")));
-// define("ALCOHOL_MASTER", serialize(array("liquor_type:alcohol_type")));
-// define("CITY_MSTER", serialize(array("city_name:city_district_name", "state:state")));
-
 
 define("BILL_TABLE_HEAD", serialize(array("description:liquor_bill_description", "cart_quantity_buttons:quantity", "rate:unit_lot_cost", "total_cost:total_quantity_cost")));
 
 define("BREWERY_MASTER_LIST", serialize(array("brewery_name:brewery_name", "address:address", "contact_person_name:contact_person_name", "mobile_no:mobile_no", "mail_id:mail_id"))); // "state:state", "serving_entity:serving_entity"
-
-// define("USER_DETAILS_TABLE", serialize(array("sr_no:sr_no","registration_status:registration_status","irla_no:irla", "name:name", "mobile_no:mobile_no", "date_of_birth:date_of_birth", "rank:rank", "present_appointment:present_appoitment", "status:status", "location_name:location_name", "district_name:district_name", "state_name:state_name", "email_id:email_id", "creation_time:creation_time")));
-//
 define("PURCHASE_CART", serialize(array(
   "title" => "cart", //from lang file
   "cart_button_1" => "continue_shopping", //from lang file
   "cart_button_2" => "place_order", //from lang file
   "page_mode" => 'shopping_cart', //for sp updatation
   "redirect_url" => 'cart/CartDetails/orderCodeDisplay',
-  // "redirect_url" => 'cart/CartDetails/displaySessionOrder',
-  // "redirected_from_serach_product_to" => 'cart/CartDetails/viewSessionOrder',//redirection from sea
   'mode' => 'A'
 )));
 

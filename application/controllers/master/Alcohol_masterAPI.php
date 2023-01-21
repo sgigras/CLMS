@@ -1,13 +1,4 @@
-<?php
-
-/**
-Author: SUJIT N. MISHRA
-Created on:23/10/2021
-Scope: Alcohol master API
-Source:
- **/
-
-
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 
 class Alcohol_masterAPI extends MY_Controller
 {
@@ -21,8 +12,6 @@ class Alcohol_masterAPI extends MY_Controller
         $this->load->model('admin/Activity_model', 'activity_model');
         $this->load->helper(array('bsf_form/list_field', 'bsf_form/master_table', 'Ats/common', 'bsf_form/check_input'));
     }
-
-    //function to load view page --------------
 
     public function index()
     {
@@ -38,9 +27,6 @@ class Alcohol_masterAPI extends MY_Controller
         $this->load->view('master/masterTableView', $data);
         $this->load->view('admin/includes/_footer');
     }
-
-    //function to add liquor details---------
-
 
     public function addalcholType()
     {
@@ -81,9 +67,6 @@ class Alcohol_masterAPI extends MY_Controller
             $this->load->view('admin/includes/_footer');
         }
     }
-
-
-    //function to edit liquor details---------
 
     public function editalcoholNames($id)
     {
@@ -128,24 +111,12 @@ class Alcohol_masterAPI extends MY_Controller
     {
 
         $tax_data = $this->master_model->fetchAlcoholQuantityList();
-
         $data['title'] = trans('alcohol_mm_master');
-
         $data['add_url'] = 'master/Alcohol_masterAPI/addAlcoholQuantity';
-
         $data['add_title'] = trans('add_alcohol_quantity');
-
         $data['table_head'] = ALCOHOL_MM_MASTER;
-
         $data['table_data'] = $tax_data;
-
         $data['edit_url'] = 'master/Alcohol_masterAPI/addAlcoholQuantity';
-
-
-        // $data['edit_url'] = 'master/Tax_masterAPI/editTaxNames';
-
-        // $data['edit_url'] = 'master/Alcohol_masterAPI/liquorcapacitymaster';
-
         $data['csrf_url'] = 'master/CanteenMaster';
 
         $this->load->view('admin/includes/_header');
@@ -153,22 +124,17 @@ class Alcohol_masterAPI extends MY_Controller
         $this->load->view('admin/includes/_footer');
     }
 
-
     //function to add liquor quantity---------
-
     public function addAlcoholQuantity()
     {
 
         if ($this->input->post('submit')) {
             $this->form_validation->set_rules('alcohol_quantity', 'Liquor quantity', 'trim|required');
-
-
             $data = array(
                 'liquor_ml' => checkIMP($this->input->post('alcohol_quantity')),
                 'created_by' => $this->session->userdata('admin_id'),
 
             );
-
             if ($this->form_validation->run() == FALSE) {
                 $data = array(
                     'errors' => validation_errors()
@@ -191,7 +157,6 @@ class Alcohol_masterAPI extends MY_Controller
             $this->load->view('admin/includes/_footer');
         }
     }
-
     //LIQUOR MM MASERAPI FUNCTION END
 
 
@@ -204,7 +169,7 @@ class Alcohol_masterAPI extends MY_Controller
             $data['title'] = trans('liquor_list'); // header of the page
             $data['add_url'] = 'master/Alcohol_masterAPI/addLiquorDetails'; //url for adding new product on form submission
             $data['add_title'] = trans('liquor_add'); //add button titl on list page
-            $data['table_head'] = LIQUOR_MASTER_LIST; //from application/helpers/bsf_form list_field_helper //use to create table 
+            $data['table_head'] = LIQUOR_MASTER_LIST; 
             $data['table_data'] = $liquor_data;
             $data['edit_url'] = 'master/Alcohol_masterAPI/editLiquorDetails';
             $data['csrf_url'] = 'master/Alcohol_masterAPI/liquorspecificdetails';
@@ -360,19 +325,12 @@ class Alcohol_masterAPI extends MY_Controller
 
         if (count($liquor_data_array) > 0) {
             $data['title'] = trans('liquor_details'); // header of the page
-
             $data['add_url'] = 'master/Alcohol_masterAPI/addLiquorEntityMapping'; //url for adding new product on form submission
-
             $data['add_title'] = trans('liquor_add'); //add button titl on list page
-
             $data['table_head'] = LIQUOR_MASTER_LIST; //from application/helpers/bsf_form list_field_helper //use to create table 
-
             $data['table_data'] = $liquor_data;
-
             $data['edit_url'] = 'master/Alcohol_masterAPI/editLiquorEntityMapping';
-
             $data['csrf_url'] = 'master/Alcohol_masterAPI/liquorspecificdetails';
-
             $this->load->view('admin/includes/_header');
             $this->load->view('master/masterTableView', $data);
             $this->load->view('admin/includes/_footer');
@@ -390,21 +348,13 @@ class Alcohol_masterAPI extends MY_Controller
     public function liquorBrandDetails()
     {
         $liquor_data = $this->master_model->fetchLiquorBrandList();
-
         $data['title'] = trans('liquor_brand');
-
         $data['add_url'] = 'master/Alcohol_masterAPI/addLiquorBrand';
-
         $data['add_title'] = trans('liquor_brand');
-
         $data['table_head'] = LIQUOR_BRAND_MASTER;
-
         $data['table_data'] = $liquor_data;
-
         $data['edit_url'] = 'master/Alcohol_masterAPI/editLiquorBrand';
-
         $data['csrf_url'] = 'master/CanteenMaster';
-
         $this->load->view('admin/includes/_header');
         $this->load->view('master/masterTableView', $data);
         $this->load->view('admin/includes/_footer');
@@ -421,9 +371,6 @@ class Alcohol_masterAPI extends MY_Controller
 
             $data = array(
                 'brand' => $brand_type,
-
-                //'created_by' => $this->session->userdata('admin_id'),
-
             );
             if ($this->form_validation->run() == FALSE) {
                 $data = array(
@@ -451,9 +398,6 @@ class Alcohol_masterAPI extends MY_Controller
 
     public function editLiquorBrand($id)
     {
-        //$this->rbac->check_operation_access(); // check opration permission
-
-
         if ($this->input->post('submit')) {
             $this->form_validation->set_rules('liquor_brand', 'Brand name', 'trim|required');
             $data = array(
@@ -485,6 +429,4 @@ class Alcohol_masterAPI extends MY_Controller
             $this->load->view('admin/includes/_footer');
         }
     }
-
-    // LIQUOR BRAND MASTER FUNCTION END
 }

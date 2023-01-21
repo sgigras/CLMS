@@ -2,8 +2,6 @@
 <?php
 $resultArray = (isset($liquor_data)) ? $liquor_data[0] : new stdClass;
 $liquor_select_array = (isset($liquor_list)) ? $liquor_list : array();
-// print_r($resultArray );die();
-/* $distributor_name_select_array = (isset($distributor_name_list)) ? $distributor_name_list : array(); */
 ?>
 <!--<div class="content-wrapper" style="margin-top: 55px;min-height: 580.08px !important;">-->
 <!-- Main content -->
@@ -21,10 +19,6 @@ $liquor_select_array = (isset($liquor_list)) ? $liquor_list : array();
             </div>
         </div>
         <div class="card-body">
-
-            <!-- For Messages -->
-            <?php // $this->load->view('admin/includes/_messages.php')   ?>
-
             <?php
             $redirect_url = ($mode == 'A') ? 'master/Alcohol_masterAPI/addLiquorDetails' : 'master/Alcohol_masterAPI/editLiquorDetails/' . getValue('id', $resultArray);
             echo form_open_multipart(base_url($redirect_url), array('class' => 'form-horizontal', 'id' => 'liquor_details_form'));
@@ -45,11 +39,6 @@ $liquor_select_array = (isset($liquor_list)) ? $liquor_list : array();
                             <?php $this->load->view('master/upload_image_block_field', array("field_id" => "liquor_image", "name"=>"liquor_image","css_class" => "photostyle", "width" => "300px", "height" => "400px", "image_title" => getValue('liquor_image', $resultArray))) ?>
                         </div>
                         <div class="col-6">
-                            <!-- <div class='row'>
-                                <div class='col'>
-                                    <?php $this->load->view('master/alphabet_space_field', array("field_id" => "liquor_name", "label" => "liquor_name", "max_length" => "70", "place_holder" => "Enter a liquor", "value" => getValue('liquor_description', $resultArray))); ?>
-                                </div>
-                            </div> -->
                             <div class='row'>
                                 <div class='col'>
                                     <?php $this->load->view('master/select_field', array("field_id" => "brewery_name", "label" => "brewery_name", "place_holder" => "Select a Brewery", "option_record" => $brewery_data, "option_value" => "id", "option_text" => "brewery_name", "selected_value" => getValue('brewery_id', $resultArray))); ?>
@@ -82,11 +71,7 @@ $liquor_select_array = (isset($liquor_list)) ? $liquor_list : array();
                             </div>
                             <div class='row'>
                                 <div class='col'>
-
                                     <?php 
-                                   
-
-
                                     $this->load->view('master/select_field', array("field_id" => "bottle_vol", "label" => "bottle_vol", "place_holder" => "Select a bottle volume", "option_record" => $bottle_volume_record, "option_value" => "id", "option_text" => "bottle_volume", "selected_value" => getValue('bottle_volume', $resultArray))); ?>
                                 </div>
                             </div>

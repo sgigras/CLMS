@@ -1,29 +1,20 @@
 <div class="card mb-0" style="margin-bottom:0px !important">
     <div class="card-body mb-0">
         <div class="row px-0">
-            <!-- <div class='col-1'></div> -->
             <div class="col-12">
                 <div class="row">
                     <div class="col-5">
-                        <!-- <div >
-                            <div class="user-logo"> -->
                         <img src="<?= base_url() . $liquor_data[0]->liquor_image; ?>" width="350">
-                        <!-- </div>
-                        </div> -->
                     </div>
                     <div class="col-7">
                         <div class='row'>
                             <div class='col'>
-                                <!-- <div class="form-group"> -->
                                 <?php $this->load->view('master/display_data_label_field', array("field_id" => "liquor_type", "label" => "liquor_type", "max_length" => "", "place_holder" => "", "value" => $liquor_data[0]->liquor)); ?>
-                                <!-- </div> -->
                             </div>
                         </div>
                         <div class='row'>
                             <div class='col'>
-                                <!-- <div class="form-group"> -->
                                 <?php $this->load->view('master/display_data_label_field', array("field_id" => "select_ml", "label" => "select_ml", "max_length" => "", "place_holder" => "", "value" => $liquor_data[0]->liquor_ml)); ?>
-                                <!-- </div> -->
                             </div>
                         </div>
                         <div>
@@ -37,7 +28,6 @@
                                     <?php $this->load->view('master/display_data_label_field', array("field_id" => "base_price_display", "label" => "base_price", "max_length" => "5", "place_holder" => "Base Price", "value" => getValue('base_price', $liquor_data[0]))); ?>
                                 </div>
                                 <div class='col-md-4'>
-                                    <!-- <input type="text" name="price[]" class="form-control calcEvent price" id="price" placeholder="" required> -->
                                     <?php $this->load->view('master/display_data_label_field', array("field_id" => "purchase_price_display", "label" => "purchase_price", "max_length" => "5", "place_holder" => "Sell Price", "value" => getValue('purchase_price', $liquor_data[0]))); ?>
                                 </div>
                                 <div class='col-md-4'>
@@ -59,18 +49,14 @@
                                     </div>
                                 <?php  } else { ?>
                                     <div class='col'>
-
                                         <?php
                                         $this->load->view('master/numeric_field', array("field_id" => "available_quantity", "label" => "available_quantity", "max_length" => "5", "place_holder" => "Available Quantity", "value" => getValue('available_quantity', $liquor_data[0])));
                                         ?>
-
                                     </div>
                                     <div class='col'>
                                         <?php $this->load->view('master/numeric_field', array("field_id" => "reorder_level", "label" => "reorder_level", "max_length" => "5", "place_holder" => "Reorder Level", "value" => getValue('reorder_level', $liquor_data[0]))); ?>
                                     </div>
-
                                 <?php } ?>
-
                             </div>
                         </div>
                     </div>

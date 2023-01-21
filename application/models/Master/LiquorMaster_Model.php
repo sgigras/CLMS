@@ -1,25 +1,7 @@
-<?php
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of LiquorMaster_Model
- *
- * @author Jitendra Pal
- * 23-10-21
- * 
- * library for liquor master and liquor state mapping
- * 
- */
 class LiquorMaster_Model extends CI_Model
 {
-
-    //put your code here
-
     public function fetchAllLiquorRecords()
     {
         $db = $this->db;
@@ -122,18 +104,4 @@ class LiquorMaster_Model extends CI_Model
         $db->close();
         return $result;
     }
-
-
-    // public function insert_update_liquor_details($product_data)
-    // {
-    //     $db = $this->db;
-    //     $query = "CALL SP_INSERT_UPDATE_LIQUOR_DETAILS('$product_data)";
-    //     return $query;
-    //     // $response = $db->query($query, array($product_data));
-    //     // $result = $response->result();
-    //     // $db->close();
-    //     // return $result;
-    // }
-
-    //    public functi
 }
