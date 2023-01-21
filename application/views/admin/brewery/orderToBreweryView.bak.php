@@ -117,7 +117,7 @@ $liquor_select_array = (isset($liquor_list)) ? $liquor_list : array();
                                 <div id="brewery_name"></div>
                             </div>
                             <!-- <div class="row"> -->
-                            <!-- <div class="col-md-4">
+                                <!-- <div class="col-md-4">
                                     <h4 class="mt-2 ml-2"><b>Sales Type : </b><span id="sales_type_modal" class="bg-success"> </span> </h4>
                                 </div>
                                 <div class="col-md-4">
@@ -131,7 +131,7 @@ $liquor_select_array = (isset($liquor_list)) ? $liquor_list : array();
                                         <th>Sr.No</th>
                                         <th>Liquor Name</th>
                                         <!-- <th style="width:150px;">Liquor Type</th> -->
-                                        <th style="width:150px;">Base Price</th>
+                                        <th style="width:150px;">Selling Price</th>
                                         <!-- <th style="width:150px;">Avaialble Stock</th> -->
                                         <th style="width:150px;">Quantity</th>
                                         <th style="width:150px;">Total</th>
@@ -205,7 +205,7 @@ $liquor_select_array = (isset($liquor_list)) ? $liquor_list : array();
         // $("#purpose_modal").append(purpose);
         // $("#select_type_modal").append(select_type);
         // $("#selected_type_modal").append(sales_type);
-
+  
         var row;
         var mainTable = $('#tb2');
         var tr = mainTable.find('tbody tr');
@@ -399,12 +399,7 @@ $liquor_select_array = (isset($liquor_list)) ? $liquor_list : array();
             tmpArr = {};
             tmpArr.liquor_entity_id = $(this).find('td:eq(1) option:selected').val();
             var liquor_entity_element = $(this).find('td:eq(1)').children();
-            console.log(liquor_entity_element);
-
             var liquor_entity_field_id = liquor_entity_element[0].id;
-            console.log(liquor_entity_field_id);
-
-
             // console.log(liquor_entity_field_id);
             tmpArr.selling_price = $(this).find('td:eq(2) input:text').val();
             // tmpArr.available_stock = $(this).find('td:eq(3) input:text').val();
@@ -423,8 +418,8 @@ $liquor_select_array = (isset($liquor_list)) ? $liquor_list : array();
 
             // var liquor_entity_element = `liquor_name${i}`;
             isEmpty(liquor_entity_field_id);
-            // isEmpty("purpose");
-            // isEmpty("select_type");
+            isEmpty("purpose");
+            isEmpty("select_type");
             i++;
 
             liquor_entity_id_array.push(tmpArr.liquor_entity_id);
@@ -445,31 +440,25 @@ $liquor_select_array = (isset($liquor_list)) ? $liquor_list : array();
             //     }
             // });
             mainArr.push(tmpArr);
+            // console.log(mainArr);
             // console.log(sales_type);
             // console.log(select_type);
             // console.log(purpose);
 
         });
 
-        if (mainArr.length == 0) {
-            swal("Kindly select a brewery");
-            return false;
-        }
-
-        if (validation == true) {
-            unique_liquor_entity_id_array = new Set(liquor_entity_id_array);
-            let liquor_entity_id_array_length = liquor_entity_id_array.length;
-            let unique_liquor_entity_id_array_size = unique_liquor_entity_id_array.size;
-            if (liquor_entity_id_array_length != unique_liquor_entity_id_array_size) {
-                swal("You can't select Same Liquor");
-                return false;
-            }
+        // if (validation == true) {
+        //     unique_liquor_entity_id_array = new Set(liquor_entity_id_array);
+        //     let liquor_entity_id_array_length = liquor_entity_id_array.length;
+        //     let unique_liquor_entity_id_array_size = unique_liquor_entity_id_array.size;
+            // if (liquor_entity_id_array_length != unique_liquor_entity_id_array_size) {
+            //     swal("You can't select Same Liquor");
+            //     return false;
+            // }
             stock_modal();
-        } else {
-            swal("Kindly select a liquor to place the order");
-        }
+        // }
 
-
+        
 
         // console.log(mainArr);
         // var liquor_array = [];
@@ -507,12 +496,11 @@ $liquor_select_array = (isset($liquor_list)) ? $liquor_list : array();
     }
 
     function store_data() {
-        // console.log(mainArr.length);
-        // return false;
+        // console.log(mainArr);
         // console.log(sales_type);
         // console.log(select_type);
         // console.log(purpose);
-        var brewery_id = $("#select_brewery").val();
+
         document.getElementById("confirm").disabled = true;
         $.ajax({
             url: DOMAIN + 'master/BreweryMaster/insertIntoBreweryOrderLiquorDetails',
@@ -523,21 +511,19 @@ $liquor_select_array = (isset($liquor_list)) ? $liquor_list : array();
                 // sales_type: sales_type,
                 // select_type: select_type,
                 // purpose: purpose,
-
-                mainArr: mainArr,
-                brewery_id: brewery_id
+                mainArr: mainArr
             },
             success: function(response) {
 
                 // alert(response);
                 var result = JSON.parse(response);
-
+                
 
                 // if (response) {
 
                 swal({
-                    title: result[0].V_SWAL_TITLE,
-                    text: result[0].V_SWAL_TEXT,
+                    title: result[0].V_SWAL_TEXT,
+                    text: result[0].V_SWAL_TITLE,
                     icon: result[0].V_SWAL_TYPE,
 
                 }).then(function() {

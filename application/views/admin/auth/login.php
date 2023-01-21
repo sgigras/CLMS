@@ -88,8 +88,18 @@
               <input type="password" maxlength="4" name="pin" id="pin" onkeypress="return checkValidInputKeyPress(numeric_regex_pattern);" class="form-control login-fields" placeholder="Enter Pin" value="<?php echo $this->session->flashdata('pin'); ?>">
               
             </div> -->
-            <center> <button id="submit" name="submit" type="submit" class="btn login-button" value="signin">login</button></center>
-
+            <div class="row">
+              <div class="col-6 ">
+                <div style="padding-top: 8px;">
+                  <center> <button id="himveerSubmit" name="himveerSubmit" type="button" class="btn login-button" value="HimVeerSubmit" onClick="RedirectHimveer()">Himveer Login</button></center>
+                </div>
+              </div>
+              <div class="col-6 ">
+                <div style="padding-top: 8px;">
+                <center> <button id="submit" name="submit" type="submit" class="btn login-button" value="signin">login</button></center>
+                </div>
+              </div>
+          </div>
             <?php echo form_close(); ?>
             <div class="row">
               <div class="col-6 ">
@@ -123,6 +133,10 @@
 </div>
 
 <script>
+  function RedirectHimveer()
+  {
+    window.location = "<?php echo $AuthUrl;?>";
+  }
   function init (){
 	var portrait = document.getElementById('winter-field');
 	var context = portrait.getContext('2d');

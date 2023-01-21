@@ -21,7 +21,7 @@ class Dashboard_model extends CI_Model
 
 	public function getrankid()
 	{
-
+		echo "shekhar -".$this->session->userdata('rank');
 		$this->db->from('master_rank');
 		$this->db->where('rank', $this->session->userdata('rank'));
 		$query = $this->db->get();

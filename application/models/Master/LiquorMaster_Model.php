@@ -23,16 +23,7 @@ class LiquorMaster_Model extends CI_Model
     public function fetchAllLiquorRecords()
     {
         $db = $this->db;
-
-        // $query = "SELECT ml.id,ml.liquor_name,ml.liquor_image,mat.liquor_type as liquor_type,date_format(ml.creation_time,'%d-%m-%Y %h:%i:%s') as creation_time "
-        //     . "from master_liquor ml "
-        //     . "INNER JOIN master_liquor_type mat on mat.id=ml.liquor_type";
-
-            // $query="SELECT ml.id,ml.liquor_description as liquor_name,ml.liquor_image,mat.liquor_type,
-            // date_format(ml.creation_time,'%d-%m-%Y %h:%i:%s') as creation_time from liquor_description ml
-            //  INNER JOIN liquor_type mat on mat.id=ml.liquor_type_id";
-
-         $query = "select ml.id,lb.brand as liquor_brand,ml.liquor_description as liquor_name,
+         $query = "select (select brewery_name from master_brewery where id = ml.brewery_id) as brewery_name,ml.id,lb.brand as liquor_brand,ml.liquor_description as liquor_name,
                     mat.liquor_type as liquor_type,concat(lm.liquor_ml,' ML') as bottle_size from liquor_description ml
                     inner join liquor_type mat on mat.id=ml.liquor_type_id
                     inner join liquor_brand lb on lb.id=ml.liquor_brand_id
@@ -52,9 +43,19 @@ class LiquorMaster_Model extends CI_Model
         $result['alcohol_brand_record'] = $this->getLiquorBrand($db);
         $result['bottle_size_record'] = $this->getBottleSize($db);
         $result['bottle_volume_record'] = $this->getBottleVolume($db);
+        $result['brewery_data'] = $this->getBreweryData($db);
         $db->close();
         return $result;
     }
+
+    public function getBreweryData($db)
+    {
+        $query = "Select id, brewery_name from master_brewery";
+        $response = $db->query($query);
+        $result = $response->result();
+        return $result;
+    }
+
     public function getBottleVolume($db)
     {
         $query = "Select id, liquor_ml as bottle_volume from liquor_ml";
@@ -98,7 +99,7 @@ class LiquorMaster_Model extends CI_Model
         // $query = "SELECT id,liquor_name,liquor_type as alcohol_type from master_liquor where id=$id";
         $query = "
         SELECT id,liquor_description as liquor_name,liquor_image,liquor_type_id as liquor_type,
-        liquor_brand_id as liquor_brand,liquor_description,liquor_bottle_size_id as bottle_size,liquor_ml_id as bottle_volume 
+        liquor_brand_id as liquor_brand,liquor_description,liquor_bottle_size_id as bottle_size,liquor_ml_id as bottle_volume ,brewery_id
         from liquor_description where id=?";
         $response = $db->query($query, array($id));
         // $response = $db->query($query);
@@ -107,7 +108,7 @@ class LiquorMaster_Model extends CI_Model
         $result['alcohol_brand_record'] = $this->getLiquorBrand($db);
         $result['bottle_size_record'] = $this->getBottleSize($db);
         $result['bottle_volume_record'] = $this->getBottleVolume($db);
-
+        $result['brewery_data'] = $this->getBreweryData($db);
         $db->close();
         return $result;
     }

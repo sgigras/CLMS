@@ -41,7 +41,7 @@ define("city_master_tablehead", serialize(array("id" => "ID", "city" => "City", 
 define("bottle_description", serialize(array("title" => "Add Bottle Description", "heading" => "Bottle Description", "label" => "Bottle Size", "placeholder" => "Enter bottle size")));
 define("bottle_description_tablehead", serialize(array("id" => "ID", "bottle_description" => "Bottle Description", "action" => "Action")));
 
-define("LIQUOR_MASTER_LIST", serialize(array("liquor_brand:liquor_brand", "liquor_name:liquor_name", "liquor_type:liquor_type", "bottle_size:bottle_size")));
+define("LIQUOR_MASTER_LIST", serialize(array("brewery_name:brewery_name","liquor_brand:liquor_brand", "liquor_name:liquor_name", "liquor_type:liquor_type", "bottle_size:bottle_size")));
 
 define("CANTEEN_MASTER_LIST", serialize(array("canteen_name:entity_name","unit_type:battalion_unit" , "establishment_type:canteen_club", "state:state", "canteen_chairman:chairman", "canteen_executive:executive", "canteen_supervisor:supervisor")));
 // define("LIQUOR_MASTER_LIST", serialize(array("liquor_name:liquor_name", "liquor_type:liquor_type", "liquor_image:liquor_image")));

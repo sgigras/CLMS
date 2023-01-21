@@ -212,6 +212,13 @@ class Brewery_model extends CI_Model
 		return $query->result_array();
 	}
 
+	//Fetch Brewery List From Database
+	function getBrewery()
+	{
+		$this->db->from('master_brewery');
+		$query = $this->db->get();
+		return $query->result_array();
+	}
 
 	//Fetch Brand name from liquor_details table
 	function getBrandName()
@@ -228,7 +235,7 @@ class Brewery_model extends CI_Model
 	{
 		$this->db->select("me.id,me.entity_name,mt.entity_type AS canteen_club,CONCAT(cc.firstname,' ',IFNULL(cc.lastname,''))AS chairman, CONCAT(IFNULL(cs.firstname,'N.A.'),' ',IFNULL(cs.lastname,'')) AS supervisor,CONCAT(IFNULL(ce.firstname,'N.A.'),' ',IFNULL(ce.lastname,'')) AS executive");
 		$this->db->from('master_entities as me');
-		$this->db->join("master_entity_type as mt", "find_in_set(me.entity_type,mt.id)<> 0", false);
+		$this->db->join("master_entity_type as mt", "find_in_set(me.entity_type,mt.id)<> 0",false);
 		$this->db->join("ci_admin as cs", "find_in_set(cs.admin_id,me.supervisor)<> 0", false);
 		$this->db->join("ci_admin as cc", "find_in_set(cc.admin_id,me.chairman)<> 0", false);
 		$this->db->join("ci_admin as ce", "find_in_set(ce.admin_id,me.executive)<> 0", false);
@@ -246,8 +253,8 @@ class Brewery_model extends CI_Model
 	{
 		$this->db->select("bm.id,me.entity_name,concat(ld.brand,' ',ld.liquor_description,' ',ld.liquor_type) as liquor_brand");
 		$this->db->from("brand_stockist_mapping as bm");
-		$this->db->join("master_entities as me", "find_in_set(me.id=bm.entity_id)<>0", false);
-		$this->db->join("liquor_details as ld", "find_in_set(ld.liquor_description_id=bm.brand_id)<>0", 'left');
+		$this->db->join("master_entities as me","find_in_set(me.id=bm.entity_id)<>0",false);
+		$this->db->join("liquor_details as ld","find_in_set(ld.liquor_description_id=bm.brand_id)<>0", 'left');
 		// $this->db->groupBy("entity_name");
 		$query = $this->db->get();
 		return $query->result_array();
@@ -258,7 +265,7 @@ class Brewery_model extends CI_Model
 
 
 	//Fetch Brewery Name from master_brewery table
-	function getBreweryName()
+	function getBreweryName()                           
 	{
 		$this->db->select('id,entity_name');
 		$this->db->from('master_brewery');
@@ -321,7 +328,7 @@ class Brewery_model extends CI_Model
 	function getBrandMappedList($breweryid)
 	{
 		$this->db->select("brand_id");
-		$this->db->where("entity_id", $breweryid);
+		$this->db->where("entity_id",$breweryid);
 		$query = $this->db->get("brand_stockist_mapping");
 		// $this->db->select("bm.id,me.entity_name,concat(ld.brand,'',ld.liquor_description,'',' - ',ld.liquor_type) as brand_name");
 		// $this->db->from("brand_stockist_mapping as bm");
@@ -332,6 +339,10 @@ class Brewery_model extends CI_Model
 		// $query = $this->db->get();
 		return $query->row_array();
 	}
+
+
+
+
 
 
 	//Fetches states mapped with brewery
@@ -346,23 +357,27 @@ class Brewery_model extends CI_Model
 	function mapStockistToBrand($stockistid, $data)
 	{
 		$this->db->select("entity_id");
-		$this->db->where("entity_id", $stockistid);
-		$response = $this->db->get("brand_stockist_mapping");
-		$result = $response->result_array();
+		 $this->db->where("entity_id",$stockistid);
+		 $response = $this->db->get("brand_stockist_mapping");
+		 $result = $response->result_array();
 		// $result[0]['entity_id']	$this->db->update("brand_stockist_mapping",$data);
 
 		// print_r($result);
 		// die();
-		if (count($result) > 0) {
+		if (count($result)>0)
+		{
 			// $this->db->set("brand_id", $this->db->post("brand_id"));
-			$this->db->where("entity_id", $stockistid);
-			$this->db->update("brand_stockist_mapping", $data);
-			return true;
-		} else {
-			$this->db->where('entity_id', $stockistid);
-			$this->db->insert('brand_stockist_mapping', $data);
+			$this->db->where("entity_id",$stockistid);
+			$this->db->update("brand_stockist_mapping",$data);
 			return true;
 		}
+		else
+		{
+			$this->db->where('entity_id',$stockistid);
+			$this->db->insert('brand_stockist_mapping',$data);
+			return true;
+		}
+		
 	}
 
 
@@ -454,94 +469,102 @@ class Brewery_model extends CI_Model
 
 
 	public function fetchBreweryLiquorList($entity_id)
-	{
+    {
+       
+        $db = $this->db;
 
-		$db = $this->db;
-
-		$query =  "SELECT lem.id,Concat(ld.brand,' ',ld.liquor_description,' ',ld.liquor_type, ' -- ',lem.selling_price) as liquor
+        $query =  "SELECT lem.id,Concat(ld.brand,' ',ld.liquor_description,' ',ld.liquor_type, ' -- ',lem.selling_price) as liquor
         FROM liquor_entity_mapping lem
         INNER JOIN liquor_details ld
         ON lem.liquor_description_id=ld.liquor_description_id
         WHERE lem.entity_id = $entity_id";
 		//$where_clause
-		// echo $query;
-		$response = $db->query($query);
-		$result = $response->result();
-		// echo "<pre>";
-		// print_r($result);
-		// die();
-		// echo "</pre>";
-		$db->close();
-		return $result;
-	}
+        // echo $query;
+        $response = $db->query($query);
+        $result = $response->result();
+        // echo "<pre>";
+        // print_r($result);
+        // die();
+        // echo "</pre>";
+        $db->close();
+        return $result;
+    }
 
+
+
+
+
+	public function fetchLiquorList()
+    {
+        $entity_id = $this->session->userdata('entity_id');
+        // print_r($entity_id);
+        // die;
+        // if ($sales_type == 'user') {
+        //     $where_clause = " and lem.liquor_type_id IN (select id from liquor_type where liquor_type='BEER') ";
+        // } else {
+        //     $where_clause = '';
+        // }
+
+        $db = $this->db;
+
+
+        $query =  "SELECT lem.id,Concat(ld.brand,' ',ld.liquor_description,' ',ld.liquor_type) as liquor
+        FROM liquor_entity_mapping lem
+        INNER JOIN liquor_details ld
+        ON lem.liquor_description_id=ld.liquor_description_id
+        WHERE lem.entity_id = $entity_id";
+
+			// print_r($query);die();
+
+        // echo $query;
+        $response = $db->query($query);
+        $result = $response->result();
+        // echo "<pre>";
+        // print_r($result);
+        // die();
+        // echo "</pre>";
+        $db->close();
+        return $result;
+    }
 
 
 	public function createNewAdditionalSheet($data)
-	{
-		$db = $this->db;
-		$query = "CALL SP_ADDITIONAL_SHEETS('$data')";
-		// echo $query;
-		// die;
-		$response = $db->query($query);
-		$db->close();
-		$result = $response->result();
-		return $result;
-	}
+    {
+        $db = $this->db;
+        $query = "CALL SP_ADDITIONAL_SHEETS('$data')";
+        // echo $query;
+        // die;
+        $response = $db->query($query);
+        $db->close();
+        $result = $response->result();
+        return $result;
+    }
 
 
-	function fetchOrderRequested($order_id)
-	{
-		$db = $this->db;
-		// $query="select id,insert_time from brewery_order_liquor_details where id = 1;";
-
-		$query = "SELECT bm.brewery_name,bd.brewery_order_id,bd.liquor_base_price,bd.liquor_brewery_id,bd.total_quantity,bd.total_purchase_price,
-		ca.firstname as requested_by 
-		FROM brewery_order_liquor_details as bd
-		INNER JOIN brewery_order bo ON bo.id = bd.brewery_order_id 
-		INNER JOIN ci_admin ca ON ca.admin_id=bo.created_by
-		INNER JOIN master_brewery bm ON bm.id=bo.brewery_id
-		WHERE bo.id = $order_id";
-
-		$response = $db->query($query);
-		$db->close();
-		$result = $response->result();
-		return $result;
-	}
-
-
-	/// below functions are used for order to brewery
-
-	public function fetchLiquorList($bewweryid)
-	{
-
-		$db = $this->db;
-		$query = "SELECT ld.id,ld.liquor_description as liquor
-        FROM liquor_description ld
-		where ld.brewery_id = $bewweryid";
-		$response = $db->query($query);
-		$result = $response->result();
-		$db->close();
-		return $result;
-	}
-
-	//Fetch Brewery List From Database
-	function getBrewery()
-	{
-		$this->db->select("id,brewery_name");
-		$this->db->from('master_brewery');
-		$query = $this->db->get();
-		return $query->result_array();
-	}
 
 	function insertIntoBreweryOrderLiquorDetails($data)
 	{
 
 		$db = $this->db;
 		$query = "CALL SP_ORDER_TO_BREWERY('$data')";
+		// print_r($query);
+		// die();
 		$response = $db->query($query);
 		$db->close();
 		$result = $response->result();
 		return $result;
+		
+		// $this->db->set('brewery_order_id', $this->input->post('131'));
+		// $this->db->set('liquor_description_id', $this->input->post('liquor_description_id'));
+		// $this->db->set('liquor_brewery_id', $this->input->post($data,'liquor_entity_id'));
+		// $this->db->set('total_quantity', $this->input->post($data,'quantity'));
+		// $this->db->set('liquor_base_price', $this->input->post($data,'selling_price'));
+		// $this->db->set('total_purchase_price', $this->input->post($data,'total'));
+		// $this->db->set('insert_time', date('Y-m-d H:i:s'));
+		// $this->db->set('inserted_by', $this->input->post('user_id'));
+		// $response = $this->db->insert('brewery_order_liquor_details');
+		// print_r($response);
+		// die();		
 	}
+
 }

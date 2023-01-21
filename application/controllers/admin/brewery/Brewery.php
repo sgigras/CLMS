@@ -192,6 +192,9 @@ class Brewery extends MY_Controller
 		$stockist_brandmappedlist = $this->brewery_model->getBrandMappedList($stockistid);
 		echo json_encode($stockist_brandmappedlist);
 	}
+
+
+	// function fetchBreweryList
 	
 	// function getBrandMappedList()
 	// {

@@ -27,25 +27,15 @@ class Alcohol_masterAPI extends MY_Controller
     public function index()
     {
         $liquor_data = $this->master_model->fetchLiquorlist();
-
         $data['title'] = trans('alcohol_master');
-
         $data['add_url'] = 'master/Alcohol_masterAPI/addalcholType';
-
         $data['add_title'] = trans('add_alcohol_type');
-
         $data['table_head'] = ALCOHOL_MASTER;
-
         $data['table_data'] = $liquor_data;
-
         $data['edit_url'] = 'master/Alcohol_masterAPI/editalcoholNames';
-
         $data['csrf_url'] = 'master/CanteenMaster';
-
-
         $this->load->view('admin/includes/_header');
         $this->load->view('master/masterTableView', $data);
-
         $this->load->view('admin/includes/_footer');
     }
 
@@ -209,24 +199,15 @@ class Alcohol_masterAPI extends MY_Controller
     public function liquorspecificdetails()
     {
         $liquor_data = $this->liquor_master_model->fetchAllLiquorRecords();
-
         $liquor_data_array = json_decode(json_encode($liquor_data), true);
-
         if (count($liquor_data_array) > 0) {
             $data['title'] = trans('liquor_list'); // header of the page
-
             $data['add_url'] = 'master/Alcohol_masterAPI/addLiquorDetails'; //url for adding new product on form submission
-
             $data['add_title'] = trans('liquor_add'); //add button titl on list page
-
             $data['table_head'] = LIQUOR_MASTER_LIST; //from application/helpers/bsf_form list_field_helper //use to create table 
-
             $data['table_data'] = $liquor_data;
-
             $data['edit_url'] = 'master/Alcohol_masterAPI/editLiquorDetails';
-
             $data['csrf_url'] = 'master/Alcohol_masterAPI/liquorspecificdetails';
-
             $this->load->view('admin/includes/_header');
             $this->load->view('master/masterTableView', $data);
             $this->load->view('admin/includes/_footer');
@@ -243,74 +224,30 @@ class Alcohol_masterAPI extends MY_Controller
     {
         // $this->rbac->check_operation_access(); // check opration permission
         if ($this->input->post('submit')) {
-            $files = $_FILES;
-            $upload_path = './liquor_image/';
-            $year = date("Y");
-            $month = date("m");
-            $day = date("d");
-            $date_folder = $year . $month . $day;
-            $upload_path .= $date_folder . '/';
+            $image_path = $this->uploadImage("A");
+            
+            $data = array(
+                'liquor_image' => $image_path,  
+                'liquor_type_id' => $this->input->post('liquor_type'),
+                'liquor_brand_id' => $this->input->post('liquor_brand'),
+                'liquor_description' => $this->input->post('liquor_description'),
+                'liquor_bottle_size_id' => $this->input->post('bottle_size'),
+                'liquor_ml_id' => $this->input->post('bottle_vol'),
+                'user_id' => $this->session->userdata('admin_id'),
+                'mode' => 'A',
+                'brewery_id' => $this->input->post('brewery_name'),
+            );
 
-            if (!is_dir($upload_path)) {
-                mkdir($upload_path, 0777, true);
-                chmod($upload_path, 0775);
+            if ($image_path == "F") {
+                redirect(base_url('master/Alcohol_masterAPI/liquorspecificdetails'), 'refresh');
             }
 
-            $config['upload_path']          = $upload_path;
-            $config['allowed_types']        = 'jpg|png|jpeg';
-            $this->load->library('upload', $config);
-            // echo  $this->input->post('liquor_image_h'); die();
-            if (!$this->upload->do_upload('liquor_image')) {
-
-                $data = array('errors' => $this->upload->display_errors());
-                $this->session->set_flashdata('form_data', $_POST);
-                $this->session->set_flashdata('errors', $data['errors']);
-                redirect(base_url('master/Alcohol_masterAPI/addLiquorDetails'), 'refresh');
-            } else {
-                $upload_array = array('upload_data' => $this->upload->data());
-
-                $image_path = $upload_path . $upload_array['upload_data']['file_name'];
-                //   echo "<pre>";
-                //   print_r($image_path);  echo "<pre>"; 
-                //   $data = array(
-                //         //'liquor_image' => $this->input->post('liquor_image_h'),
-                //     'liquor_image' => $image_path,
-                //     'liquor_name' => $this->input->post('liquor_name'),
-                //     'liquor_type_id' => $this->input->post('liquor_type'),
-                //     'liquor_brand_id' => $this->input->post('liquor_brand'),
-                //     'liquor_description' => $this->input->post('liquor_description'),
-                //     'liquor_bottle_size_id' => $this->input->post('bottle_size'),
-                //     'liquor_ml_id' => $this->input->post('bottle_vol'),
-                //     'user_id' => $this->session->userdata('admin_id'),
-                //     'mode' => 'A',
-                // );
-                $data = array(
-                    //'liquor_image' => $this->input->post('liquor_image_h'),
-                    'liquor_image' => $image_path,
-                    // 'liquor_name' => $this->input->post('liquor_name'),
-                    'liquor_type_id' => $this->input->post('liquor_type'),
-                    'liquor_brand_id' => $this->input->post('liquor_brand'),
-                    'liquor_description' => $this->input->post('liquor_description'),
-                    'liquor_bottle_size_id' => $this->input->post('bottle_size'),
-                    'liquor_ml_id' => $this->input->post('bottle_vol'),
-                    'user_id' => $this->session->userdata('admin_id'),
-                    'mode' => 'A',
-                );
-            }
-                // print_r($data);die();
             $result = $this->liquor_master_model->insert_update_liquor_details(json_encode($data));
             if ($result) {
 
                 $this->session->set_flashdata('success', 'Liquor Details added successfully');
                 redirect(base_url('master/Alcohol_masterAPI/liquorspecificdetails'), 'refresh');
             }
-            //  echo "<pre>"; echo $data; echo '<pre>';
-
-            //$response = $this->CheckEntityMasterForm();
-            //   if ($response['success']) {
-            //     $response['model_response'] = $this->insert_update_liquor_details($data);
-            // }
-            //echo json_encode($response);
         } else {
 
             $data = $this->liquor_master_model->fetchInitialAlcoholFormDetails();
@@ -323,47 +260,23 @@ class Alcohol_masterAPI extends MY_Controller
 
     public function editLiquorDetails($id)
     {
-        // $this->rbac->check_operation_access(); // check opration permission
         if ($this->input->post('submit')) {
+            $image_path = $this->uploadImage("E");
+            if ($image_path == "F")
+                redirect(base_url('master/Alcohol_masterAPI/liquorspecificdetails'), 'refresh');
 
-            $upload_path = './liquor_image/';
-            $year = date("Y");
-            $month = date("m");
-            $day = date("d");
-            $date_folder = $year . $month . $day;
-            $upload_path .= $date_folder . '/';
-            if (!is_dir($upload_path)) {
-                mkdir($upload_path, 0777, true);
-                chmod($upload_path, 0775);
-            }
-            $config['upload_path']          = $upload_path;
-            $config['allowed_types']        = 'jpg|png|jpeg';
-            $this->load->library('upload', $config);
-            // echo  $this->input->post('liquor_image_h'); die();
-            if (!$this->upload->do_upload('liquor_image')) {
-                $data = array('errors' => $this->upload->display_errors());
-                $this->session->set_flashdata('form_data', $_POST);
-                $this->session->set_flashdata('errors', $data['errors']);
-                redirect(base_url('master/Alcohol_masterAPI/addLiquorDetails'), 'refresh');
-            } else {
-                $upload_array = array('upload_data' => $this->upload->data());
-
-                $image_path = $upload_path . $upload_array['upload_data']['file_name'];
-
-                $data = array(
-                    //'liquor_image' => $this->input->post('liquor_image_h'),
-                    'id' => $id,
-                    'liquor_image' => $image_path,  
-                    // 'liquor_name' => $this->input->post('liquor_name'),
-                    'liquor_type_id' => $this->input->post('liquor_type'),
-                    'liquor_brand_id' => $this->input->post('liquor_brand'),
-                    'liquor_description' => $this->input->post('liquor_description'),
-                    'liquor_bottle_size_id' => $this->input->post('bottle_size'),
-                    'liquor_ml_id' => $this->input->post('bottle_vol'),
-                    'user_id' => $this->session->userdata('admin_id'),
-                    'mode' => 'E',
-                );
-            }
+            $data = array(
+                'id' => $id,
+                'liquor_image' => $image_path,  
+                'liquor_type_id' => $this->input->post('liquor_type'),
+                'liquor_brand_id' => $this->input->post('liquor_brand'),
+                'liquor_description' => $this->input->post('liquor_description'),
+                'liquor_bottle_size_id' => $this->input->post('bottle_size'),
+                'liquor_ml_id' => $this->input->post('bottle_vol'),
+                'user_id' => $this->session->userdata('admin_id'),
+                'mode' => 'E',
+                'brewery_id' => $this->input->post('brewery_name'),
+            );
             $response = $this->CheckEntityMasterForm();
             // print_r($data);die();
             if ($response['success']) {
@@ -371,11 +284,6 @@ class Alcohol_masterAPI extends MY_Controller
             }
             $this->session->set_flashdata('success', 'Liquor Details Update successfully');
             redirect(base_url('master/Alcohol_masterAPI/liquorspecificdetails'));
-
-            // print_r($data);die();
-
-
-            // echo json_encode($response);
         } else {
 
             $data = $this->liquor_master_model->fetchAlcoholDetails($id);
@@ -385,6 +293,34 @@ class Alcohol_masterAPI extends MY_Controller
         }
     }
 
+    public function uploadImage($mode)
+    {
+        $image_path = $this->input->post('liquor_image_h');
+        $upload_path = './liquor_image/'. date("Ymd") . '/';
+        if (!is_dir($upload_path)) {
+            mkdir($upload_path, 0777, true);
+            chmod($upload_path, 0775);
+        }
+        $config['upload_path']          = $upload_path;
+        $config['allowed_types']        = 'jpg|png|jpeg';
+        $this->load->library('upload', $config);
+
+        if (!$this->upload->do_upload('liquor_image')) {
+            if ($mode == "E" && $image_path == "") {
+                $data = array('errors' => $this->upload->display_errors());
+                $this->session->set_flashdata('form_data', $_POST);
+                $this->session->set_flashdata('errors', $data['errors']);
+                $image_path = "F";
+            }
+        }
+        else{
+            $upload_array = array('upload_data' => $this->upload->data());
+            $filename = $upload_array['upload_data']['file_name'];
+            $image_path = $upload_path . $filename;
+        }
+
+        return $image_path;
+    }
     public function insert_update_liquor_details($data)
     {
         $response = $this->liquor_master_model->insert_update_liquor_details(json_encode($data));

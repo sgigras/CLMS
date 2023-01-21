@@ -34,8 +34,6 @@ $liquor_select_array = (isset($liquor_list)) ? $liquor_list : array();
             }
 
             if (null!=($this->session->flashdata('success'))) {
-
-
                 $this->load->view('admin/includes/_messages.php');
               }
             ?>
@@ -54,14 +52,17 @@ $liquor_select_array = (isset($liquor_list)) ? $liquor_list : array();
                             </div> -->
                             <div class='row'>
                                 <div class='col'>
+                                    <?php $this->load->view('master/select_field', array("field_id" => "brewery_name", "label" => "brewery_name", "place_holder" => "Select a Brewery", "option_record" => $brewery_data, "option_value" => "id", "option_text" => "brewery_name", "selected_value" => getValue('brewery_id', $resultArray))); ?>
+                                </div>
+                            </div>
+                            <div class='row'>
+                                <div class='col'>
                                     <?php $this->load->view('master/select_field', array("field_id" => "liquor_type", "label" => "liquor_type", "place_holder" => "Select a liquor type", "option_record" => $alcohol_type_record, "option_value" => "id", "option_text" => "alcohol_type", "selected_value" => getValue('liquor_type', $resultArray))); ?>
                                 </div>
                             </div>
                             <div class='row'>
                                 <div class='col'>
-
-                                    <?php 
-
+                                   <?php 
                                     $this->load->view('master/select_field', array("field_id" => "liquor_brand", "label" => "liquor_brand", "place_holder" => "Select a liquor brand", "option_record" => $alcohol_brand_record, "option_value" => "id", "option_text" => "liquor_brand", "selected_value" => getValue('liquor_brand', $resultArray))); ?>
                                 </div>
                             </div>

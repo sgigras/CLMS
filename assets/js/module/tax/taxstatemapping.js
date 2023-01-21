@@ -21,20 +21,21 @@ $('#liquorlist').on('select2:select select2:unselect', function (e) {
     // var taxid = taxname[0].id;
     var taxid = '';
     selectedValues = selectedValues.toString()
-    alert(selectedValues);
+    
     // return false;
 
     // var selectedarray = JSON.parse("[" + selectedValues + "]");
     var liquoridlist = selectedValues;
-    alert(liquoridlist);
+    // alert(liquoridlist);
     var databaseObject = { csrf_test_name: csrfHash, liquoridlist: liquoridlist };
+    console.log(databaseObject);
     $.ajax({
         url: baseurl + 'admin/tax/Tax/fetchliquortaxesmapped',
         type: 'post',
         data: databaseObject,
         dataType: 'json',
         success: function (response) {
-            // console.log(response['taxlist']);
+            console.log(response);
             var html = "";
             var count = 0;
             $('#collapsible_container').empty();

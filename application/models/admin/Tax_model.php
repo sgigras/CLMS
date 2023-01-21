@@ -113,15 +113,7 @@ class Tax_model extends CI_Model
 		// (SELECT sm.isactive from states_taxes_mapping sm where sm.taxid= $taxid and sm.stateid=ms.id  ) as isactive,(SELECT sm.id from states_taxes_mapping sm where sm.taxid= $taxid and sm.stateid=ms.id  ) as mappingid
 		// FROM master_state ms where ms.id in('$statesidlist')";
 
-		$fetchtaxmapping = "SELECT mt.id as taxid,mtlm.id as mappingid,tc.id as tax_category_id,mtlm.liquor_description_id,concat(mt.tax_name,' - ',tc.tax_category) as tax_name,mtlm.tax_percent,mtlm.isactive,mtlm.tax_type_id
-							FROM master_tax mt
-							inner join tax_category tc on tc.id = mt.tax_category_id
-							LEFT JOIN master_tax_liquor_mapping mtlm
-    						ON mt.id = mtlm.tax_id  AND mtlm.liquor_description_id in('$liquoridlist') AND mtlm.entity_id='$entity_id'
-							WHERE mt.entity_type=(SELECT entity_type FROM master_entities WHERE id='$entity_id') order by tc.id;";
-
-							// print_r($fetchtaxmapping);
-							// die();
+		$fetchtaxmapping = "SELECT mt.id as taxid,mtlm.id as mappingid,tc.id as tax_category_id,mtlm.liquor_description_id,concat(mt.tax_name,' - ',tc.tax_category) as tax_name,mtlm.tax_percent,mtlm.isactive,mtlm.tax_type_id FROM master_tax mt inner join tax_category tc on tc.id = mt.tax_category_id LEFT JOIN master_tax_liquor_mapping mtlm ON mt.id = mtlm.tax_id AND mtlm.liquor_description_id in('9') AND mtlm.entity_id='$entity_id' and mt.entity_type=(SELECT entity_type FROM master_entities WHERE id='$entity_id') where tc.id !=1 order by tc.id;";
 		$fetchtaxmappingresponse = $this->db->query($fetchtaxmapping);
 
 		

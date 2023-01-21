@@ -1,5 +1,5 @@
 $(document).ready(function () {
-
+    $('#brewery_name').select2();
     $("#liquor_type").select2({width: '100%', placeholder: 'Select a liquor type'});
     $("#liquor_brand").select2({width: '100%', placeholder: 'Select a liquor brand'});
     $("#bottle_size").select2({width: '100%', placeholder: 'Select a bottle size'});

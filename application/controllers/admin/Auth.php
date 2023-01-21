@@ -16,6 +16,8 @@ class Auth extends MY_Controller
 		$this->load->helper(array('Ats/curl'));
 		$this->load->helper(array('custom_email_helper'));
 		$this->load->helper(array('browser_ip'));
+
+		$this->load->model('ssoauthorization/HimveerSSOAuthModel', 'SSO_model');
 	}
 
 
@@ -158,6 +160,7 @@ class Auth extends MY_Controller
 							'is_admin_login' => TRUE,
 							'profile_picture' => $result['image'],
 							'token' => $token,
+                			'IsHimveerLogin'=>FALSE
 							// 'last_login' => 
 						);
 						// print_r($admin_data);
@@ -189,8 +192,12 @@ class Auth extends MY_Controller
 			$data['footer'] = false;
 			$data['bg_cover'] = true;
 
+			$authurl = $this->SSO_model->ImplicitLoginUrl();
+			$modelArray = array();
+			$modelArray["AuthUrl"] = $authurl;
+
 			$this->load->view('admin/includes/_header', $data);
-			$this->load->view('admin/auth/login');
+			$this->load->view('admin/auth/login',$modelArray);
 			$this->load->view('admin/includes/_footer', $data);
 		}
 	}
@@ -767,9 +774,17 @@ class Auth extends MY_Controller
 	//-----------------------------------------------------------------------
 	public function logout()
 	{
-		// $this->session->checkSessionData();
-		$this->session->sess_destroy();
-		redirect(base_url('admin/auth/login'), 'refresh');
+		$authurl = $this->SSO_model->HimveerLogoutUrl();
+		if ($authurl == "") {
+			// $this->session->checkSessionData();
+			$this->session->sess_destroy();
+			redirect(base_url('admin/auth/login'), 'refresh');
+		}
+		else
+		{
+			$this->session->sess_destroy();
+			redirect($authurl);
+		}
 	}
 
 	// Get Country. State and City

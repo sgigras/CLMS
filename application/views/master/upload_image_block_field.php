@@ -17,7 +17,7 @@
             <div class="input-group">
                 <div class="custom-file">
                     <input type="file" class="custom-file-input" id="<?= $field_id ?>" name="<?= $name ?>" data-parsley-filemaxmegabytes=".2" accept="image/x-png,image/gif,image/jpeg" data-parsley-trigger="change" data-parsley-filemimetypes="image/jpeg, image/png" onchange="readURL(this);">
-                    <label class="custom-file-label" id="<?= $field_id ?>_label" for="<?= $field_id ?>" style="padding-right: 65%;"><?= $label_text ?>
+                    <label class="custom-file-label" id="<?= $field_id ?>_label" for="<?= $field_id ?>"><?= $label_text ?>
                     </label>
                 </div>
                 <div class="input-group-append">
