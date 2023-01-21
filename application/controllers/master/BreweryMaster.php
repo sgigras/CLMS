@@ -1,17 +1,5 @@
-<?php
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of CanteenMaster
- *
- * @author Jitendra Pal
- * to add new canteen club  details 
- */
 class BreweryMaster extends MY_Controller
 {
 
@@ -49,8 +37,6 @@ class BreweryMaster extends MY_Controller
             $this->form_validation->set_rules('mobilenumber', 'Mobile Number', 'trim|required|min_length[10]|max_length[10]');
             $this->form_validation->set_rules('emailaddress', 'Email Address', 'trim|required|valid_email|min_length[3]|max_length[580]');
             $this->form_validation->set_rules('brewerystate[]', 'Brewery States', 'trim|required|xss_clean|callback_multiple_selectstate');
-            // $this->form_validation->set_rules('brewerystate', 'Brewery States', 'required',array('required' =>'Select At Least One State'));
-            // $this->form_validation->set_rules('breweryentity', 'Brewery Entity', 'required',array('required' =>'Select At Least One Entity'));
             $this->form_validation->set_rules('breweryentity[]', 'Brewery Entity', 'trim|required|xss_clean|callback_multiple_selectentity');
             $this->form_validation->set_error_delimiters('<p class="text-danger">', '</p>');
 
@@ -67,23 +53,11 @@ class BreweryMaster extends MY_Controller
                     $data['messages'][$key] = form_error($key);
                 }
             }
-
-            // echo json_encode($data);
-            // return;
-
-
-            // $this->brewery_model->insert();	
-            // $this->session->set_flashdata('success', 'Record Added Successfully');	
-            // redirect('admin/brewery/Brewery');
         }
 
         if (!empty($_POST['breweryname'])) {
             $breweryid = $this->input->post('breweryname');
             $data['brewery_statemappedlist'] = $this->brewery_model->getBreweryMappedList($breweryid);
-            // $data['']
-            // $data['testkey']='test';
-            // print_r($data['brewery_statemappedlist']);
-            // die();
         }
 
         // print_r($data);
@@ -106,19 +80,12 @@ class BreweryMaster extends MY_Controller
         $brewery_data_array = json_decode(json_encode($brewery_data), true);
         if (count($brewery_data_array) > 0) {
             $data['title'] = trans('brewery_master');
-
             $data['add_url'] = 'master/BreweryMaster/addBrewery';
-
             $data['add_title'] = trans('add_new_brewery');
-
             $data['table_head'] = BREWERY_MASTER_LIST;
-
             $data['table_data'] = $brewery_data;
-
             $data['edit_url'] = 'master/BreweryMaster/editBrewery';
-
             $data['csrf_url'] = 'master/BreweryMaster';
-
             $this->load->view('admin/includes/_header');
             $this->load->view('master/masterTableView', $data);
             $this->load->view('admin/includes/_footer');
@@ -129,17 +96,6 @@ class BreweryMaster extends MY_Controller
             $this->load->view('admin/includes/_footer');
         }
     }
-
-    // function additionalSale()
-    // {
-    //     $liquor_data = $this->NewAvailable_stock->getLiquorNames();
-    //     $data['liquor_name_record'] = $liquor_data;
-    //     // print_r($liquor_data);
-    //     $this->load->view('admin/includes/_header');
-    //     $this->load->view('admin/brewery/orderToBreweryView', $data);
-    //     $this->load->view('admin/includes/_footer');
-    // }
-
 
 
     // to add new Brewery details
@@ -153,10 +109,6 @@ class BreweryMaster extends MY_Controller
             $this->form_validation->set_rules('contactperson', 'Contact Person', 'trim|required|min_length[3]|max_length[100]');
             $this->form_validation->set_rules('mobilenumber', 'Mobile Number', 'trim|required|min_length[10]|max_length[10]');
             $this->form_validation->set_rules('emailaddress', 'Email Address', 'trim|required|valid_email|min_length[3]|max_length[580]');
-            // $this->form_validation->set_rules('brewerystate[]', 'Brewery States', 'trim|required|callback_multipleselectstate');
-            // $this->form_validation->set_rules('brewerystate', 'Brewery States', 'required',array('required' =>'Select At Least One State'));
-            // $this->form_validation->set_rules('breweryentity', 'Brewery Entity', 'required',array('required' =>'Select At Least One Entity'));
-            // $this->form_validation->set_rules('breweryentity[]', 'Brewery Entity', 'trim|required|callback_multiple_selectentity');
             $this->form_validation->set_error_delimiters('<p class="text-danger">', '</p>');
 
 
@@ -164,8 +116,6 @@ class BreweryMaster extends MY_Controller
                 $data['success'] = true;
                 $this->brewery_model->insert();
                 $this->brewery_model->insertToEntityTable();
-                // $this->session->set_flashdata('success', 'Brewery Added Successfully');
-                // redirect('admin/brewery/Brewery/add');
             } else {
                 foreach ($_POST as $key => $value) {
                     $data['messages'][$key] = form_error($key);
@@ -221,9 +171,6 @@ class BreweryMaster extends MY_Controller
         $this->form_validation->set_rules('contactperson', 'Contact Person Name', 'trim|required');
         $this->form_validation->set_rules('mobilenumber', 'Mobile Number', 'trim|required');
         $this->form_validation->set_rules('emailaddress', 'Email Address', 'trim|required');
-        // $this->form_validation->set_rules('select_brewerystate[]', 'Brewery State', 'trim|required');
-        // $this->form_validation->set_rules('select_breweryentity[]', 'Brewery Entity', 'trim|required');
-
         $this->form_validation->set_error_delimiters('<p class="text-danger" style="font-size:14px">', '</p>');
         if ($this->form_validation->run()) {
             $data['success'] = true;
@@ -252,30 +199,6 @@ class BreweryMaster extends MY_Controller
         $result = $this->canteen_master_model->fetchDistrubutors($distrubtor_authority);
         echo json_encode($result);
     }
-
-    //    public function getUserDetails() {
-    //        
-    //    }
-
-
-    // public function index()
-    // {
-    //     $data['entity_id'] = $this->session->userdata('entity_id');
-    //     $data["page_hit"] = 'start';
-    //     $data["check_out_cart_id"] = '';
-    //     $data["order_code"] = '';
-
-    //     // $data = preg_replace('/"/i', '', $data);
-    //     // $data = preg_replace("/'/i", '', $data);
-    //     // $data = preg_replace('/<.+>/sU','',$data);
-    //     // $data = preg_replace('/(?:\{|<|\[)/', '(', $data);
-    //     // print_r($data);
-    //     // die;
-    //     $this->loadOrderCode($data);
-    // }
-
-    // public function loadBreweryOrder($initial_data)
-
     public function loadBreweryOrder()
     {
         // $order_id = $this->input->post("order_id");
@@ -289,20 +212,6 @@ class BreweryMaster extends MY_Controller
         $user_id = $this->session->userdata('admin_id');
         $page_labels = unserialize(ORDER_DELIVERY_SUMMARY); //to fetch page labels
 
-
-        // $page_labels['cart_footer_buttons'] = array(
-        //     "fa_form_icon" => $page_labels['fa_form_icon'],
-        //     "button_label_1" => $page_labels['button_label_1'],
-        //     "button_label_2" => $page_labels['button_label_2'],
-        //     "button_id_1" => $page_labels['button_id_1'],
-        //     "button_id_2" => $page_labels['button_id_2'],
-        //     "button_class_1" => $page_labels['button_class_1'],
-        //     "button_class_2" => $page_labels['button_class_2'],
-        //     "fa_button_icon" => $page_labels['fa_button_icon'],
-        //     "cart_footer_button_mode" => $page_labels['cart_footer_button_mode'],
-        //     // "cart_id" => $cart_id
-        // );
-
         $this->load->view('admin/includes/_header');
         $this->load->view('order/brewery_order_approval_summary', $data); //$data
         $this->load->view('admin/includes/_footer');
@@ -313,11 +222,7 @@ class BreweryMaster extends MY_Controller
     /// below functions are used for order to brewery
     public function orderToBrewery()
     {
-        // $data = $this->brewery_model->get_all();
-        // $data['liquor_name_record'] = $liquor_data;
-        // print_r($liquor_data);
         $data['brewerylist'] = $this->brewery_model->getBrewery();
-        // $response['liquor_name_record'] = $this->brewery_model->fetchLiquorList();
         $this->load->view('admin/includes/_header');
         $this->load->view('admin/brewery/orderToBreweryView', $data);
         $this->load->view('admin/includes/_footer');

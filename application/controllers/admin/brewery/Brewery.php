@@ -39,17 +39,11 @@ class Brewery extends MY_Controller
 			$this->form_validation->set_rules('contactperson', 'Contact Person', 'trim|required|min_length[3]|max_length[100]');
 			$this->form_validation->set_rules('mobilenumber', 'Mobile Number', 'trim|required|min_length[10]|max_length[10]');
 			$this->form_validation->set_rules('emailaddress', 'Email Address', 'trim|required|valid_email|min_length[3]|max_length[580]');
-			// $this->form_validation->set_rules('brewerystate[]', 'Brewery States', 'trim|required|callback_multipleselectstate');
-			// $this->form_validation->set_rules('brewerystate', 'Brewery States', 'required',array('required' =>'Select At Least One State'));
-			// $this->form_validation->set_rules('breweryentity', 'Brewery Entity', 'required',array('required' =>'Select At Least One Entity'));
-			// $this->form_validation->set_rules('breweryentity[]', 'Brewery Entity', 'trim|required|callback_multiple_selectentity');
 			$this->form_validation->set_error_delimiters('<p class="text-danger">', '</p>');
 
 			if ($this->form_validation->run()) {
 				$data['success'] = true;
 				$this->brewery_model->insert();
-				// $this->session->set_flashdata('success', 'Brewery Added Successfully');
-				// redirect('admin/brewery/Brewery/add');
 			} else {
 				foreach ($_POST as $key => $value) {
 					$data['messages'][$key] = form_error($key);
@@ -57,11 +51,6 @@ class Brewery extends MY_Controller
 			}
 			echo json_encode($data);
 			return;
-
-
-			// $this->brewery_model->insert();	
-			// $this->session->set_flashdata('success', 'Record Added Successfully');	
-			// redirect('admin/brewery/Brewery');
 		}
 
 		$data['title'] = trans('add_new_brewery');
@@ -139,33 +128,13 @@ class Brewery extends MY_Controller
 					$data['messages'][$key] = form_error($key);
 				}
 			}
-
-			// echo json_encode($data);
-			// return;
-
-
-			// $this->brewery_model->insert();	
-			// $this->session->set_flashdata('success', 'Record Added Successfully');	
-			// redirect('admin/brewery/Brewery');
 		}
 
 		if (!empty($_POST['breweryname'])) {
 			$breweryid = $this->input->post('breweryname');
 			$data['brewery_statemappedlist'] = $this->brewery_model->getBrandMappedList($breweryid);
-			// $data['testkey']='test';
-			// print_r($data['brewery_statemappedlist']);
-			// die();
+
 		}
-
-		// if (!empty($_POST['breweryname'])) {
-		// 	$breweryid = $this->input->post('breweryname');
-		// 	$data['brewery_statemappedlist'] = $this->brewery_model->getBreweryMappedList($breweryid);
-		// 	// $data['testkey']='test';
-		// 	// print_r($data['brewery_statemappedlist']);
-		// 	// die();
-		// }
-
-		// print_r($data);
 		$data['title'] = trans('brewery_state_mapping');
 		// $data['brewerylist'] = $this->brewery_model->getBreweryList();
 		$data['depotlist'] = $this->brewery_model->getDepotName();
@@ -193,18 +162,6 @@ class Brewery extends MY_Controller
 		echo json_encode($stockist_brandmappedlist);
 	}
 
-
-	// function fetchBreweryList
-	
-	// function getBrandMappedList()
-	// {
-	// 	$stockistid = $this->input->post('stockistid');
-	// 	$stockist_brandmappedlist = $this->brewery_model->getBrandMappedList($stockistid);
-	// 	echo json_encode($stockist_brandmappedlist);
-	// }
-
-
-
 	function fetchStatesList()
 	{
 		$getStates = $this->brewery_model->getStates();
@@ -217,15 +174,6 @@ class Brewery extends MY_Controller
 		$getBrandName = $this->brewery_model->getBrandName();
 		echo json_encode($getBrandName);
 	}
-
-	//Depot Name Model
-	// function fetchDepotNameList()
-	// {
-	// 	$getDepotName = $this->brewery_model->getDepotName();
-	// 	// print_r($getDepotName);
-	// 	// die;
-	// 	echo json_encode($getDepotName);
-	// }
 
 	function fetchBreweryList()
 	{

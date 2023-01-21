@@ -17,14 +17,11 @@
 
 <script>
     $(function() {
-        // console.log(rowCount);
         var rowCounter = 1;
         var table = '';
         var rowCount = '';
         var count = 0;
         $("#liquor_details_body").empty();
-
-
         $("#liquor_details_body").append('<tr id="A1">' +
             '<td></td>' +
             '<td style="width:250px;">' +
@@ -53,13 +50,6 @@
         console.log(table);
         rowCount = table.rows.length;
         console.log(rowCount)
-
-
-        // $(".liquor_select").change(function() {
-        //     // var liquor_id = $("#liquor_name" + rowCount).val();
-        //     var field_id = $(this).attr('id');
-        //     console.log(field_id);
-        // });
 
         $(document).on("click", ".addmorerows", function(event) {
 
@@ -133,11 +123,6 @@
         $("#liquor_name" + rowCount).on("change", function() {
             console.log("changed" + " " + "liquor_name" + rowCount)
             var liquor_id = $("#liquor_name" + rowCount).val();
-            // console.log(liquor_id);
-            // console.log(select1);
-
-            // console.log(GetValue);
-            // $("#available_stock").val("d");
 
             $.ajax({
                 url: DOMAIN + 'newStock/NewStock_master/fetchAvailableStock',
@@ -149,18 +134,9 @@
                 },
                 success: function(response) {
                     var res = JSON.parse(response);
-                    // console.log( res[0].available_quantity);
-                    // if (res.length > 0) {
-                        // document.getElementById("available_stock" + rowCount).value = res[0].available_quantity;
-                        // document.getElementById("available_stock" + rowCount).setAttribute("disabled", "disabled");
                         document.getElementById("selling_price" + rowCount).value = res[0].selling_price;
-                        // document.getElementById("selling_price" + rowCount).setAttribute("disabled", "disabled");
-                        // alert(document.getElementById("selling_price" + rowCount));
-                    // }
-
                 },
                 error: function() {
-                    // alert(DOMAIN + 'custom/Custom/fetchdurations');
                     alert("Error!!");
 
                 }
@@ -168,17 +144,10 @@
 
 
         });
-
-        // $("#selling_price, #quantity" + rowCount).keyup(function() {
-
-        // });
     })
-
-    // $('#selling_price').keypress(function(){
 
     function displayTotalCost(field_id) {
         var table_row = field_id.replace("quantity", "");
-        // alert("hello");
         var total = 0;
         console.log(field_id);
 
@@ -193,36 +162,4 @@
         }
         document.getElementById("total" + table_row).setAttribute("disabled", "disabled");
     }
-// });
-
-   // function selectLiquor(field_id) {
-        // var table_row = field_id.replace("liquor_name", "");
-        // console.log(table_row);
-
-        // var liquor_id = $("#" + field_id).val();
-        // $.ajax({
-        //     url: DOMAIN + 'newStock/NewStock_master/fetchAvailableStock',
-        //     method: 'POST',
-        //     data: {
-        //         csrf_test_name: csrfHash,
-        //         csrfName: csrfName,
-        //         liquor_id: liquor_id
-        //     },
-        //     success: function(response) {
-        //         var res = JSON.parse(response);
-        //         if (res.length > 0) {
-        //             displayTotalCost(`quantity${table_row}`);
-        //             $("#quantity" + table_row).val(0);
-        //             $('#total' + table_row).val(0);
-        //             // document.getElementById("selling_price" + table_row).value = res[0].selling_price;
-        //             // document.getElementById("selling_price" + table_row).setAttribute("disabled", "disabled");
-        //         }
-        //     },
-        //     error: function() {
-        //         // alert(DOMAIN + 'custom/Custom/fetchdurations');
-        //         alert("Error!!");
-
-        //     }
-        // });
-   // }
 </script>
