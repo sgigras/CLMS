@@ -116,6 +116,7 @@ class HimveerSSOAuthModel extends CI_Model
         return $data;
     }
 
+    //Insert Himveer User Info in ITBP (Only Required for login)
     public function InsertUpdateHimveerUserInfo($profiletoken,$profiledata,$pin)
     {
         $V_USERNAME = $profiledata["FORCE_NUMBER"];
@@ -137,6 +138,8 @@ class HimveerSSOAuthModel extends CI_Model
 
         return true;
     }
+
+    //Get Userinfo from Himveer
     public function UserLogin($token,$irlano,$dob,$pin)
     {
         $data = array(

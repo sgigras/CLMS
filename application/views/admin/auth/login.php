@@ -89,6 +89,7 @@
               
             </div> -->
             <div class="row">
+              <!-- add link for Himveer SSO Login for Service person-->
               <div class="col-6 ">
                 <div style="padding-top: 8px;">
                   <center> <button id="himveerSubmit" name="himveerSubmit" type="button" class="btn login-button" value="HimVeerSubmit" onClick="RedirectHimveer()">Himveer Login</button></center>
@@ -133,10 +134,12 @@
 </div>
 
 <script>
+  //add link for Himveer SSO Login for Service person
   function RedirectHimveer()
   {
     window.location = "<?php echo $AuthUrl;?>";
   }
+  
   function init (){
 	var portrait = document.getElementById('winter-field');
 	var context = portrait.getContext('2d');

@@ -1,11 +1,13 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
+$config["siteurl"] = "http://itbp.aniruddhagps.com:9090/";//http://localhost/CLMS/
+
 // API Details
 $config["api-baseurl"] = "https://uatserver2.itbp.gov/HimveerConnect6Local/";
 $config['client_id'] = "clms_new";
 $config["client_secret"] = "SuperSecretPassword";
 $config["scope"] = "openid";
-$config["redirect-uri"] = "http://localhost/CLMS/himveer-sso-login/SSOAuthentication/login";
+$config["redirect-uri"] = $config["siteurl"]."himveer-sso-login/SSOAuthentication/login";
 
 $config["get-token-url"] = "connect/token";
 $config["get-profile-detail-api-url"] = "connect/userinfo";
@@ -17,4 +19,4 @@ $config["hrms-basic-detail"] = "api/Clms/GetBasicDetails";
 $config["hrms-api-baseurl"] = "https://uatserver2.itbp.gov/HrmsApiCore/";
 $config["hrms-scope"] = "HrmsApi.Clms";
 
-$config["portal-post-back-logout-url"] = "http://localhost/CLMS";
+$config["portal-post-back-logout-url"] = $config["siteurl"];

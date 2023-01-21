@@ -6,7 +6,6 @@ class SSOAuthentication extends CI_Controller
         parent::__construct();
         $this->load->model('ssoauthorization/HimveerSSOAuthModel', 'SSO_model');
     }
-
     public function login()
     {
         if (isset($_POST["id_token"]))
