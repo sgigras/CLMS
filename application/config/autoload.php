@@ -106,6 +106,7 @@ $autoload['helper'] = array('form','url', 'file', 'security', 'data', 'functions
  */
 $autoload['config'] = array('himveer-sso-config');
 
+
 /*
   | -------------------------------------------------------------------
   |  Auto-load Language files
