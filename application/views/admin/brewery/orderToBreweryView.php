@@ -20,24 +20,9 @@ $liquor_select_array = (isset($liquor_list)) ? $liquor_list : array();
         <form>
             <div class="card-body">
                 <div class="row">
-                    <!-- <div class="col-md-2">
-                        <label> <b>Select Sales Type : </b></label>
-                    </div> -->
-                    <!-- <div class="col-md-2" style="padding-top: 2px;">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input sales_type" type="radio" name="sales_type" id="mess" value="mess">
-                            <label class="form-check-label type">Mess</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input sales_type" type="radio"  name="sales_type" id="user" value="user">
-                            <label class="form-check-label type">Issue Beer</label>
-                        </div>
-                    </div> -->
                 </div>
                 <br>
                 <div class="row">
-                    <!-- <div class="col-md-8"> -->
-                    <!-- <div class="row"> -->
                     <div class="col-md-2">
                         <label> <b><span id="title">Select Brewery : </span></b></label>
                     </div>
@@ -49,16 +34,6 @@ $liquor_select_array = (isset($liquor_list)) ? $liquor_list : array();
                             <?php endforeach; ?>
                         </select>
                     </div>
-                    <!-- <div id="hold_purpose"> -->
-                    <!-- <div class="col-md-2 ml-5 hold_purpose">
-                                <label><b> Purpose : </b></label>
-                            </div>
-                            <div class="col-md-3 hold_purpose">
-                                <input type="text" name="purpose" id="purpose" class="form-control" placeholder="Enter Purpose" style="margin-left: -30px;" onkeypress="return checkValidInputKeyPress(alphabet_space_regex_pattern)" maxlength="30">
-                            </div> -->
-                    <!-- </div> -->
-                    <!-- </div> -->
-                    <!-- </div> -->
                 </div>
             </div>
     </div>
@@ -73,11 +48,6 @@ $liquor_select_array = (isset($liquor_list)) ? $liquor_list : array();
                 <!-- <div class='col-1'></div> -->
 
                 <div class="col-12">
-                    <!-- <div class="form-group">
-                            <label>Invoice No.</label>
-                            <input type="text" id="invoice_no" maxlength="16" class="form-control" name="invoice_no" placeholder="Enter Invoice No." style="width: 200px;" required="" data-parsley-required-message="Please Enter Invoice No." data-parsley-trigger="keyup" onkeypress="return checkValidInputKeyPress(numeric_regex_pattern)">
-                        </div> -->
-
                     <div class="form-group row pt-4">
                         <div class="col-12">
                             <div class="panel panel-primary">
@@ -116,15 +86,6 @@ $liquor_select_array = (isset($liquor_list)) ? $liquor_list : array();
                                 <p class="pt-2 text-white"><b>Order Details:- </b></p>
                                 <div id="brewery_name"></div>
                             </div>
-                            <!-- <div class="row"> -->
-                            <!-- <div class="col-md-4">
-                                    <h4 class="mt-2 ml-2"><b>Sales Type : </b><span id="sales_type_modal" class="bg-success"> </span> </h4>
-                                </div>
-                                <div class="col-md-4">
-                                    <h4 class="mt-2 ml-2"><b>Purpose : </b><span id="purpose_modal"> </span> </h4>
-                                </div> -->
-                            <!-- </div> -->
-                            <!-- <h4 class="mt-2 ml-2"><b>Selected Type : </b><span id="selected_type_modal" class="bg-success"> </span> </h4> -->
                             <table class="table table-hover small-text table-striped" id="tb2">
                                 <thead>
                                     <tr class="tr-header">
@@ -179,8 +140,6 @@ $liquor_select_array = (isset($liquor_list)) ? $liquor_list : array();
 
     });
 
-
-
     // var invoice_no;
     var sales_type;
     var select_type;
@@ -189,23 +148,6 @@ $liquor_select_array = (isset($liquor_list)) ? $liquor_list : array();
     var mainArr = [];
 
     function stock_modal() {
-
-        // invoice_no = $('#invoice_no').val();
-        // sales_type = $("input[type=radio][name=sales_type]:checked").val();
-        // purpose = $("#purpose").val();
-        // console.log(sales_type);
-
-        // select_type = $("#select_type option:selected").val();
-        // console.log(select_type);
-        // var select_type_name = $(this).find('#select_type option:selected').text();
-        // console.log(select_type_name);
-
-        // $("#invoice-no").append(invoice_no);
-        // $("#sales_type_modal").append(sales_type);
-        // $("#purpose_modal").append(purpose);
-        // $("#select_type_modal").append(select_type);
-        // $("#selected_type_modal").append(sales_type);
-
         var row;
         var mainTable = $('#tb2');
         var tr = mainTable.find('tbody tr');
@@ -270,17 +212,6 @@ $liquor_select_array = (isset($liquor_list)) ? $liquor_list : array();
 
 
     $(function() {
-        // $("#liquor_name").change(function() {
-        //     $("#new_stock1").val('');
-        //     $("#total").val('');
-        // });
-
-
-        // $(document).on('change', '#liquor_name', function() {
-        //     var liquor_id = document.getElementById('liquor_name').value;
-        //     // console.log(liquor_id);
-
-        // });
         $(document).ready(function() {
             $("#selling_price, #quantity1").keyup(function() {
                 var total = 0;
@@ -360,33 +291,6 @@ $liquor_select_array = (isset($liquor_list)) ? $liquor_list : array();
 
     function loadValues() {
         validation = true;
-        // invoice_no = $('#invoice_no').val();
-        // sales_type = $("input[type=radio][name=sales_type]:checked").val();
-        // console.log(sales_type);
-        // select_type = $("#select_type option:selected").val();
-        // purpose = $("#purpose").val();
-        // console.log(purpose);
-
-        // console.log("After add stock" + validation);
-        // console.log(invoice_no);
-        // if (invoice_no == "") {
-        //     swal("Please Enter Invoice No.");
-        //     return false;
-        // }
-        // if (sales_type == "" || sales_type == null) {
-        //     swal("Please Select Sales Type.");
-        //     return false;
-        // }
-        // if (select_type == "" || select_type == null) {
-        //     swal("Please Select Mess/User Type.");
-        //     return false;
-        // }
-
-        // if (liquor_name == "" || liquor_name == null){
-        //     swal("Please select a liquor name.");
-        //     return false;
-        // }
-
         mainArr = [];
         var tmpArr = [];
         var mainTable = $('#tb2');
@@ -428,26 +332,7 @@ $liquor_select_array = (isset($liquor_list)) ? $liquor_list : array();
             i++;
 
             liquor_entity_id_array.push(tmpArr.liquor_entity_id);
-
-            // console.log(liquor_entity_id_array_length);
-
-            // console.log(unique_liquor_entity_id_array_size);
-
-            // console.log(tmpArr.liquor_entity_id);
-
-            // console.log(tmpArr);
-            // has to clean on every found for take every td values into array
-            // $(this).find('td').each(function() {
-            //     var values = $(this).find('select,input').val();
-            //     // console.log(values);
-            //     if (typeof values !== 'undefined' && values != null && values.length > 0) {
-            //         tmpArr.push(values);
-            //     }
-            // });
             mainArr.push(tmpArr);
-            // console.log(sales_type);
-            // console.log(select_type);
-            // console.log(purpose);
 
         });
 
@@ -468,50 +353,9 @@ $liquor_select_array = (isset($liquor_list)) ? $liquor_list : array();
         } else {
             swal("Kindly select a liquor to place the order");
         }
-
-
-
-        // console.log(mainArr);
-        // var liquor_array = [];
-        // var available_stock_array = [];
-        // var new_stock_array = [];
-        // var total_array = [];
-        // var arraylength = mainArr.length - 1;
-        // // var agendavalidation = "";
-
-        // for (i = 1; i <= arraylength; i++) {
-        //     var liquor = mainArr[i][0];
-        //     var available_stock = mainArr[i][1];
-        //     var new_stock = mainArr[i][2];
-        //     var total = mainArr[i][3];
-
-        //     liquor_array.push(liquor);
-        //     available_stock_array.push(available_stock);
-        //     new_stock_array.push(new_stock);
-        //     total_array.push(total);
-
-        // }
-
-
-        // $('#createmeetingbtn').attr("disabled", true);
-
-
-        // if (validation == true) {
-
-        // } else {
-        //     // console.log("last validationcheck" + validation);
-        //     swal("All Fields are Mandatory");
-        //     return false;
-        // }
-
     }
 
     function store_data() {
-        // console.log(mainArr.length);
-        // return false;
-        // console.log(sales_type);
-        // console.log(select_type);
-        // console.log(purpose);
         var brewery_id = $("#select_brewery").val();
         document.getElementById("confirm").disabled = true;
         $.ajax({
@@ -520,10 +364,6 @@ $liquor_select_array = (isset($liquor_list)) ? $liquor_list : array();
             data: {
                 csrf_test_name: csrfHash,
                 csrfName: csrfName,
-                // sales_type: sales_type,
-                // select_type: select_type,
-                // purpose: purpose,
-
                 mainArr: mainArr,
                 brewery_id: brewery_id
             },
@@ -551,11 +391,8 @@ $liquor_select_array = (isset($liquor_list)) ? $liquor_list : array();
                 // }
             },
             error: function() {
-                // alert(DOMAIN + 'custom/Custom/createplanning');
                 alert("Error!!");
-
             }
-
         });
     }
 </script>

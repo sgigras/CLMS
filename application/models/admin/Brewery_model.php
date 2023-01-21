@@ -33,7 +33,6 @@ class Brewery_model extends CI_Model
 		$this->db->set('mobile_no', $this->input->post('mobilenumber'));
 		$this->db->set('mail_id', checkIMPemail($this->input->post('emailaddress')));
 		$this->db->set('state', implode(',', $this->input->post('select_brewerystate')));
-		// $this->db->set('serving_entity',implode(',', $this->input->post('select_breweryentity')));
 		$this->db->insert('master_brewery');
 	}
 
@@ -42,13 +41,11 @@ class Brewery_model extends CI_Model
 		$this->db->set('entity_name', $this->input->post('brewery_name'));
 		$this->db->set('entity_type', '1');
 		$this->db->set('address', $this->input->post('breweryaddress'));
-		// $this->db->set('brewery_contactperson',$this->input->post('contactperson'));
 		$this->db->set('chairman_mobileno', $this->input->post('mobilenumber'));
 		$this->db->set('chairman_mailid', $this->input->post('emailaddress'));
 		$this->db->set('state', implode(',', $this->input->post('select_brewerystate')));
 		$this->db->set('creation_time', date('Y-m-d H:i:s'));
 		$this->db->set('created_by', $this->session->userdata('admin_id'));
-		// $this->db->set('serving_entity',implode(',', $this->input->post('select_breweryentity')));
 		$this->db->insert('master_entities');
 	}
 
@@ -293,16 +290,7 @@ class Brewery_model extends CI_Model
 		$this->db->join("master_state as MS", "find_in_set(MS.id,MB.state)<> 0", "left", false);
 		$this->db->join("master_entities as ME", "find_in_set(ME.id,MB.serving_entity)<> 0", "left", false);
 		$this->db->group_by('MB.id');
-		// $this->db->join('master_entities as ME', 'ME.id = MB.serving_entity', 'left');
-
-		// $this->db->where('FIND_IN_SET(MS.id, MB.state)');
-		// $this->db->or_where('FIND_IN_SET(ME.id, MB.serving_entity)');
-		// $this->db->where_in('taxid', $taxid);
-		// $this->db->where_in('stateid', $statesidlist);
 		$query = $this->db->get();
-		// $querypreview=$this->db->last_query();
-		// print_r($querypreview);
-		// die();
 		return $query->result_array();
 	}
 
@@ -323,13 +311,6 @@ class Brewery_model extends CI_Model
 		$this->db->select("brand_id");
 		$this->db->where("entity_id", $breweryid);
 		$query = $this->db->get("brand_stockist_mapping");
-		// $this->db->select("bm.id,me.entity_name,concat(ld.brand,'',ld.liquor_description,'',' - ',ld.liquor_type) as brand_name");
-		// $this->db->from("brand_stockist_mapping as bm");
-		// $this->db->join("master_entities as me","find_in_set(me.id,bm.entity_id)<>0",false);
-		// $this->db->join("liquor_details as ld","find_in_set(ld.liquor_description_id,bm.brand_id)<>0",false);
-		// // $this->db->where("bm.id",$stockistid);
-		// $this->db->where('id',$stockistid);
-		// $query = $this->db->get();
 		return $query->row_array();
 	}
 
@@ -349,12 +330,7 @@ class Brewery_model extends CI_Model
 		$this->db->where("entity_id", $stockistid);
 		$response = $this->db->get("brand_stockist_mapping");
 		$result = $response->result_array();
-		// $result[0]['entity_id']	$this->db->update("brand_stockist_mapping",$data);
-
-		// print_r($result);
-		// die();
 		if (count($result) > 0) {
-			// $this->db->set("brand_id", $this->db->post("brand_id"));
 			$this->db->where("entity_id", $stockistid);
 			$this->db->update("brand_stockist_mapping", $data);
 			return true;
@@ -365,9 +341,6 @@ class Brewery_model extends CI_Model
 		}
 	}
 
-
-
-
 	public function fetchInitialEntityFormDetails()
 	{
 		$data['title'] = trans('add_new_brewery');
@@ -376,8 +349,6 @@ class Brewery_model extends CI_Model
 		$data['entities_record'] = $this->getentities();
 		return $data;
 	}
-
-
 
 	public function fetchBreweryDetails($id)
 	{
@@ -392,11 +363,6 @@ class Brewery_model extends CI_Model
 		$brewery_result = $query->result();
 
 		$data['brewery_data'] = $brewery_result;
-		// $brewery_name = $brewery_result[0]->brewery_name;
-		// $address = $brewery_result[0]->address;
-		// $contact_person_name = $brewery_result[0]->contact_person_name;
-		// $mobile_no = $brewery_result[0]->mobile_no;
-		// $mail_id = $brewery_result[0]->mail_id;
 		$state = $brewery_result[0]->state;
 
 		//CONVERTIN COMMA SEPARATED STATE IDS TO ARRAY
@@ -407,8 +373,6 @@ class Brewery_model extends CI_Model
 
 		//CONVERTING COMMA SEPARATED ENTITY IDS TO ARRAY
 		$servingentity_array = explode(",", $serving_entity);
-		// $data['brewery_data'][0]->serving_entity=$servingentity_array;
-		// $isactive = $brewery_result[0]->isactive;
 
 		//GET IDS AND NAMES OF STATES MAPPED WITH BREWERY
 		$this->db->select('id,state');
@@ -463,14 +427,8 @@ class Brewery_model extends CI_Model
         INNER JOIN liquor_details ld
         ON lem.liquor_description_id=ld.liquor_description_id
         WHERE lem.entity_id = $entity_id";
-		//$where_clause
-		// echo $query;
 		$response = $db->query($query);
 		$result = $response->result();
-		// echo "<pre>";
-		// print_r($result);
-		// die();
-		// echo "</pre>";
 		$db->close();
 		return $result;
 	}
@@ -481,8 +439,6 @@ class Brewery_model extends CI_Model
 	{
 		$db = $this->db;
 		$query = "CALL SP_ADDITIONAL_SHEETS('$data')";
-		// echo $query;
-		// die;
 		$response = $db->query($query);
 		$db->close();
 		$result = $response->result();
@@ -493,8 +449,6 @@ class Brewery_model extends CI_Model
 	function fetchOrderRequested($order_id)
 	{
 		$db = $this->db;
-		// $query="select id,insert_time from brewery_order_liquor_details where id = 1;";
-
 		$query = "SELECT bm.brewery_name,bd.brewery_order_id,bd.liquor_base_price,bd.liquor_brewery_id,bd.total_quantity,bd.total_purchase_price,
 		ca.firstname as requested_by 
 		FROM brewery_order_liquor_details as bd

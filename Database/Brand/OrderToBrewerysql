@@ -1,0 +1,100 @@
+CREATE TABLE brewery_order (
+  id int NOT NULL AUTO_INCREMENT,
+  brewery_id int,
+  brewery_order_code varchar(10),
+  approval_status varchar(10)  COMMENT 'A-Approved R-Rejected P-Pending',
+  approval_from int,
+  approved_by int,
+  approved_time datetime DEFAULT current_timestamp(),
+  created_by int,
+  creation_time datetime DEFAULT current_timestamp(),
+  modification_time datetime,
+  modified_by int,
+  remarks varchar(70),
+  PRIMARY KEY(id)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+CREATE TABLE brewery_order_liquor_details (
+  id int NOT NULL AUTO_INCREMENT,
+  brewery_order_id int,
+  liquor_description_id int,
+  liquor_brewery_id tinyint,
+  total_quantity int,
+  liquor_base_price float(12,2),
+  total_purchase_price float(12,2),
+  insert_time datetime DEFAULT current_timestamp(),
+  inserted_by int,
+  PRIMARY KEY(id)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+CREATE PROCEDURE `SP_ORDER_TO_BREWERY`(IN P_DATA JSON)
+BEGIN
+
+		DECLARE V_APPROVAL_STATUS,V_SWAL_TYPE,V_SWAL_TITLE,V_SWAL_TEXT,V_PURPOSE,V_LIQUOR_NAME,V_LIQUOR_LIST,V_ORDER_CODE,V_GENERATE_ORDER_CODE VARCHAR(225);
+		DECLARE V_MESSAGE_LIQUOR_QTY TEXT;
+		DECLARE V_LIQUOR_DETAILS_DATA JSON;
+        DECLARE V_USER_ID,V_IRLA,V_CHAIRMAN_ID BIGINT;
+		DECLARE V_LIQUOR_DETAILS_DATA_COUNT,V1,V_TOTAL_QUANTITY,V_LIQUOR_ID ,V_QUANTITY,V_ENTITY_ID,V_BREWERY_ID,V_LIQUOR_DESCRIPTION_ID,V_BREWERY_ORDER_ID INT DEFAULT 0;
+        DECLARE V_BASE_PRICE,V_TOTAL_PER_LIQUOR_PRICE,V_TOTAL_COST FLOAT(11,2);
+        
+        DECLARE EXIT HANDLER FOR SQLEXCEPTION
+			BEGIN
+				ROLLBACK;
+				GET DIAGNOSTICS CONDITION 1
+					@P1 = MESSAGE_TEXT, @P2 = RETURNED_SQLSTATE;
+					INSERT INTO sp_error_log_data(page_name, sp_name, data_passed,  error_message, returne_sql_state)
+					VALUES('ORDER TO BREWERY', 'SP_ORDER_TO_BREWERY', P_DATA, @P1, @P2);
+					SET V_SWAL_TYPE = "warning", V_SWAL_TITLE = "unable to place order", V_SWAL_TEXT = "";
+					SELECT V_SWAL_TYPE, V_SWAL_TITLE, V_SWAL_TEXT, @P1, @P2;
+			END;
+		
+        START TRANSACTION;
+			SET V_USER_ID = FN_EXTRACT_JSON_DATA(P_DATA,0,'user_id');
+			SET V_BREWERY_ID = FN_EXTRACT_JSON_DATA(P_DATA,0,'brewery_id');
+			SET V_ENTITY_ID = FN_EXTRACT_JSON_DATA(P_DATA,0,'entity_id');
+			SET V_LIQUOR_DETAILS_DATA = FN_EXTRACT_JSON_DATA(P_DATA,0,'liquor_details_data');
+			SET V_LIQUOR_DETAILS_DATA_COUNT = JSON_LENGTH(V_LIQUOR_DETAILS_DATA);
+			SET V1 = 0;
+			SET V_LIQUOR_LIST='';
+			SET V_MESSAGE_LIQUOR_QTY='';
+			SET V_APPROVAL_STATUS = 'P';
+            SET V_ORDER_CODE = "";
+            
+            SELECT chairman INTO V_CHAIRMAN_ID FROM master_entities WHERE id=V_ENTITY_ID;
+			
+            	WHILE(V_ORDER_CODE="") DO
+					SET V_GENERATE_ORDER_CODE=lpad(conv(floor(rand()*pow(36,8)), 10, 36), 8, 0);  
+					IF NOT EXISTS (SELECT id FROM brewery_order WHERE brewery_order_code=V_GENERATE_ORDER_CODE) THEN
+						BEGIN
+							SET V_ORDER_CODE=V_GENERATE_ORDER_CODE; 
+						END;
+					END IF;            
+				END WHILE;
+            
+            
+		   INSERT INTO brewery_order
+					(brewery_id,brewery_order_code,approval_status,approval_from,approved_time,created_by,creation_time)
+				VALUES(V_BREWERY_ID,V_ORDER_CODE,V_APPROVAL_STATUS,V_CHAIRMAN_ID,NOW(),V_USER_ID,NOW());
+				
+			SELECT id INTO V_BREWERY_ORDER_ID FROM brewery_order ORDER BY brewery_order_code=V_ORDER_CODE DESC LIMIT 1;
+			
+			 WHILE(V1<V_LIQUOR_DETAILS_DATA_COUNT) DO
+				BEGIN
+					SET V_LIQUOR_ID  = FN_EXTRACT_JSON_DATA(V_LIQUOR_DETAILS_DATA, V1, 'liquor_entity_id');
+					SET V_BASE_PRICE = FN_EXTRACT_JSON_DATA(V_LIQUOR_DETAILS_DATA, V1, 'selling_price');
+					SET V_QUANTITY = FN_EXTRACT_JSON_DATA(V_LIQUOR_DETAILS_DATA, V1, 'quantity');
+					SET V_TOTAL_COST = FN_EXTRACT_JSON_DATA(V_LIQUOR_DETAILS_DATA, V1,'total');
+					SET V_TOTAL_QUANTITY=V_TOTAL_QUANTITY+V_QUANTITY;
+				
+					INSERT INTO brewery_order_liquor_details
+					(brewery_order_id,liquor_description_id,liquor_brewery_id,total_quantity,liquor_base_price,total_purchase_price,insert_time,inserted_by)
+					VALUES(V_BREWERY_ORDER_ID,V_LIQUOR_ID,V_LIQUOR_ID ,V_QUANTITY,V_BASE_PRICE,V_TOTAL_COST,NOW(),V_USER_ID);
+			
+				SET V1 = V1+1; 
+			END;
+			END WHILE;
+			
+            SET V_SWAL_TYPE = "success", V_SWAL_TITLE = CONCAT("Order Code:",V_ORDER_CODE),V_SWAL_TEXT = "order has been sent for confirmation to the chairman";        
+	COMMIT;
+		SELECT V_SWAL_TYPE,V_SWAL_TITLE,V_SWAL_TEXT;
+END;
