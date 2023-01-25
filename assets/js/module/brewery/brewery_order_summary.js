@@ -1,7 +1,6 @@
 var cart_id = 0
 var details_mode = 'hold_cart_collapsible_view';
 // $('#select_order').select2({ 'width': '100%', 'placeholder': 'search order code' })
-
 $('#select_order').change(function () {
   console.log("changed");
   console.log(page_hit);
@@ -10,7 +9,6 @@ $('#select_order').change(function () {
   }
   // checkInputEmpty('select_order', 'Kindly select a order code')
 })
-
 // console.log('on ready');
 $("#select_order").keypress(function(e) {
   // alert("hello")
@@ -27,14 +25,11 @@ $("#select_order").keypress(function(e) {
       return true;
   }
 });
-
 // $("#searchCartDetails").click(function(e) {
-
 //   // console.log("clicked");
 //   // console.log(page_hit);
 //   var select_order = document.getElementById('select_order').value;
 //   console.log(select_order);
-
 //   var regex=/[a-zA-Z0-9]/;
 //   console.log(regex.test(select_order));
 //   if( regex.test( select_order )) {
@@ -48,7 +43,6 @@ $("#select_order").keypress(function(e) {
 //   // return true;
 //   }    
 // });
-
 function checkPageHit() {
   console.log(page_hit);
   if (page_hit !== 'start') {
@@ -57,13 +51,11 @@ function checkPageHit() {
     $('#searchCartDetails').trigger('click')
   }
 }
-
 $('#searchCartDetails').click(function (event) {
   event.preventDefault()
   details_mode = 'hold_cart_collapsible_view';
   fetchOrderDetails(details_mode);
 })
-
 function fetchOrderDetails(div) {
   // event.preventDefault()
   console.log(page_hit)
@@ -77,7 +69,6 @@ function fetchOrderDetails(div) {
     empty_flag = false
   }
   console.log(order_code)
-
   if (!empty_flag) {
     $.ajax({
       url: DOMAIN + 'order/OrderDetails/fetchBreweryOrderDetails',
@@ -99,12 +90,7 @@ function fetchOrderDetails(div) {
     })
   }
 }
-
-
 function edit_order_delivery(cart_id) {
-  // console.log('clicked')
-  // return false
-  // var cart_id = $('#select_order').val()
   var order_code = $('#select_order').val()
   var page_mode = 'order_summary_delivery'
   console.log(cart_id + '----' + order_code + '--' + page_mode)
@@ -113,7 +99,6 @@ function edit_order_delivery(cart_id) {
     method: 'POST',
     data: { csrf_test_name: csrfHash, order_code: order_code, page_mode: page_mode },
     success: function (response) {
-      // console.log(response)
       window.location.href = DOMAIN + 'order/OrderDetails/fetchCartDetails'
     },
     error: function (error) {
@@ -121,18 +106,15 @@ function edit_order_delivery(cart_id) {
     }
   })
 }
-
 function submit_order_delivery() {
   $("#myModal").modal('show');
   $("#confirmDeliveryModal").html('');
   $(".card-info").clone().appendTo("#confirmDeliveryModal");
 }
-
 function submit_order_delivery_check() {
   // var cart_id = $('#select_order').val()
   var order_code = $('#select_order').val()
   var page_mode = 'order_summary_delivery'
-
   // console.log(cart_id + '----' + order_code + '--' + page_mode)
   $.ajax({
     url: DOMAIN + 'order/OrderDetails/completeDeliveryProcess',
@@ -170,4 +152,3 @@ function submit_order_delivery_check() {
     }
   })
 }
-

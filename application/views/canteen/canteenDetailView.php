@@ -1,5 +1,8 @@
 <!-- Content Wrapper. Contains page content -->
 <?php
+// echo '<pre>';
+// print_r($outlet_type_select_option_array);
+// die;
 $resultArray = (isset($canteen_club_data)) ? $canteen_club_data[0] : new stdClass;
 $city_select_array = (isset($city_list)) ? $city_list : array();
 $distributor_name_select_array = (isset($distributor_name_list)) ? $distributor_name_list : array();
@@ -73,7 +76,7 @@ $distributor_name_select_array = (isset($distributor_name_list)) ? $distributor_
                     <?php $this->load->view('master/select_field', array("field_id" => "select_supervisor", "CSS_CLASS" => "select_canteen_user", "label" => "supervisor", "place_holder" => "Select a supervisor", "option_record" => $user_details, "option_value" => "id", "option_text" => "name", "selected_value" => getValue('supervisor', $resultArray))); ?>
                 </div>
                 <!--distributor distributor name-->
-                <div class="col-6">
+                <div class="col-6" id="distribute_authority">
                     <?php $this->load->view('master/select_field', array("field_id" => "select_distrubuting_authority", "label" => "distrubuting_authority", "place_holder" => "Select a distributor authority", "option_record" => $distributor_authority_record, "option_value" => "id", "type" => "hidden", "option_text" => "distributor_authority", "selected_value" => getValue('authorised_distributor', $resultArray))); ?>
                 </div>
                 <!-- <div class="col-6" id="distrubuting_authority" style="display: none;">
@@ -101,7 +104,7 @@ $distributor_name_select_array = (isset($distributor_name_list)) ? $distributor_
                 <div class="col-md-12">
                     <button id="addEntity" class="btn btn-primary pull-right"><?= $title ?></button>
                     <!--<in[>-->
-                    <input type="hidden" name="submit" value="submit" />
+                    <input type="hidden" name="submit" value="submit" id="submit" />
                 </div>
             </div>
             <?php echo form_close(); ?>

@@ -23,9 +23,7 @@ class ReceivedLiquorAPI extends MY_Controller
     public function fetchReceivedLiquor()
     {
         $order_code = $this->input->post('order_code');
-        $entity_id = $this->session->userdata('entity_id');
-
-        $result = $this->received_model->fetchReceivedLiquor($order_code, $entity_id);
+        $result = $this->received_model->fetchReceivedLiquor($order_code);
         // if()
         // print_r($result);
         if (count($result) > 0) {

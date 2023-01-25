@@ -250,9 +250,9 @@ class Canteen_master_model extends CI_Model
     public function getUsersDetails($irlano)
     {
         $db = $this->db;
-        $query = "SELECT ca.admin_id AS id,concat( ca.user_rank,'. ',ca.firstname,' ',IFNULL(ca.lastname,''),' - ',ca.username) AS name,ca.username 
+        $query = "SELECT distinct ca.admin_id AS id,concat( ca.user_rank,'. ',ca.firstname,' ',IFNULL(ca.lastname,''),' - ',ca.username) AS name,ca.username 
                   FROM ci_admin ca 
-                   WHERE ca.username like '%$irlano%' and  ca.firstname IS NOT NULL  AND ca.user_rank is NOT NULL group by ca.username ";
+                   WHERE ca.username like '%$irlano%' and  ca.firstname IS NOT NULL  AND ca.user_rank is NOT NULL";
 
         $response = $db->query($query);
         $db->close();

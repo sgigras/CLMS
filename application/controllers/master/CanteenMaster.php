@@ -97,20 +97,23 @@ class CanteenMaster extends MY_Controller
                 'chairman' => $this->input->post('select_chairman'),
                 'supervisor' => $this->input->post('select_supervisor'),
                 'executive' => $this->input->post('select_executive'),
-                'distrubuting_entity_type' => $this->input->post('select_distrubuting_authority'    ),
+                'distrubuting_entity_type' => $this->input->post('select_distrubuting_authority'),
                 'distributor_authorised_entity' => $this->input->post('select_distributor_name'),
-                // 'distributor_authorised_entity_1' => array($this->input->post('select_distributor_name_1')),
-                // 'distrubuting_entity_type' => '',
-                // 'distributor_authorised_entity' => '',
-                // 'distributor_authorised_entity_1' => '',
                 'user_id' => $this->session->userdata('admin_id'),
                 'mode' => 'A',
             );
+            if ($data['distrubuting_entity_type'] == "" ){
+                $data['distrubuting_entity_type'] = "0";
+            }
 
+            if ($data['distributor_authorised_entity'] == "" ){
+                $data['distributor_authorised_entity'] = "0";
+            }
+            // print_r($data);
+            // die();
             $response = $this->CheckEntityMasterForm();
             if ($response['success']) {
                 $response['model_response'] = $this->canteen_master_model->insert_canteen_details(json_encode($data));
-
                 if ($response['model_response'][0]->V_SWAL_TYPE == 'success') {
                     $this->session->set_userdata('action_messages', $response['model_response'][0]->V_SWAL_TITLE);
                     $this->session->set_userdata('action_messages', $response['model_response'][0]->V_SWAL_MESSAGE);

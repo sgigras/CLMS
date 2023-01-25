@@ -1,29 +1,15 @@
 $(function () {
     //Initialize Select2 Elements
-    // $('.select2').select2()
+    $('.form-select2').select2()
     $('#brewerystate,#select_brewerystate').select2({
         width: '100%',
         placeholder: 'Select States'
     });
-
     $('#breweryentity,#select_breweryentity').select2({
         width: '100%',
         placeholder: 'Select Entities'
     });
-
-
 })
-
-
-
-// $('#brewerystate').on('select2:select', function (e) {
-//     var data = e.params.data;
-//     console.log(data);
-//     $("#brewerystate option:first").removeAttr("selected");
-// });
-
-
-
 $("#breweryname").change(function () {
     checkInputEmpty("breweryname", "Kindly Enter Brewery Name");
 });
@@ -42,10 +28,8 @@ $("#emailaddress").change(function () {
 $("#brewerystate").change(function () {
     var states = $('#brewerystate').val();
     if (states.length > 0 && states[0] !== "") {
-        // alert('selected');
         $('#brewerystate_error').html("");
     } else {
-        // alert('not selected');
         submit_data_error_check = false;
         $('#brewerystate_error').html("Please Select A State");
     }
@@ -53,10 +37,8 @@ $("#brewerystate").change(function () {
 $("#breweryentity").change(function () {
     var breweryentity = $('#breweryentity').val();
     if (breweryentity.length > 0 && breweryentity[0] !== "") {
-        // alert('selected');
         $('#breweryentity_error').html("");
     } else {
-        // alert('not selected');
         submit_data_error_check = false;
         $('#breweryentity_error').html("Please Select An Entity");
     }
@@ -65,25 +47,18 @@ $('#breweryregistrationfrm').submit(function (e) {
     e.preventDefault();
     submit_data_error_check = true;
     var states = $('#brewerystate').val();
-    // console.log(states);
     if (states.length > 0 && states[0] !== "") {
-        // alert('selected');
         $('#brewerystate_error').html("");
     } else {
-        // alert('not selected');
         submit_data_error_check = false;
         $('#brewerystate_error').html("Please Select A State");
     }
-
-
     var breweryentity = $('#breweryentity').val();
     console.log(breweryentity);
     if (breweryentity.length > 0 && breweryentity[0] !== "") {
-        // alert('selected');
         $('#breweryentity_error').html("");
     } else {
         submit_data_error_check = false;
-        // alert('not selected');
         $('#breweryentity_error').html("Please Select An Entity");
     }
     checkInputEmpty("breweryname", "Kindly Enter Brewery Name");
@@ -91,10 +66,7 @@ $('#breweryregistrationfrm').submit(function (e) {
     checkInputEmpty("contactperson", "Kindly Enter Contact Person Name");
     checkInputEmpty("mobilenumber", "Kindly Enter 10 Digit Mobile Number");
     checkInputEmpty("emailaddress", "Kindly Enter Contact Email Address");
-
     var me = $(this);
-    // alert("submit");
-    console.log("validation check " + submit_data_error_check);
     if (submit_data_error_check) {
         $.ajax({
             url: me.attr('action'),
@@ -136,7 +108,6 @@ $('#breweryregistrationfrm').submit(function (e) {
                                 spanelement.after(value);
                             }
                         } else {
-
                             element.after(value);
                         }
                     })
@@ -153,4 +124,3 @@ $('#breweryregistrationfrm').submit(function (e) {
         });
     }
 });
-

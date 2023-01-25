@@ -1,17 +1,13 @@
 <!-- Content Wrapper. Contains page content -->
 <?php
 $resultArray = (isset($brewery_data)) ? $brewery_data[0] : new stdClass;
-// echo '<pre>';
-// print_r($resultArray);die();
 ?>
-<!--<div class="content-wrapper" style="margin-top: 55px;min-height: 580.08px !important;">-->
 <!-- Main content -->
 <style>
     .select2-container--default .select2-selection--multiple .select2-selection__choice {
         background-color: grey;
         border-color: black;
     }
-
     .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
         color: red;
     }
@@ -37,7 +33,6 @@ $resultArray = (isset($brewery_data)) ? $brewery_data[0] : new stdClass;
             $redirect_url = ($mode == 'A') ? 'master/BreweryMaster/addBrewery' : 'master/BreweryMaster/editBrewery/' . getValue('id', $resultArray);
             echo form_open(base_url($redirect_url), array('class' => 'form-horizontal', 'id' => 'breweryregistrationfrm'), 'class="form-horizontal"');
             ?>
-
             <!--outlet and canteen name-->
             <div class="row">
                 <div class="col-6">
@@ -47,7 +42,6 @@ $resultArray = (isset($brewery_data)) ? $brewery_data[0] : new stdClass;
                     <?php $this->load->view('master/address_field', array("field_id" => "breweryaddress", "label" => "breweryaddress", "max_length" => "250", "place_holder" => "Enter Brewery Address", "value" => getValue('address', $resultArray))); ?>
                 </div>
             </div>
-
             <!--state and city name-->
             <div class="row">
                 <div class="col-6">
@@ -57,52 +51,20 @@ $resultArray = (isset($brewery_data)) ? $brewery_data[0] : new stdClass;
                     <?php $this->load->view('master/numeric_field', array("field_id" => "mobilenumber", "label" => "mobilenumber", "max_length" => "10", "place_holder" => "Enter Mobile Number", "value" => getValue('mobile_no', $resultArray))); ?>
                 </div>
             </div>
-
-
-
             <!--Address -->
             <div class="row">
                 <div class="col-6">
                     <?php $this->load->view('master/email_field', array("field_id" => "emailaddress", "label" => "emailaddress", "max_length" => "70", "place_holder" => "Enter Email Address", "value" => getValue('mail_id', $resultArray))); ?>
                 </div>
-                
-                <!-- <div class="col-6">
-                    <?php $this->load->view('master/select_field_multiple', array("field_id" => "select_brewerystate", "name" => "select_brewerystate[]", "label" => "brewerystate", "place_holder" => "Select Brewery State", "option_record" => $state_record, "option_value" => "id", "option_text" => "state", "selected_value" => getValue('state', $resultArray))); ?>
-                </div> -->
-
-                <div class="col-6">
-                    <?php
-                    $this->load->view('master/select_field', array("field_id" => "select_state", "label" => "select_state", "place_holder" => "Select a state", "option_record" => $state_record, "option_value" => "id", "option_text" => "state", "name" => "select_state", "selected_value" => getValue('stateid', $resultArray))); ?>
-                </div>
-
             </div>
-            <div class="error" id="emailErr" name="emailErr" style="color:red;"></div>
-
-
-
-            <!--executive supervisor-->
-            <!-- <div class="row">
-                <div class="col-12">
-                    <?php $this->load->view('master/select_field_multiple', array("field_id" => "select_breweryentity", "name" => "select_breweryentity[]", "label" => "breweryentity", "place_holder" => "Select Brewery Entity", "option_record" => $entities_record, "option_value" => "id", "option_text" => "entity_name", "selected_value" => getValue('entity_name', $resultArray))); ?>
-                </div>
-            </div> -->
-            <!-- <div class="form-group">
-                <div class="col-md-12">
-                    <button id="addEntity" class="btn btn-primary pull-right" ><?= $title ?></button> -->
-            <!--<in[>-->
-
             <div class="row">
                 <div class="col-sm-6">
                     <input type="hidden" name="submit" value="submit" />
                     <button type="submit" Style="width: 100px;" id="breweryregistrationfrm" class=" btn btn-primary btn-md center-block"><?= trans('submit') ?></button> &nbsp; &nbsp;
-                    <!-- <button id="btnClear" class="btn btn-danger btn-md center-block" Style="width: 100px;" OnClick="btnClear_Click">Reset</button> -->
                 </div>
             </div>
-            <!-- </div>
-            </div> -->
             <?php echo form_close(); ?>
         </div>
-        <!-- /.box-body -->
     </div>
 </section>
 <script>

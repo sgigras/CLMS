@@ -81,12 +81,12 @@ class Order_model extends CI_Model
 
     public function fetchPrintReceipt($cart_order_code)
     {
-        $db = $this->db;
+        // $db = $this->db;
 
-        $fetch_cart_id_query = "SELECT id FROM cart_details WHERE  order_code=? AND is_order_placed=1 AND is_order_delivered=1 ORDER BY ID DESC LIMIT 1";
-        $cart_id_response = $db->query($fetch_cart_id_query, array($cart_order_code));
-        $cart_id_result = $cart_id_response->result();
-        $cart_id = $cart_id_result[0]->id;
+        // $fetch_cart_id_query = "SELECT id FROM cart_details WHERE  order_code=? AND is_order_placed=1 AND is_order_delivered=1 ORDER BY ID DESC LIMIT 1";
+        // $cart_id_response = $db->query($fetch_cart_id_query, array($cart_order_code));
+        // $cart_id_result = $cart_id_response->result();
+        // $cart_id = $cart_id_result[0]->id;
 
 
         // $query = "SELECT me.entity_name,me.address as canteen_address,ca.username as irla,concat(bh.rank,'-',bh.name) as name,			
@@ -106,25 +106,52 @@ class Order_model extends CI_Model
         //             WHERE cd.order_code=? and od.is_liquor_removed=0 and cd.is_order_placed=1 and cd.is_order_delivered=1 ";
 
 
-        $query = "SELECT me.entity_name,me.address as canteen_address,ca.username as irla,concat(bh.rank,'-',bh.name) as name,			
-                    Concat(ld.liquor_type,' ',ld.brand,' ',ld.liquor_description,' ',ld.bottle_size) as liquor_bill_description,
-                    cd.order_code as order_code,
-                    concat(od.recevied_quantity) as quantity, 
-                    od.recevied_cost_lot_size as unit_lot_cost, 
-                    (od.recevied_cost_lot_size * od.recevied_quantity) as total_quantity_cost FROM 
-                    cart_details cd  
-                    INNER JOIN order_details as od  ON cd.id=od.cart_id
+        // $query = "SELECT me.entity_name,me.address as canteen_address,ca.username as irla,concat(bh.rank,'-',bh.name) as name,			
+        //             Concat(ld.liquor_type,' ',ld.brand,' ',ld.liquor_description,' ',ld.bottle_size) as liquor_bill_description,
+        //             cd.order_code as order_code,
+        //             concat(od.recevied_quantity) as quantity, 
+        //             od.recevied_cost_lot_size as unit_lot_cost, 
+        //             (od.recevied_cost_lot_size * od.recevied_quantity) as total_quantity_cost FROM 
+        //             cart_details cd  
+        //             INNER JOIN order_details as od  ON cd.id=od.cart_id
 
-                    INNER JOIN ci_admin as ca on ca.admin_id=od.order_by  
-                    INNER JOIN bsf_hrms_data as bh on bh.irla=ca.username and bh.date_of_birth=ca.date_of_birth
-                    INNER JOIN liquor_entity_mapping lem ON lem.id=od.liquor_entity_id 
-                    INNER JOIN master_entities me on me.id=lem.entity_id
-                    INNER JOIN liquor_details ld ON ld.liquor_description_id=lem.liquor_description_id 
-                    WHERE cd.id=? and od.is_liquor_removed=0 and cd.is_order_placed=1 and cd.is_order_delivered=1 ";
-        $response = $db->query($query, array($cart_id));
-        $result = $response->result_array();
-        $db->close();
-        return $result;
+        //             INNER JOIN ci_admin as ca on ca.admin_id=od.order_by  
+        //             INNER JOIN bsf_hrms_data as bh on bh.irla=ca.username and bh.date_of_birth=ca.date_of_birth
+        //             INNER JOIN liquor_entity_mapping lem ON lem.id=od.liquor_entity_id 
+        //             INNER JOIN master_entities me on me.id=lem.entity_id
+        //             INNER JOIN liquor_details ld ON ld.liquor_description_id=lem.liquor_description_id 
+        //             WHERE cd.id=? and od.is_liquor_removed=0 and cd.is_order_placed=1 and cd.is_order_delivered=1 ";
+        // $response = $db->query($query, array($cart_id));
+        // $result = $response->result_array();
+        // $db->close();
+        // return $result;
+
+        $db = $this->db;
+		$query = "SELECT
+            DISTINCT
+            bo.brewery_order_code,
+            bd.brewery_order_id,
+            bm.brewery_name,
+            ca.firstname as requested_by,
+            bo.approval_status,
+            bo.brewery_order_code,
+            (select firstname from ci_admin where admin_id=bo.approved_by) as approved_by,
+            bo.approved_time,
+            bo.creation_time,
+            bo.approval_status
+        FROM
+            brewery_order_liquor_details as bd
+                INNER JOIN brewery_order bo
+                    ON bo.id = bd.brewery_order_id
+                INNER JOIN ci_admin ca
+                    ON ca.admin_id=bo.created_by
+                INNER JOIN master_brewery bm
+                    ON bm.id=bo.brewery_id WHERE bo.brewery_order_code = ".$cart_order_code;
+        echo $query;
+		$response = $db->query($query);
+		$db->close();
+		$result = $response->result_array();
+		return $result;
     }
 
     public function deliveryCheckOut($cart_details)

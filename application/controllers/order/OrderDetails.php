@@ -243,19 +243,18 @@
 
         public function printReceipt()
         {
-            if ($this->session->userdata('print_reciept')) {
-                $cart_order_code = $this->session->userdata('print_reciept');
-                $response = $this->order_model->fetchPrintReceipt($cart_order_code);
-                $receipt_data['canteen_name'] = $response[0]['entity_name'];
-                $receipt_data['name'] = $response[0]['name'];
-                $receipt_data['canteen_address'] = $response[0]['canteen_address'];
-                $receipt_data['irla'] = $response[0]['irla'];
-                $receipt_data['order_code'] = $response[0]['order_code'];
-                $receipt_data['liquor_details'] = $response;
+            if (isset($_SESSION["print_reciept"])) {
+                $cart_order_code = $_SESSION["print_reciept"];
+                $data['brewerysummary'] = $this->order_model->fetchPrintReceipt($cart_order_code);
+                // $receipt_data['canteen_name'] = $response[0]['entity_name'];
+                // $receipt_data['name'] = $response[0]['name'];
+                // $receipt_data['canteen_address'] = $response[0]['canteen_address'];
+                // $receipt_data['irla'] = $response[0]['irla'];
+                // $receipt_data['order_code'] = $response[0]['order_code'];
+                // $receipt_data['liquor_details'] = $response;
 
                 $this->load->view('admin/includes/_header');
-                $this->load->view('order/invoice', $receipt_data);
-                $this->load->view('admin/includes/_footer');
+                $this->load->view('order/invoice', $data);
             } else {
                 header('Location: ' . $_SERVER['HTTP_REFERER']);
             }

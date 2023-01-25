@@ -12,6 +12,7 @@ class SSOAuthentication extends CI_Controller
         {
             //Get Login Token
             $token = $_POST["id_token"];
+            //echo $token;
             $sub = $this->SSO_model->JWTDecode($token);
 
             $profiletoken = $this->SSO_model->GetProfileToken();

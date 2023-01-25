@@ -55,7 +55,7 @@ class HimveerSSOAuthModel extends CI_Model
         $requestUrl = $this->config->item("api-baseurl").$this->config->item("get-token-url");
         $client_id =  $this->config->item("client_id");
         $client_secret =  $this->config->item("client_secret");
-        $scope = $this->config->item("hrms-scope");
+        $scope = $this->config->item("hrms-scope-token");
         $requestType = "POST";
         $grant_type = "client_credentials";
         $ContentType = 'application/x-www-form-urlencoded';
@@ -76,11 +76,13 @@ class HimveerSSOAuthModel extends CI_Model
         $requestUrl = $this->config->item("hrms-api-baseurl").$this->config->item("hrms-basic-detail");
         $requestType = "POST";
         $ContentType = 'application/x-www-form-urlencoded';
+        $scope = $this->config->item("hrms-scope");
         $headeroption = array(
             'Authorization: Bearer '.$token,
             'Content-Type: '.$ContentType
         );
         $dataArray = 'RegtlNo='.$RegtlNo;
+        $dataArray .= '&scope='.$scope;
         $data = self::RequestAPI($requestUrl, $requestType,$headeroption,$dataArray);
 
         return $data;
@@ -132,6 +134,10 @@ class HimveerSSOAuthModel extends CI_Model
         $query = "CALL SP_INSERT_UPDATE_HIMVEER_USER_DETAIL('$V_USERNAME','$V_PIN','$V_NAME','$V_DOB','$V_EMAIL',
         '$V_MOBILENO','$V_TOKEN','$V_RANK','$V_SUB_RANK')";
 
+        // print_r($profiledata);
+        // echo $query;
+        // die;
+
         $response = $this->db->query($query);
 		$result = $response->result();
 		$this->db->close();
@@ -149,7 +155,8 @@ class HimveerSSOAuthModel extends CI_Model
         );
         //$additionaldata = $this->UserAdditionalDetail($irlano,$dob);
         $resultArray = $this->HimveerLogin($irlano,$dob,$pin);
-        //print_r($resultArray);
+        // print_r($resultArray);
+        // die;
         if (count($resultArray) > 0) {
             $result = $resultArray[0];
             $admin_data = array(
@@ -166,6 +173,7 @@ class HimveerSSOAuthModel extends CI_Model
                 'token' => $token,
                 'IsHimveerLogin'=>TRUE
             );
+
             $this->session->set_userdata($admin_data);
         }
         $this->session->userdata('token');
@@ -203,13 +211,12 @@ class HimveerSSOAuthModel extends CI_Model
         $result = $response->result();
         if (count($result) > 0)
         {
-            $pin = '$2y$10$08Ouk/Dx.8SMne1GZZZQTOV8ir9JJ5GU5LUTQw8XR0wZGpGOPll4a';
-            $validPassword =($pin==$result[0]->password?true:false);
-            if ($validPassword) {
+            // $validPassword =($pin==$result[0]->password?true:false);
+            // if ($validPassword) {
                 $query = "update ci_admin set last_login = now() where username = '".$irlano."' and date_of_birth = '".$dob."'";
                 $this->db->query($query);
                 return $result;
-            }
+            // }
         }
         return array();
     }

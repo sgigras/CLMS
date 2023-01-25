@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(document).ready(function() {
     $("#outlet_type").select2({ width: '100%', placeholder: 'Select an outlet' });
     $("#battalion_unit").select2({ width: '100%', placeholder: 'Select an Unit' });
     $("#select_state").select2({ width: '100%', placeholder: 'Select a state' });
@@ -8,19 +8,25 @@ $(document).ready(function () {
     $("#select_supervisor").select2({ width: '100%', placeholder: 'Select a supervisor' });
     $("#select_distrubuting_authority").select2({ width: '100%', placeholder: 'Select a distributor authorithy' });
     $("#select_distributor_name").select2({ width: '100%', placeholder: 'Select a distributor name' });
+    // $("select_distrubuting_authority").hide();
     $('#distrubuting_authority').hide();
     $('#distrubuting_authority_1').hide();
 
 
 
-    $("#outlet_type").change(function () {
+    $("#outlet_type").change(function() {
         checkInputEmpty("outlet_type", "Kindly select a outlet");
         var outlet_type_val = $("#outlet_type option:selected").text();
+        if (outlet_type_val == 'Depot') {
+            $('#distribute_authority').hide();
+        } else {
+            $('#distribute_authority').show();
+        }
         distribution_authority_enable_disable_option(outlet_type_val);
         create_canteen_name();
     });
 
-    $("#battalion_unit").change(function () {
+    $("#battalion_unit").change(function() {
         checkInputEmpty("battalion_unit", "Kindly select a unit");
         create_canteen_name();
     });
@@ -35,17 +41,17 @@ $(document).ready(function () {
             dataType: 'json',
             delay: 250,
             method: 'POST',
-            data: function (params) {
+            data: function(params) {
                 var query = {
-                    search: params.term,
-                    //                    transporterid: transporterid,
-                    // ats_sign: ats_sign
-                    csrf_test_name: csrfHash
-                }
-                // Query parameters will be ?search=[term]&type=public
+                        search: params.term,
+                        //                    transporterid: transporterid,
+                        // ats_sign: ats_sign
+                        csrf_test_name: csrfHash
+                    }
+                    // Query parameters will be ?search=[term]&type=public
                 return query;
             },
-            processResults: function (data) {
+            processResults: function(data) {
                 console.log(data);
                 return {
 
@@ -69,17 +75,17 @@ $(document).ready(function () {
             dataType: 'json',
             delay: 250,
             method: 'POST',
-            data: function (params) {
+            data: function(params) {
                 var query = {
-                    search: params.term,
-                    //                    transporterid: transporterid,
-                    // ats_sign: ats_sign
-                    csrf_test_name: csrfHash
-                }
-                // Query parameters will be ?search=[term]&type=public
+                        search: params.term,
+                        //                    transporterid: transporterid,
+                        // ats_sign: ats_sign
+                        csrf_test_name: csrfHash
+                    }
+                    // Query parameters will be ?search=[term]&type=public
                 return query;
             },
-            processResults: function (data) {
+            processResults: function(data) {
                 console.log(data);
                 return {
 
@@ -102,17 +108,17 @@ $(document).ready(function () {
             dataType: 'json',
             delay: 250,
             method: 'POST',
-            data: function (params) {
+            data: function(params) {
                 var query = {
-                    search: params.term,
-                    //                    transporterid: transporterid,
-                    // ats_sign: ats_sign
-                    csrf_test_name: csrfHash
-                }
-                // Query parameters will be ?search=[term]&type=public
+                        search: params.term,
+                        //                    transporterid: transporterid,
+                        // ats_sign: ats_sign
+                        csrf_test_name: csrfHash
+                    }
+                    // Query parameters will be ?search=[term]&type=public
                 return query;
             },
-            processResults: function (data) {
+            processResults: function(data) {
                 console.log(data);
                 return {
 
@@ -124,8 +130,8 @@ $(document).ready(function () {
         }
     });
 
-   
-    $("#select_distrubuting_authority").change(function () { //on selection of distrubition authority fetching the respective distributor
+
+    $("#select_distrubuting_authority").change(function() { //on selection of distrubition authority fetching the respective distributor
         console.log("in change func");
         // checkInputEmpty("select_distrubuting_authority", "Kindly select a distributoin authority");
         var distrubtor_authority_text = $("#select_distrubuting_authority option:selected").text();
@@ -142,7 +148,7 @@ $(document).ready(function () {
             url: DOMAIN + 'master/CanteenMaster/getDistrubutors',
             method: 'POST',
             data: { csrf_test_name: csrfHash, distrubtor_authority: distrubtor_authority },
-            success: function (response) {
+            success: function(response) {
                 var result = JSON.parse(response);
                 // console.log(result);
                 var distrubtor_name_html = '<option></option>';
@@ -165,7 +171,7 @@ $(document).ready(function () {
                     // valueSelect.removeAttr("multiple", "multiple");
                 }
             },
-            errror: function () {
+            errror: function() {
                 swal("Can't reach to the server");
             }
         });
@@ -202,7 +208,7 @@ $(document).ready(function () {
     // });
 
 
-    $("#select_state").change(function () {
+    $("#select_state").change(function() {
         // alert("Please select");
         checkInputEmpty("select_state", "Kindly select a state");
         var state_id = $(this).val();
@@ -211,7 +217,7 @@ $(document).ready(function () {
             url: DOMAIN + 'master/CanteenMaster/getCityList',
             method: 'POST',
             data: { csrf_test_name: csrfHash, state_id: state_id },
-            success: function (response) {
+            success: function(response) {
                 var result = JSON.parse(response);
                 var city_option_html = '<option></option>';
                 for (var i = 0; i < result.length; i++) {
@@ -219,7 +225,7 @@ $(document).ready(function () {
                 }
                 $("#select_city").html(city_option_html);
             },
-            errror: function () {
+            errror: function() {
                 swal("Can't reach to the server");
             }
         });
@@ -227,25 +233,25 @@ $(document).ready(function () {
 
 
 
-    $("#select_city").change(function () {
+    $("#select_city").change(function() {
         checkInputEmpty("select_city", "Kindly select a city");
     });
 
-    $("#select_chairman").change(function () {
+    $("#select_chairman").change(function() {
         checkInputEmpty("select_chairman", "Kindly select a chairman");
         // disableEnableSelectOptionUser("select_chairman", "select_exceutive");
         // disableEnableSelectOptionUser("select_chairman", "select_supervisor");
     });
 
 
-    $("#select_executive").change(function () {
+    $("#select_executive").change(function() {
         checkInputEmpty("select_executive", "Kindly select a executive");
         // disableEnableSelectOptionUser("select_executive", "select_supervisor");
         // disableEnableSelectOptionUser("select_executive", "select_chairman");
     });
 
 
-    $("#select_supervisor").change(function () {
+    $("#select_supervisor").change(function() {
 
         checkInputEmpty("select_supervisor", "Kindly select a supervisor");
         // disableEnableSelectOptionUser("select_supervisor", "select_exceutive");
@@ -253,15 +259,15 @@ $(document).ready(function () {
     });
 
 
-    $("#select_distributor_name").change(function () {
+    $("#select_distributor_name").change(function() {
         // checkInputEmpty("select_distributor_name", "Kindly select a distributor name");
     });
 
-    $("#canteen_name").change(function () {
+    $("#canteen_name").change(function() {
         nameValidation();
     });
 
-    $("#address").change(function () {
+    $("#address").change(function() {
         checkInputEmpty("address", "Kindly enter a address");
     });
     //    $("#")
@@ -322,13 +328,14 @@ $(document).ready(function () {
     //            });
     //        }
     //    });
-    $("#entity_details").submit(function (event) {
+    $("#entity_details").submit(function(event) {
         var entity_form_data = $(this);
+        // alert(entity_form_data);
         // console.log(entity_form_data.serialize());
         event.preventDefault();
         sumit_data_error_check = true;
         var canteenDetailsObj = {};
-        checkInputEmpty("outlet_type", "Kindly select a outlet");
+        //checkInputEmpty("outlet_type", "Kindly select a outlet");
         checkInputEmpty("select_state", "Kindly select a state");
         checkInputEmpty("select_city", "Kindly select a city");
         checkInputEmpty("select_distrubuting_authority", "Kindly select a distribution authority");
@@ -345,16 +352,16 @@ $(document).ready(function () {
                 method: 'POST',
                 data: entity_form_data.serialize(),
                 dataType: 'JSON',
-                beforeSend: function () {
+                beforeSend: function() {
                     $("#addEntity").attr('disabled', 'disabled');
                 },
-                success: function (response) {
+                success: function(response) {
                     //                alert('here');
                     $("#addEntity").removeAttr('disabled');
-                    console.log(response);  
+                    console.log(response);
                     if (!response.success) {
 
-                        $.each(response.messages, function (key, value) {
+                        $.each(response.messages, function(key, value) {
                             //                        console.log(key);
                             //                        console.log(value);
                             var element = $('#' + key);
@@ -375,8 +382,8 @@ $(document).ready(function () {
                                 text: "",
                                 icon: response.model_response[0].V_SWAL_TYPE,
                                 showConfirmButton: true
-                                //                            toast: true
-                            }).then(function (isConfirm) {
+                                    //                            toast: true
+                            }).then(function(isConfirm) {
                                 if (isConfirm) {
                                     window.location.href = DOMAIN + 'master/CanteenMaster';
                                 }
@@ -387,13 +394,13 @@ $(document).ready(function () {
                                 text: "",
                                 icon: response.model_response[0].V_SWAL_TYPE,
                                 showConfirmButton: true
-                                //                            toast: true
+                                    //                            toast: true
                             });
                         }
                     }
 
                 },
-                error: function (xhr, status, error) {
+                error: function(xhr, status, error) {
                     $("#addEntity").removeAttr('disabled');
                     //                    var err = eval("(" + xhr.responseText + ")");
                     //                    console.log(status);
@@ -426,7 +433,7 @@ function distribution_authority_enable_disable_option(outlet) {
             $("#select_distrubuting_authority_1").prop("disabled", true);
             $("#select_distrubuting_authority_2").prop("disabled", true);
             $("#select_distrubuting_authority_3").prop("disabled", false);
-            $("#select_distrubuting_authority_4").prop("disabled", true);
+            // $("#select_distrubuting_authority_4").prop("disabled", true);
             $("#select_distrubuting_authority").select2({ width: '100%', placeholder: 'Select a distributor authorithy' });
             break;
 
@@ -434,23 +441,23 @@ function distribution_authority_enable_disable_option(outlet) {
             $("#select_distrubuting_authority_1").prop("disabled", true);
             $("#select_distrubuting_authority_2").prop("disabled", true);
             $("#select_distrubuting_authority_3").prop("disabled", true);
-            $("#select_distrubuting_authority_4").prop("disabled", true);
+            // $("#select_distrubuting_authority_4").prop("disabled", true);
             $("#select_distrubuting_authority").select2({ display: "none", width: '100%', placeholder: 'Select a distributor authorithy' });
             break;
 
-        case 'FHQ':
-            $("#select_distrubuting_authority_1").prop("disabled", false);
-            $("#select_distrubuting_authority_2").prop("disabled", true);
-            $("#select_distrubuting_authority_3").prop("disabled", true);
-            $("#select_distrubuting_authority_4").prop("disabled", true);
-            $("#select_distrubuting_authority").select2({ width: '100%', placeholder: 'Select a distributor authorithy' });
-            break;
+            // case 'FHQ':
+            //     $("#select_distrubuting_authority_1").prop("disabled", false);
+            //     $("#select_distrubuting_authority_2").prop("disabled", true);
+            //     $("#select_distrubuting_authority_3").prop("disabled", true);
+            //     $("#select_distrubuting_authority_4").prop("disabled", true);
+            //     $("#select_distrubuting_authority").select2({ width: '100%', placeholder: 'Select a distributor authorithy' });
+            //     break;
 
         case 'Club':
             $("#select_distrubuting_authority_1").prop("disabled", true);
             $("#select_distrubuting_authority_2").prop("disabled", false);
             $("#select_distrubuting_authority_3").prop("disabled", true);
-            $("#select_distrubuting_authority_4").prop("disabled", true);
+            // $("#select_distrubuting_authority_4").prop("disabled", true);
             $("#select_distrubuting_authority").select2({ width: '100%', placeholder: 'Select a distributor authorithy' });
             break;
 
@@ -458,11 +465,11 @@ function distribution_authority_enable_disable_option(outlet) {
             $("#select_distrubuting_authority_1").prop("disabled", false);
             $("#select_distrubuting_authority_2").prop("disabled", false);
             $("#select_distrubuting_authority_3").prop("disabled", false);
-            $("#select_distrubuting_authority_4").prop("disabled", false);
+            // $("#select_distrubuting_authority_4").prop("disabled", false);
             $("#select_distrubuting_authority").select2({ width: '100%', placeholder: 'Select a distributor authorithy' });
             $("#select_distrubuting_authority").val('2').trigger('change');
             break;
-        // code block
+            // code block
     }
 }
 
@@ -476,6 +483,8 @@ function create_canteen_name() {
 function outlet_type_enable_disable_option(outlet) {
     $("#outlet_type").find('option').removeAttr("disabled");
     // $("#outlet_type").find('option').removeAttr("disabled");
+
+    // alert(outlet);
     switch (outlet) {
         case 'Sub-Depot':
             $("#outlet_type_2").prop("disabled", false);
@@ -485,7 +494,7 @@ function outlet_type_enable_disable_option(outlet) {
             $("#outlet_type").select2({ width: '100%', placeholder: 'Select a distributor authorithy' });
             break;
         case 'Depot':
-            $("#outlet_type_2").prop("disabled", true);
+            $("#outlet_type_2").prop("disabled", false);
             $("#outlet_type_3").prop("disabled", true);
             $("#outlet_type_4").prop("disabled", true);
             $("#outlet_type_5").prop("disabled", true);
@@ -514,7 +523,7 @@ function outlet_type_enable_disable_option(outlet) {
             $("#outlet_type_5").prop("disabled", true);
             $("#outlet_type").select2({ width: '100%', placeholder: 'Select a distributor authorithy' });
             break;
-        // code block
+            // code block
     }
 }
 

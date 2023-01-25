@@ -1,7 +1,4 @@
-<?php $form_data = $this->session->flashdata('form_data'); ?>
 <!-- Content Wrapper. Contains page content -->
-
-
 <section class="content">
     <div class="card">
         <div class="card-header">
@@ -10,13 +7,10 @@
             </div>
             <div class="d-inline-block float-right">
                 <a href="<?php echo site_url($add_url); ?>" class="btn btn-secondary"><i class="fa fa-plus"></i> <?= $add_title ?></a>
-                &nbsp;
-                <a href="#" onclick="window.history.go(-1); return false;" class="btn  btn-info pull-right" style="border-radius:7px"><i class="fa fa-reply mr5"></i> <?= trans('back') ?></a>
             </div>
         </div>
         <br>
         <div class="card-body">
-            <?php $this->load->view('admin/includes/_messages.php') ?>
             <table id="master_table" class="table table-bordered table-hover" style="border-collapse: collapse !important;border-color: #DA0037">
                 <thead style='background-color:#dc3545;color:white;border-color: #DA0037;box-shadow: 0px 1px 1px 0px #DA0037;'>
                     <tr>
@@ -28,7 +22,6 @@
                             echo "<th style='border-color: #DA0037'>" . trans($column_array[0]) . "</th>";
                         }
                         ?>
-
                         <th style="border-color: #DA0037">Action</th>
                     </tr>
                 </thead>
@@ -52,8 +45,6 @@
     </div>
 </section>
 <!-- /.content -->
-
-
 <script>
     $("body").on("change", ".tgl_checkbox", function() {
         $.post('<?= base_url("admin/admin_roles/change_status") ?>', {

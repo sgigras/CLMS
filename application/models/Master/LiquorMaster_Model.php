@@ -98,6 +98,7 @@ class LiquorMaster_Model extends CI_Model
     public function insert_update_liquor_details($product_data)
     {
         $db = $this->db;
+        $query = "CALL SP_INSERT_UPDATE_LIQUOR_DETAILS('".$product_data."')";
         $query = "CALL SP_INSERT_UPDATE_LIQUOR_DETAILS(?)";
         $response = $db->query($query, array($product_data));
         $result = $response->result();
