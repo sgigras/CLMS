@@ -4,7 +4,11 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title><?= isset($title) ? $title . ' - ' : 'Title -' ?> <?= $this->general_settings['application_name']; ?></title>
+    <?php if (isset($this->general_settings)) { ?>
+        <title><?= isset($title) ? $title . ' - ' : 'Title -' ?> <?= $this->general_settings['application_name']; ?></title>
+    <?php } else { ?> 
+        <title><?= isset($title) ? $title . ' - ITBP CLMS' : 'Title - ITBP CLMS' ?></title>
+    <?php }?>
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Font Awesome -->

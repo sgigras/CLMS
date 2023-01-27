@@ -1,38 +1,28 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
-
 class Profile extends MY_Controller {
 	
 	public function __construct(){
 		
 		parent::__construct();
-		auth_check(); // check login auth
+		auth_check();
 		$this->load->model('admin/admin_model', 'admin_model');
 	}
-
-	//-------------------------------------------------------------------------
 	public function index(){
-
 		if($this->input->post('submit') && count($_FILES['profilepics']['name']) > 0){
-
 			$number_of_files = count($_FILES['profilepics']['name']);
-
             $files = $_FILES;
 			$mode="";
-
             if (!is_dir('uploads/profilepics/'.$this->input->post('username').'/')) {
                 mkdir('./uploads/profilepics/'.$this->input->post('username').'/', 0777, true);
             }
-
             for ($i = 0; $i < $number_of_files; $i++) {
                 $_FILES['profilepics']['name'] = $files['profilepics']['name'][$i];
                 $_FILES['profilepics']['type'] = $files['profilepics']['type'][$i];
                 $_FILES['profilepics']['tmp_name'] = $files['profilepics']['tmp_name'][$i];
                 $_FILES['profilepics']['error'] = $files['profilepics']['error'][$i];
                 $_FILES['profilepics']['size'] = $files['profilepics']['size'][$i];
-
                 $config['upload_path'] = './uploads/profilepics/'.$this->input->post('username').'/';
                 $config['allowed_types'] = 'gif|jpg|png|PNG|jpeg';
-                //        $config['overwrite'] = TRUE;
                 $config['max_size'] = '0';
                 $config['max_width']  = '0';
                 $config['max_height']  = '0';
@@ -40,30 +30,17 @@ class Profile extends MY_Controller {
                 $this->load->library('upload', $config);
                 $this->upload->initialize($config);
                 if ($this->upload->do_upload('profilepics')) {
-                    $upload_data = $this->upload->data(); //Returns array of containing all of the data related to the file you uploaded.
-                    // print_r($upload_data);
-
+                    $upload_data = $this->upload->data();
 					$file_path = "uploads/profilepics/" .$this->input->post('username').'/'. $upload_data['orig_name'];
                     $file_name = $upload_data['orig_name'];
                 } else {
 					$mode="nofile";
-					// $this->session->set_flashdata('error', 'Please Select File To Upload!');
-				// redirect(base_url('admin/profile'), 'refresh');
-					// print_r($upload_data);
-
-                    // $message = "File Not Selected For Upload/Extension Not Supported!";
-                    // $errormessage = "<script>$(function() {swal('$message','','warning')});</script>";
                 }
             }
-
-			// die();
-
-
 			if($mode=="nofile"){
 				$data = array(
 					'username' => $this->input->post('username'),
 					'firstname' => $this->input->post('firstname'),
-					'lastname' => $this->input->post('lastname'),
 					'email' => $this->input->post('email'),
 					'mobile_no' => $this->input->post('mobile_no'),
 					'updated_at' => date('Y-m-d : h:m:s')
@@ -72,15 +49,12 @@ class Profile extends MY_Controller {
 				$data = array(
 					'username' => $this->input->post('username'),
 					'firstname' => $this->input->post('firstname'),
-					'lastname' => $this->input->post('lastname'),
 					'email' => $this->input->post('email'),
 					'mobile_no' => $this->input->post('mobile_no'),
 					'updated_at' => date('Y-m-d : h:m:s'),
 					'image'=>$file_path
 				);
-				// print_r($data);die();
-			}
-		
+			}		
 			$data = $this->security->xss_clean($data);
 			$result = $this->admin_model->update_user($data);
 			if($result){
@@ -89,7 +63,6 @@ class Profile extends MY_Controller {
 			}
 		}
 		else{
-
 			$data['title'] = 'Admin Profile';
 			$data['admin'] = $this->admin_model->get_user_detail();
 			
@@ -98,17 +71,11 @@ class Profile extends MY_Controller {
 			$this->load->view('admin/includes/_footer');
 		}
 	}
-
-	//-------------------------------------------------------------------------
 	public function change_pwd(){
-
 		$id = $this->session->userdata('admin_id');
-
 		if($this->input->post('submit')){
-
 			$this->form_validation->set_rules('password', 'Password', 'trim|required');
 			$this->form_validation->set_rules('confirm_pwd', 'Confirm Password', 'trim|required|matches[password]');
-
 			if ($this->form_validation->run() == FALSE) {
 				$data = array(
 					'errors' => validation_errors()
@@ -117,9 +84,8 @@ class Profile extends MY_Controller {
 				redirect(base_url('admin/profile/change_pwd'),'refresh');
 			}
 			else{
-
 				$data = array(
-					'password' => password_hash($this->input->post('password'), PASSWORD_BCRYPT)
+					'password' => md5($this->input->post('password'))
 				);
 				$data = $this->security->xss_clean($data);
 				$result = $this->admin_model->change_pwd($data, $id);
@@ -129,16 +95,13 @@ class Profile extends MY_Controller {
 				}
 			}
 		}
-		else{
-			
+		else{			
 			$data['title'] = 'Change Password';
-			$data['user'] = $this->admin_model->get_user_detail();
-			
+			// $data['user'] = $this->admin_model->get_user_detail();			
 			$this->load->view('admin/includes/_header');
 			$this->load->view('admin/profile/change_pwd', $data);
 			$this->load->view('admin/includes/_footer');
 		}
 	}
 }
-
 ?>	
