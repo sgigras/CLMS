@@ -13,14 +13,11 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-3">
-
                     <?php $this->load->view('master/select_field', array("field_id" => "posting_unit", "label" => "posting_unit", "place_holder" => "Select an posting_unit", "option_record" => $posting_unit_data, "option_value" => "posting_unit", "option_text" => "posting_unit", "selected_value" => ''));
                     // $this->load->view() 
                     ?>
-
                 </div>
                 <div class="col-3">
-
                     <?php
                     $status_array = array(array("status" => "serving", "option_text" => "Serving"), array("status" => "retired", "option_text" => "Retiree"));
                     $this->load->view('master/select_field', array("field_id" => "personnel_type", "label" => "personnel_type", "place_holder" => "select a personnel type", "option_record" => $status_array, "option_value" => "status", "option_text" => "option_text", "selected_value" => '')); ?>
@@ -36,10 +33,8 @@
                         array("status" => "verification_pending", "option_text" => "Verification Pending"),
                         array("status" => "verification_completed", "option_text" => "Only Verification Completed"),
                     );
-
                     $this->load->view('master/select_field', array("field_id" => "status_req", "label" => "registration_status", "place_holder" => "select a personnel type", "option_record" => $registration_status_array, "option_value" => "status", "option_text" => "option_text", "selected_value" => ''));
                     ?>
-
                 </div>
                 <div class="col-3" style="padding-top: 30px;">
                     <!-- <br><br> -->
@@ -48,7 +43,6 @@
                 </div>
             </div>
         </div>
-
 </section>
 <div style="margin-left: 10px; margin-right: 10px; margin-bottom: 20px; " class="card" id="hold_table">
     <div class="card-body table-responsive">
@@ -71,7 +65,6 @@
     </div>
 </div>
 <!-- /.content -->
-
 <link rel="stylesheet" href="<?= base_url() ?>assets/plugins/datatables/dataTables.bootstrap4.css">
 <script src="<?= base_url() ?>assets/plugins/datatables/jquery.dataTables.js"></script>
 <script src="<?= base_url() ?>assets/plugins/datatables/dataTables.bootstrap4.js"></script>
@@ -83,7 +76,6 @@
 <script src="<?= base_url() ?>assets/plugins/datatablesbtn/vfs_fonts.js"></script>
 <script src="<?= base_url() ?>assets/plugins/datatablesbtn/buttons.html5.min.js" defer></script>
 <script src="<?= base_url() ?>assets/plugins/datatablesbtn/buttons.html5.min.js" defer></script>
-
 <script>
     var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
     var csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';

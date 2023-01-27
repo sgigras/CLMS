@@ -1,0 +1,13 @@
+insert into itbp_clms.ci_users (id, username, firstname, lastname, email, mobile_no, password, address, role, is_active, is_verify, is_admin, token, password_reset_code, last_ip, created_at, updated_at)
+values  (3, 'admin', 'admin', 'admin', 'admin@admin.com', '12345', '$2y$10$qlAzDhBEqkKwP3OykqA7N.ZQk6T67fxD9RHfdv3zToxa9Mtwu9C/e', '27 new jersey - Level 58 - CA 444 
+
+United State ', 1, 1, 1, 1, '', '', '', '2017-09-29 10:09:44', '2017-12-14 10:12:41'),
+        (32, 'usergjkjljj;k;k''''kl''l''l''lll''l'';l''', 'user', 'user', 'user@user.com', '44897866462', '$2y$10$nYuGnV2pLSsijWt3oBqB2efHzKSoZLlYxy/Fhvr7XdRxaLL7F9NOi', '', 1, 1, 1, 0, '352fe25daf686bdb4edca223c921acea', '', '', '2018-04-24 07:04:07', '2021-10-20 00:00:00'),
+        (33, 'john123', 'john', 'smith', 'johnsmith@gmail.com', '445889654656', '$2y$10$CcBiQrcW597s5muOP2blhOev48gzBv2VvAVp83NsXbLo7cZM7tjGm', 'USA', 7, 1, 0, 0, '', '', '', '2018-04-25 06:04:25', '2019-01-24 04:01:33'),
+        (38, 'john', 'smith', 'johan', 'johnsmith@gmail.com', '123456', '$2y$10$5wXvKkhMTEatZ7aUHE/RU.lQbeXdURME8Br9Noxn802epBPoFz7wu', 'asdfdasfdsfds', 1, 1, 0, 0, '', '', '', '2019-07-15 09:07:24', '2019-07-15 09:07:24'),
+        (39, 'techesprit', 'zain', 'khan', 'zain@gmail.com', '03004596000', '$2y$10$F14///ug4J6WNd0selNJguZ2ib4ugER8u4n09Z787nz2g6j4gJZva', '111asdfasd', 1, 1, 0, 0, '', '', '', '2019-11-25 00:00:00', '2019-11-25 00:00:00'),
+        (40, 'techesprit', 'zain', 'khan', 'zain@gmail.com', '03004596000', '$2y$10$UbljVrMhHmqRYhJBumzmVOfXYmaOeZRMAEkBn0uF68Nj3VL4ACiHC', '111asdfasd', 1, 1, 0, 0, '', '', '', '2019-11-25 00:00:00', '2019-11-25 00:00:00'),
+        (44, 'test@fgh', 'trial', 'attempt', 'j@g.com', '456456487564', '$2y$10$ZMMXYhBpWL.inFVhDJ6BSOaeCZOu1tuPbYDY317dk9cMhPAXR/G9G', 'sdfdsfsdfs', 1, 1, 0, 0, '', '', '', '2021-10-17 00:00:00', '2021-10-17 00:00:00'),
+        (43, 'harish', 'Harish', 'Manoharan', 'harish.manoharan@aniruddhagps.com', '7507469760', '$2y$10$D16dnzxF08GOx.3r00GMWeSxekA8OSJeoW2EjDbpdY8gLpRg8l4Fi', 'Mumbai', 1, 1, 1, 0, '', '', '', '2021-10-16 00:00:00', '2021-10-16 00:00:00'),
+        (45, 'Amit@123', 'Amit', 'Thakur', 'amititbp@gmail.com', '6001597229', '$2y$10$9w7jW0ztlxbtPI1Mb5mQ.eIva/0AdL9TiQkRhq9ukktSsz8CWa3I6', ' Dte. Gen, Cgo complex ND', 1, 1, 0, 0, '', '', '', '2022-08-22 00:00:00', '2022-08-23 00:00:00'),
+        (46, 'Thakur$123', 'Amit', 'Thakur', 'amititbp@gmail.com', '6001597229', '$2y$10$XUxO9h/XvdphTlT7pq/t4uhWEz.YTj9brJfAHhF1BgoiMEcd707hy', ' Dte. Gen, Cgo complex ND', 1, 1, 0, 0, '', '', '', '2022-08-23 00:00:00', '2022-08-23 00:00:00');

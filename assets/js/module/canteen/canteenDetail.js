@@ -16,13 +16,13 @@ $(document).ready(function() {
 
     $("#outlet_type").change(function() {
         checkInputEmpty("outlet_type", "Kindly select a outlet");
-        var outlet_type_val = $("#outlet_type option:selected").text();
-        if (outlet_type_val == 'Depot') {
+        var outlet_type_val = $("#outlet_type option:selected").val();
+        if (outlet_type_val == '1') {
             $('#distribute_authority').hide();
         } else {
             $('#distribute_authority').show();
         }
-        distribution_authority_enable_disable_option(outlet_type_val);
+        //distribution_authority_enable_disable_option(outlet_type_val);
         create_canteen_name();
     });
 
@@ -136,14 +136,13 @@ $(document).ready(function() {
         // checkInputEmpty("select_distrubuting_authority", "Kindly select a distributoin authority");
         var distrubtor_authority_text = $("#select_distrubuting_authority option:selected").text();
         var distrubtor_authority = $("#select_distrubuting_authority").val();
-
         // console.log(distrubtor_authority);
 
         // let valueSelect = $('#select_distributor_name_1');
-        // alert(distrubtor_authority);
+        //alert(distrubtor_authority_text);
         // console.log(dist)
         // $("#select_distributor_name_1").val('').trigger('change');
-        outlet_type_enable_disable_option(distrubtor_authority_text);
+        outlet_type_enable_disable_option(distrubtor_authority);
         $.ajax({
             url: DOMAIN + 'master/CanteenMaster/getDistrubutors',
             method: 'POST',
@@ -157,15 +156,15 @@ $(document).ready(function() {
                 }
                 $('#distrubuting_authority').show();
 
-                if (distrubtor_authority == 1 || distrubtor_authority == '1') {
+                if (distrubtor_authority != 1 || distrubtor_authority == '1') {
                     $('#distrubuting_authority').show();
-                    $('#distrubuting_authority_1').hide();
+                    $('#distrubuting_authority_1').show();
                     // valueSelect.attr("multiple", "multiple");
-                    $("#select_distributor_name_1").html(distrubtor_name_html);
+                    $("#select_distributor_name").html(distrubtor_name_html);
                     // $('#select_distributor_name_1').select2();
                 } else {
-                    $('#distrubuting_authority_1').show();
-                    $('#distrubuting_authority').hide();
+                    $('#distrubuting_authority_1').hide();
+                    $('#distrubuting_authority').show();
                     // $('#select_distributor_name_1').multiselect();
                     $("#select_distributor_name").html(distrubtor_name_html);
                     // valueSelect.removeAttr("multiple", "multiple");
@@ -177,7 +176,7 @@ $(document).ready(function() {
         });
     });
 
-    if ($("#select_distrubuting_authority").val().trim() != "") {
+    if ($("#select_distrubuting_authority").length > 0 && $("#select_distrubuting_authority").val().trim() != "") {
         console.log($("#select_distrubuting_authority").val().trim());
         $("#select_distrubuting_authority").trigger("change");
     }
@@ -336,13 +335,13 @@ $(document).ready(function() {
         sumit_data_error_check = true;
         var canteenDetailsObj = {};
         //checkInputEmpty("outlet_type", "Kindly select a outlet");
-        checkInputEmpty("select_state", "Kindly select a state");
-        checkInputEmpty("select_city", "Kindly select a city");
-        checkInputEmpty("select_distrubuting_authority", "Kindly select a distribution authority");
-        checkInputEmpty("select_distributor_name", "Kindly select a distribution name");
-        checkDistinctPersonnel();
-        nameValidation();
-        addressValidation();
+        // checkInputEmpty("select_state", "Kindly select a state");
+        // checkInputEmpty("select_city", "Kindly select a city");
+        // checkInputEmpty("select_distrubuting_authority", "Kindly select a distribution authority");
+        // checkInputEmpty("select_distributor_name", "Kindly select a distribution name");
+        // checkDistinctPersonnel();
+        // nameValidation();
+        // addressValidation();
         //        alert('called');
 
         if (sumit_data_error_check) {
@@ -429,15 +428,19 @@ function distribution_authority_enable_disable_option(outlet) {
     $("#select_distrubuting_authority").find('option').removeAttr("disabled");
     $("#select_distrubuting_authority").select2();
     switch (outlet) {
-        case 'Sub-Depot':
-            $("#select_distrubuting_authority_1").prop("disabled", true);
+        case '2':
+            $("#select_distrubuting_authority_1").prop("disabled", false);
             $("#select_distrubuting_authority_2").prop("disabled", true);
-            $("#select_distrubuting_authority_3").prop("disabled", false);
-            // $("#select_distrubuting_authority_4").prop("disabled", true);
+            if ($("#select_distrubuting_authority_3").length > 0)
+                $("#select_distrubuting_authority_3").prop("disabled", true);
+            if ($("#select_distrubuting_authority_4").length > 0)
+                $("#select_distrubuting_authority_4").prop("disabled", true);
             $("#select_distrubuting_authority").select2({ width: '100%', placeholder: 'Select a distributor authorithy' });
+            $("#select_distributor_name").val('1').trigger('change');
+            $("#select_distributor_name").show();
             break;
 
-        case 'Depot':
+        case '1':
             $("#select_distrubuting_authority_1").prop("disabled", true);
             $("#select_distrubuting_authority_2").prop("disabled", true);
             $("#select_distrubuting_authority_3").prop("disabled", true);
@@ -453,7 +456,7 @@ function distribution_authority_enable_disable_option(outlet) {
             //     $("#select_distrubuting_authority").select2({ width: '100%', placeholder: 'Select a distributor authorithy' });
             //     break;
 
-        case 'Club':
+        case '3':
             $("#select_distrubuting_authority_1").prop("disabled", true);
             $("#select_distrubuting_authority_2").prop("disabled", false);
             $("#select_distrubuting_authority_3").prop("disabled", true);
@@ -483,24 +486,22 @@ function create_canteen_name() {
 function outlet_type_enable_disable_option(outlet) {
     $("#outlet_type").find('option').removeAttr("disabled");
     // $("#outlet_type").find('option').removeAttr("disabled");
-
-    // alert(outlet);
     switch (outlet) {
-        case 'Sub-Depot':
+        case '3':
             $("#outlet_type_2").prop("disabled", false);
             $("#outlet_type_3").prop("disabled", true);
             $("#outlet_type_4").prop("disabled", true);
             $("#outlet_type_5").prop("disabled", false);
             $("#outlet_type").select2({ width: '100%', placeholder: 'Select a distributor authorithy' });
             break;
-        case 'Depot':
+        case '1':
             $("#outlet_type_2").prop("disabled", false);
             $("#outlet_type_3").prop("disabled", true);
             $("#outlet_type_4").prop("disabled", true);
             $("#outlet_type_5").prop("disabled", true);
             $("#outlet_type").select2({ width: '100%', placeholder: 'Select a distributor authorithy' });
             break;
-        case 'FHQ':
+        case '2':
             $("#outlet_type_2").prop("disabled", false);
             $("#outlet_type_3").prop("disabled", false);
             $("#outlet_type_4").prop("disabled", false);
@@ -508,7 +509,7 @@ function outlet_type_enable_disable_option(outlet) {
             $("#outlet_type").select2({ width: '100%', placeholder: 'Select a distributor authorithy' });
             //            $("#select_distrubuting_authority").val('1').trigger('change');
             break;
-        case 'Brewery':
+        case '4':
             $("#outlet_type_2").prop("disabled", false);
             $("#outlet_type_3").prop("disabled", false);
             $("#outlet_type_4").prop("disabled", false);

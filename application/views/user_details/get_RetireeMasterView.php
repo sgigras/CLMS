@@ -2,13 +2,11 @@
 <!-- Main content -->
 <section class="content">
     <div class="row">
-
         <div class="col-lg-3 col-6">
             <!-- small box -->
             <div class="small-box bg-warning">
                 <div class="inner">
                     <h3><?= $pending; ?></h3>
-
                     <p style="color:white">Verification  Pending</p>
                 </div>
                 <div class="icon">
@@ -23,7 +21,6 @@
             <div class="small-box bg-success">
                 <div class="inner">
                     <h3><?= $approved; ?></h3>
-
                     <p style="color:white">Verification Approved</p>
                 </div>
                 <div class="icon">
@@ -38,7 +35,6 @@
             <div class="small-box bg-danger">
                 <div class="inner">
                     <h3><?= $denied; ?></h3>
-
                     <p style="color:white">Verifcation Denied</p>
                 </div>
                 <div class="icon">
@@ -52,7 +48,6 @@
             <div class="small-box bg-info">
                 <div class="inner">
                     <h3><?= $registered; ?></h3>
-
                     <p style="color:white">Retiree Registered</p>
                 </div>
                 <div class="icon">
@@ -67,9 +62,7 @@
             <div class="d-inline-block">
                 <h3 class="card-title"> <i class="fa fa-list"></i>
                     Retiree Verification Status Report</h3>
-
             </div>
-
         </div>
         <div class="card-body">
             <div class="row">
@@ -82,7 +75,6 @@
                         <!-- <option value="4">Rights Not Given</option>
                         <option value="5">Canteen Liquor's Added</option> -->
                     </select>
-
                 </div>
                 <div class="col-md-2">
                     <input type="submit" value="submit" name="submit" class="btn btn-info" onclick="retiree()">
@@ -90,10 +82,7 @@
             </div>
             <br>
             <div id="tableView">
-
             </div>
-
-
             <!-- PAGE PLUGINS -->
             <!-- SparkLine -->
             <!-- <script src="<?= base_url() ?>assets/plugins/sparkline/jquery.sparkline.min.js"></script> -->
@@ -104,8 +93,6 @@
             <!-- <script src="<?= base_url() ?>assets/plugins/slimScroll/jquery.slimscroll.min.js"></script> -->
             <!-- ChartJS 1.0.2 -->
             <!-- <script src="<?= base_url() ?>assets/plugins/chartjs-old/Chart.min.js"></script> -->
-
-
             <!-- <script>
                 $('#master_table').DataTable({
                     dom: 'Bfrtip',
@@ -137,10 +124,11 @@
     var baseurl = "<?php echo base_url(); ?>";
 </script>
 <!--</div>-->
-
-
-
 <script>
+    $("#retiree_report").select2({
+        width: '100%',
+        placeholder: 'Select a Status Type'
+    });
     function retiree() {
         var report_type = document.getElementById("retiree_report").value;
         // var strUser = report_type.value;
@@ -166,16 +154,5 @@
                 console.log(error);
             }
         });
-        // $.ajax({
-        //     method:"POST",
-        //     url: "<?php echo base_url(); ?>/canteenMaster/getCanteenData",
-        //     data:{report_type:report_type,csrfHash:csrfHash},
-        //     success:function(response){},
-        //     error:function(error){}
-
-
-        // }); 
-
-
     }
 </script>

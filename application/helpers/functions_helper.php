@@ -48,9 +48,29 @@
         function get_sidebar_menu()
         {
             $ci =& get_instance();
-            $ci->db->select('*');
-            $ci->db->order_by('sort_order','asc');
-            return $ci->db->get('module')->result_array();
+            $userroleid = $ci->session->userdata("admin_role_id");
+            
+            $ci =& get_instance();
+            $query = "SELECT
+                            module_id,
+                            module_name,
+                            m1.sort_order,
+                            m1.controller_name,
+                            (select if(count(*)>1,1,0) from sub_module sm
+                            where sm.parent=m1.module_id) as has_submenu,
+                            (select group_concat(concat(sm.id,'#',sm.name,'#',sm.link)) from sub_module sm
+                            where sm.parent=m1.module_id) as subnav     
+                    FROM module_access ma
+                        INNER JOIN module m1 on m1.controller_name = ma.module and ma.admin_role_id='{$userroleid}'
+                    GROUP BY module_id
+                    ORDER BY m1.sort_order     
+                    ";
+            //and (sm.link != '' OR sm.link != null)
+            // $ci->db->select('*');
+            // $ci->db->order_by('sort_order','asc');
+            // $result = $ci->db->get('module')->result_array();
+            $response = $ci->db->query($query);
+            return $response->result_array();
         }
     }
 

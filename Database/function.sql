@@ -1,5 +1,5 @@
 create
-    definer = itbp_final_user@`%` function FN_STRING_SPLIT(P_SPLIT_STRING text, P_DELIMITER varchar(20), P_POSITION int) returns varchar(500)
+    function FN_STRING_SPLIT(P_SPLIT_STRING text, P_DELIMITER varchar(20), P_POSITION int) returns varchar(500)
     deterministic
 BEGIN
   RETURN REPLACE(SUBSTRING(SUBSTRING_INDEX(P_SPLIT_STRING, P_DELIMITER, P_POSITION), LENGTH(SUBSTRING_INDEX(P_SPLIT_STRING, P_DELIMITER, P_POSITION - 1)) + 1), P_DELIMITER, '');

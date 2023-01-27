@@ -1,4 +1,3 @@
-
 <div class="table-responsive">
     <!-- <table id="example2" style="white-space:nowrap;" class="table  table-bordered table-hover "> -->
     <table id="master_table" class="table table-bordered table-hover" style="white-space:nowrap;border-collapse: collapse !important;border-color: #DA0037">
@@ -14,7 +13,6 @@
                     echo "<th style='border-color: #DA0037'>" . trans($column_array[0]) . "</th>";
                 }
                 ?>
-
                 <!-- <th style="border-color: #DA0037">Action</th> -->
             </tr>
         </thead>
@@ -24,7 +22,6 @@
             foreach ($table_data as $record) {
                 echo "<tr>";
                 echo "<td>" . $count++ . "</td>";
-
                 foreach ($table_head_array as $column_header) {
                     $data_key = explode(":", $column_header);
                     
@@ -33,7 +30,6 @@
                 echo "</tr>";
             }
             ?>
-
         </tbody>
     </table>
     <?php // $this->load->view('master/table_tr_td', array("table_header" => USER_DETAILS_TABLE, "table_data_array" => $user_details)) 

@@ -466,7 +466,8 @@ $config['csrf_token_name'] = 'csrf_test_name';
 $config['csrf_cookie_name'] = 'csrf_cookie_name';
 $config['csrf_expire'] = 7200;
 $config['csrf_regenerate'] = FALSE;
-$config['csrf_exclude_uris'] = array('mobileapi/NewUsersAPI/cancelOrder', 
+$config['csrf_exclude_uris'] = array(
+'mobileapi/NewUsersAPI/cancelOrder', 
 'mobileapi/NewUsersAPI/fetchRetireeDetails', 
 'mobileapi/NewUsersAPI/checkAppVersion', 
 'mobileapi/NewUsersAPI/checkDeviceRegistered', 
@@ -505,7 +506,11 @@ $config['csrf_exclude_uris'] = array('mobileapi/NewUsersAPI/cancelOrder',
 'himveer-sso-login/SSOAuthentication/login',
 'master/BreweryMaster/approveRejectOrder',
 'master/BreweryMaster/loadorderToBrewerylist',
-'master/BreweryMaster/approveRejectOrder'
+'master/BreweryMaster/approveRejectOrder',
+'admin/Auth/login',
+'admin/users/user_edit',
+'user_details/User_details/update_user',
+'user_details/User_details/GetPostingunitdata'
 );
 
 /* 

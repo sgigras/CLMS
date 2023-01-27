@@ -1,0 +1,3 @@
+insert into itbp_clms.additional_sheets (id, user_id, order_code, cart_id, entity_id, sales_type, select_type, purpose, liquor_entity_id, selling_price, quantity, total, sale_by, sale_time)
+values  (64507, 229, 'U0HT0CKJ', 32, 379, 'user', '229', 'issue beer', 107, '81', '24', '0', '229', '2022-09-23 15:06:37'),
+        (64509, 229, 'RMGVQR31', 51, 379, 'user', '229', 'issue beer', 107, '81', '24', '0', '229', '2022-12-11 14:08:53');

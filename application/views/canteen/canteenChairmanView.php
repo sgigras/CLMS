@@ -20,11 +20,9 @@ $distributor_name_select_array = (isset($distributor_name_list)) ? $distributor_
             </div>
         </div>
         <div class="card-body">
-
             <!-- For Messages -->
             <?php // $this->load->view('admin/includes/_messages.php')   
             ?>
-
             <?php
             $redirect_url = ($mode == 'A') ? 'master/CanteenMaster/addCanteenClub' : 'master/CanteenMaster/editChairmanCanteenClub/0';
             echo form_open(base_url($redirect_url), array('class' => 'form-horizontal', 'id' => 'entity_details'), 'class="form-horizontal"');
@@ -34,7 +32,6 @@ $distributor_name_select_array = (isset($distributor_name_list)) ? $distributor_
                 <input type="hidden" value="<?php echo getValue('id', $resultArray) ?>" name="entity_id" id="entity_id">
             <?php }
             ?>
-
             <!--outlet and canteen name-->
             <div class="row">
                 <div class="col-6">
@@ -47,7 +44,6 @@ $distributor_name_select_array = (isset($distributor_name_list)) ? $distributor_
                     <?php $this->load->view('master/alpha_numeric_space_field', array("field_id" => "canteen_name", "label" => "canteen_name", "max_length" => "70", "place_holder" => "Enter a name", "value" => getValue('entity_name', $resultArray))); ?>
                 </div>
             </div>
-
             <!--state and city name-->
             <div class="row">
                 <div class="col-6">
@@ -55,32 +51,27 @@ $distributor_name_select_array = (isset($distributor_name_list)) ? $distributor_
                 </div>
                 <div class="col-6">
                     <?php $this->load->view('master/select_field', array("field_id" => "select_city", "label" => "city", "place_holder" => "Select a city", "option_record" => $city_select_array, "option_value" => "id", "option_text" => "city_district_name", "selected_value" => getValue('city', $resultArray))); ?>
-
                 </div>
             </div>
-
-
-
             <!--Address & Chairman-->
             <div class="row">
                 <div class="col-6">
                     <?php $this->load->view('master/text_area_field', array("field_id" => "address", "label" => "address", "max_length" => "70", "place_holder" => "", "value" => getValue('address', $resultArray))); ?>
                 </div>
                 <div class="col-6">
-                    <?php $this->load->view('master/select_field', array("field_id" => "select_chairman", "CSS_CLASS" => "select_canteen_user", "label" => "chairman", "place_holder" => "Select a chairman", "option_record" => $user_details, "option_value" => "id", "option_text" => "name", "selected_value" => getValue('chairman', $resultArray))); ?>
+                    <?php //$this->load->view('master/select_field', array("field_id" => "select_chairman", "CSS_CLASS" => "select_canteen_user", "label" => "chairman", "place_holder" => "Select a chairman", "option_record" => $user_details, "option_value" => "id", "option_text" => "name", "selected_value" => getValue('chairman', $resultArray))); ?>
                 </div>
             </div>
             <!--executive supervisor-->
             <div class="row">
                 <div class="col-6">
-                    <?php $this->load->view('master/select_field', array("field_id" => "select_executive", "CSS_CLASS" => "select_canteen_user", "label" => "executive", "place_holder" => "Select a executive", "option_record" => $user_details, "option_value" => "id", "option_text" => "name", "selected_value" => getValue('executive', $resultArray))); ?>
+                    <?php //$this->load->view('master/select_field', array("field_id" => "select_executive", "CSS_CLASS" => "select_canteen_user", "label" => "executive", "place_holder" => "Select a executive", "option_record" => $user_details, "option_value" => "id", "option_text" => "name", "selected_value" => getValue('executive', $resultArray))); ?>
                 </div>
                 <div class="col-6">
                     <?php $this->load->view('master/select_field', array("field_id" => "select_supervisor", "CSS_CLASS" => "select_canteen_user", "label" => "supervisor", "place_holder" => "Select a supervisor", "option_record" => $user_details, "option_value" => "id", "option_text" => "name", "selected_value" => getValue('supervisor', $resultArray))); ?>
                 </div>
             </div>
             <!--</div>-->
-
             <!--distributor distributor name-->
             <div class="row">
                 <div class="col-6">
@@ -90,7 +81,6 @@ $distributor_name_select_array = (isset($distributor_name_list)) ? $distributor_
                     <?php $this->load->view('master/select_field', array("field_id" => "select_distributor_name", "label" => "distributor_name", "place_holder" => "Select a distributor name", "option_record" => $distributor_name_select_array, "option_value" => "id", "option_text" => "store_name", "selected_value" => getValue('store_id', $resultArray))); ?>
                 </div>
             </div>
-
             <div class="form-group">
                 <div class="col-md-12">
                     <button id="addEntity" class="btn btn-primary pull-right"><?= $title ?></button>

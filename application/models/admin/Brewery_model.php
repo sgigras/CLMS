@@ -200,7 +200,7 @@ class Brewery_model extends CI_Model
 	//Fetch Depot Name from master_entites table
 	function getDepotName()
 	{
-		$this->db->select("me.id,me.entity_name,mt.entity_type AS canteen_club,CONCAT(cc.firstname,' ',IFNULL(cc.lastname,''))AS chairman, CONCAT(IFNULL(cs.firstname,'N.A.'),' ',IFNULL(cs.lastname,'')) AS supervisor,CONCAT(IFNULL(ce.firstname,'N.A.'),' ',IFNULL(ce.lastname,'')) AS executive");
+		$this->db->select("me.id,me.entity_name,mt.entity_type AS canteen_club,cc.firstname AS chairman, cs.firstname AS supervisor,ce.firstname AS executive");
 		$this->db->from('master_entities as me');
 		$this->db->join("master_entity_type as mt", "find_in_set(me.entity_type,mt.id)<> 0", false);
 		$this->db->join("ci_admin as cs", "find_in_set(cs.admin_id,me.supervisor)<> 0", false);
@@ -283,23 +283,31 @@ class Brewery_model extends CI_Model
 	//Add
 	function insert()
 	{
-		$this->db->set('brewery_name', checkIMPalpha($this->input->post('brewery_name')));
-		$this->db->set('address', $this->input->post('breweryaddress'));
-		$this->db->set('contact_person_name', checkIMPalpha($this->input->post('contactperson')));
-		$this->db->set('mobile_no', $this->input->post('mobilenumber'));
-		$this->db->set('mail_id', checkIMPemail($this->input->post('emailaddress')));
-		$this->db->set('state', implode(',', $this->input->post('select_brewerystate')));
-		$this->db->insert('master_brewery');
+		$db = $this->db;
+		$brewery_name = checkIMPalpha($this->input->post('brewery_name'));
+		$address= $this->input->post('breweryaddress');
+		$contact_person_name = checkIMPalpha($this->input->post('contactperson'));
+		$mobile_no = $this->input->post('mobilenumber');
+		$mail_id = checkIMPemail($this->input->post('emailaddress'));
+		$state = $this->input->post('select_state');
+		$userid = $this->session->userdata('admin_id');
+		$query = "CALL SP_BREWERY('0',
+			'{$brewery_name}','{$address}','{$contact_person_name}','{$mobile_no}','{$mail_id}','{$state}','{$userid}','A'
+			)";
+		$response = $db->query($query);
+		$db->close();
+		$result = $response->result();
+		return $result;
 	}
 
 	function insertToEntityTable()
 	{
 		$this->db->set('entity_name', $this->input->post('brewery_name'));
-		$this->db->set('entity_type', '1');
+		$this->db->set('entity_type', '4');
 		$this->db->set('address', $this->input->post('breweryaddress'));
 		$this->db->set('chairman_mobileno', $this->input->post('mobilenumber'));
 		$this->db->set('chairman_mailid', $this->input->post('emailaddress'));
-		$this->db->set('state', implode(',', $this->input->post('select_brewerystate')));
+		$this->db->set('state', implode(',', $this->input->post('select_state')));
 		$this->db->set('creation_time', date('Y-m-d H:i:s'));
 		$this->db->set('created_by', $this->session->userdata('admin_id'));
 		$this->db->insert('master_entities');
@@ -322,7 +330,7 @@ class Brewery_model extends CI_Model
 
 		//CONVERTIN COMMA SEPARATED STATE IDS TO ARRAY
 		$stateid_array = explode(",", $state);
-		$data['brewery_data'][0]->state = $stateid_array;
+		//$data['brewery_data'][0]->state = $stateid_array;
 
 		$serving_entity = $brewery_result[0]->serving_entity;
 
@@ -362,11 +370,24 @@ class Brewery_model extends CI_Model
 	}
 
 	//Fetches states mapped with brewery
-	function updateBreweryDetails($breweryid, $data)
+	function updateBreweryDetails($breweryid)
 	{
-		$this->db->where('id', $breweryid);
-		$this->db->update('master_brewery', $data);
-		return true;
+		$db = $this->db;
+		$brewery_name = checkIMPalpha($this->input->post('brewery_name'));
+		$address= $this->input->post('breweryaddress');
+		$contact_person_name = checkIMPalpha($this->input->post('contactperson'));
+		$mobile_no = $this->input->post('mobilenumber');
+		$mail_id = checkIMPemail($this->input->post('emailaddress'));
+		$state = $this->input->post('select_state');
+		$userid = $this->session->userdata('admin_id');
+
+		$query = "CALL SP_BREWERY(
+			'{$breweryid}','{$brewery_name}','{$address}','{$contact_person_name}','{$mobile_no}','{$mail_id}','{$state}','{$userid}','E'
+			)";
+		$response = $db->query($query);
+		$db->close();
+		$result = $response->result();
+		return $result;
 	}
 
 

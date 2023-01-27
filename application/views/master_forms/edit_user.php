@@ -64,10 +64,22 @@
     </div>
 </div>
 <br>
-<div class="form-group">
-    <div class="col-md-12">
+<div class="row">
+    <div class="col-md-6">
         <button id="get_otp" onclick="getOtp()" class="btn btn-primary pull-right">Get OTP</button>&nbsp;&nbsp;
+        <!-- <button id="remove_mac_binding" onclick="removeMacBinding()" class="btn btn-primary pull-right">Remove Mac Binding</button>&nbsp;&nbsp;
+        <button id="edit" onclick="edituser()" class="btn btn-primary pull-right">Update</button> -->
+        <!-- <input type="hidden" name="submit" value="submit" /> -->
+    </div>
+    <div class="col-md-4">
+        <!-- <button id="get_otp" onclick="getOtp()" class="btn btn-primary pull-right">Get OTP</button>&nbsp;&nbsp; -->
         <button id="remove_mac_binding" onclick="removeMacBinding()" class="btn btn-primary pull-right">Remove Mac Binding</button>&nbsp;&nbsp;
+        <!-- <button id="edit" onclick="edituser()" class="btn btn-primary pull-right">Update</button> -->
+        <!-- <input type="hidden" name="submit" value="submit" /> -->
+    </div>
+    <div class="col-md-2">
+        <!-- <button id="get_otp" onclick="getOtp()" class="btn btn-primary pull-right">Get OTP</button>&nbsp;&nbsp; -->
+        <!-- <button id="remove_mac_binding" onclick="removeMacBinding()" class="btn btn-primary pull-right">Remove Mac Binding</button>&nbsp;&nbsp; -->
         <button id="edit" onclick="edituser()" class="btn btn-primary pull-right">Update</button>
         <!-- <input type="hidden" name="submit" value="submit" /> -->
     </div>

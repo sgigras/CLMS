@@ -4,6 +4,7 @@ class Auth extends MY_Controller
 	public function __construct()
 	{
 		parent::__construct();
+		$this->session->set_flashdata('error', null);
 		$this->load->library('mailer');
 		$this->load->model('admin/auth_model', 'auth_model');
 		$this->load->library(array('Cronslib/Smslib', 'Ats/atsuser'));
@@ -49,20 +50,18 @@ class Auth extends MY_Controller
 							exit();
 						}
 						if ($result['is_admin'] == 1) {
-							$additionaldata = $this->auth_model->fetchDetailsFromHrms($result);
+							//$additionaldata = $this->auth_model->fetchDetailsFromHrms($result);
 							$token = $this->getToken(50);
 							$admin_data = array(
 								'admin_id' => $result['admin_id'],
 								'entity_id' => (isset($result['entity_id'])) ? $result['entity_id'] : '',
 								'username' => $result['username'],
-								'rank' => (isset($additionaldata[0]['rank'])) ? $additionaldata[0]['rank'] : 'N.A',
+								'rank' => $result['rank'],
 								'mobile_no' => $result['mobile_no'],
 								'full_name' => $result['firstname'],
 								'admin_role_id' => $result['admin_role_id'],
 								'admin_role' => $result['admin_role_title'],
 								'is_supper' => $result['is_supper'],
-								'transporter_id' => $result['transporter_id'],
-								'plant_id' => $result['plant_id'],
 								'is_admin_login' => TRUE,
 								'profile_picture' => $result['image'],
 								'token' => $token,

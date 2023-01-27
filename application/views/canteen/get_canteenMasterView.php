@@ -6,9 +6,7 @@
             <div class="d-inline-block">
                 <h3 class="card-title"> <i class="fa fa-list"></i>
                     Canteen Details Report</h3>
-
             </div>
-
         </div>
         <div class="card-body">
             <div class="row">
@@ -21,7 +19,6 @@
                         <option value="4">Rights Not Given</option>
                         <option value="5">Canteen Liquor's Added</option>
                     </select>
-
                 </div>
                 <div class="col-md-2">
                     <input type="submit" value="submit" name="submit" class="btn btn-info" onclick="canteen()">
@@ -29,10 +26,7 @@
             </div>
             <br>
             <div id="tableView">
-
             </div>
-
-
             <!-- PAGE PLUGINS -->
             <!-- SparkLine -->
             <!-- <script src="<?= base_url() ?>assets/plugins/sparkline/jquery.sparkline.min.js"></script> -->
@@ -43,7 +37,6 @@
             <!-- <script src="<?= base_url() ?>assets/plugins/slimScroll/jquery.slimscroll.min.js"></script> -->
             <!-- ChartJS 1.0.2 -->
             <!-- <script src="<?= base_url() ?>assets/plugins/chartjs-old/Chart.min.js"></script> -->
-
             <link rel="stylesheet" href="<?= base_url() ?>assets/plugins/datatables/dataTables.bootstrap4.css">
             <script src="<?= base_url() ?>assets/plugins/datatables/jquery.dataTables.js"></script>
             <script src="<?= base_url() ?>assets/plugins/datatables/dataTables.bootstrap4.js"></script>
@@ -55,7 +48,6 @@
             <script src="<?= base_url() ?>assets/plugins/datatablesbtn/pdfmake.min.js"></script>
             <script src="<?= base_url() ?>assets/plugins/datatablesbtn/vfs_fonts.js"></script>
             <script src="<?= base_url() ?>assets/plugins/datatablesbtn/buttons.html5.min.js" defer></script>
-
             <!-- <script>
                 $('#master_table').DataTable({
                     dom: 'Bfrtip',
@@ -76,9 +68,6 @@
     var baseurl = "<?php echo base_url(); ?>";
 </script>
 <!--</div>-->
-
-
-
 <script>
     function canteen() {
         var report_type = document.getElementById("canteen_report").value;
@@ -107,10 +96,6 @@
         //     data:{report_type:report_type,csrfHash:csrfHash},
         //     success:function(response){},
         //     error:function(error){}
-
-
         // }); 
-
-
     }
 </script>

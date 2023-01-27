@@ -1,0 +1,2 @@
+insert into itbp_clms.mail_format (ID, MESSAGE_NAME, MESSAGE_SUBJECT, MESSAGE_BODY, ISACTIVE)
+values  (77, 'USER REGISTRATION OTP', 'OTP FOR REGISTRATION', '[table]', 1);

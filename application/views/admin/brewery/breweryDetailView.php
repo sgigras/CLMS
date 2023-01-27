@@ -1,6 +1,7 @@
 <!-- Content Wrapper. Contains page content -->
 <?php
 $resultArray = (isset($brewery_data)) ? $brewery_data[0] : new stdClass;
+// print_r($resultArray);
 ?>
 <!-- Main content -->
 <style>
@@ -42,6 +43,14 @@ $resultArray = (isset($brewery_data)) ? $brewery_data[0] : new stdClass;
                     <?php $this->load->view('master/address_field', array("field_id" => "breweryaddress", "label" => "breweryaddress", "max_length" => "250", "place_holder" => "Enter Brewery Address", "value" => getValue('address', $resultArray))); ?>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-6">
+                    <?php $this->load->view('master/select_field', array("field_id" => "select_state", "label" => "state", "place_holder" => "Select a state", "option_record" => $state_record, "option_value" => "id", "option_text" => "state", "selected_value" => getValue('state', $resultArray))); ?>
+                </div>
+                <div class="col-6">
+                    <?php //$this->load->view('master/select_field', array("field_id" => "select_city", "label" => "city", "place_holder" => "Select a city", "option_record" => $city_select, "option_value" => "id", "option_text" => "city_district_name", "selected_value" => getValue('city', $resultArray))); ?>
+                </div>
+            </div>
             <!--state and city name-->
             <div class="row">
                 <div class="col-6">
@@ -71,6 +80,10 @@ $resultArray = (isset($brewery_data)) ? $brewery_data[0] : new stdClass;
     var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
     var csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
     var baseurl = "<?php echo base_url(); ?>";
+    $("#brewery_name").prop("disabled", true);
+    $("#contactperson").prop("disabled", true);
+    $("#mobilenumber").prop("disabled", true);
+    $("#emailaddress").prop("disabled", true);
 </script>
 <!--</div>-->
 <script src="<?= base_url() ?>assets/js/module/common/validation.js"></script>

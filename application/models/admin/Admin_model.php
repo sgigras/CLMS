@@ -23,7 +23,7 @@ class Admin_model extends CI_Model{
 	//-----------------------------------------------------
 	function get_admin_roles()
 	{
-		$this->db->select('*,concat(admin_role_id,"-",role_plant_mapping) as ID');
+		$this->db->select('*,concat(admin_role_id,"-",role_module_mapping) as ID');
 		$this->db->from('ci_admin_roles');
 		$this->db->where('admin_role_status',1);
 		$query=$this->db->get();

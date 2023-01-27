@@ -1,7 +1,9 @@
+  <?php
+  extract($all_users[0]);
+  ?>
   <!-- Content Wrapper. Contains page content -->
   <!-- <div class="content-wrapper"> -->
   <!-- Content Header (Page header) -->
-
   <div class="content-header">
       <div class="container-fluid">
           <div class="row mb-2">
@@ -24,21 +26,17 @@ var csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
 var baseurl = '<?= base_url() ?>';
   </script>
   <!-- Main content -->
-
   
   <section class="content">
       <div class="container-fluid">
           <!-- Small boxes (Stat box) -->
           <div class="row">
-
               <div class="col-lg-3 col-5">
                 
                   <!-- small box -->
-
                   <div class="small-box bg-warning">
                       <div class="inner">
-                          <h3><?= $all_users; ?></h3>
-
+                          <h3><?= $hrms_user_count; ?></h3>
                           <p>Total HRMS Data</p>
                       </div>
                       <div class="icon">
@@ -47,7 +45,6 @@ var baseurl = '<?= base_url() ?>';
                       <!-- <a href="#" class="small-box-footer"><?= trans('more_info') ?> <i class="fa fa-arrow-circle-right"></i></a> -->
                   </div>
               </div>
-
               <!-- ./col -->
              
               <!-- ./col -->
@@ -55,8 +52,7 @@ var baseurl = '<?= base_url() ?>';
                   <!-- small box -->
                   <div class="small-box bg-info">
                       <div class="inner">
-                          <h3><?= $active_users; ?></h3>
-
+                          <h3><?= $active_user_count; ?></h3>
                           <p><?= trans('active_users') ?></p>
                       </div>
                       <div class="icon">
@@ -70,8 +66,7 @@ var baseurl = '<?= base_url() ?>';
                   <!-- small box -->
                   <div class="small-box bg-danger">
                       <div class="inner">
-                          <h3><?= $all_users - $active_users; ?></h3>
-
+                          <h3><?= $inactive_user_count; ?></h3>
                           <p>User Not Registered</p>
                       </div>
                       <div class="icon">
@@ -80,7 +75,6 @@ var baseurl = '<?= base_url() ?>';
                       <!-- <a href="#" class="small-box-footer"><?= trans('more_info') ?> <i class="fa fa-arrow-circle-right"></i></a> -->
                   </div>
               </div>
-
               <div class="col-lg-3 col-5">
                   <!-- small box -->
                   <div class="small-box bg-success">
@@ -90,16 +84,13 @@ var baseurl = '<?= base_url() ?>';
                      </div>
                     <div class="icon"> <i class="ion ion-pie-graph"></i>
              </div>
-
         </div>
-
               <!-- ./col -->
               <!-- <div class="col-lg-3 col-6">
             small box
             <div class="small-box bg-danger">
               <div class="inner">
                 <h3>65</h3>
-
                 <p><?= trans('unique_visitors') ?></p>
               </div>
               <div class="icon">
@@ -128,15 +119,12 @@ var baseurl = '<?= base_url() ?>';
                       <span id="span_irla_no" style="color:red"></span>
                   </div>
                   <div id="table_div">
-
                   </div>
                </div>
           </div> 
 </div>
 </div>
-
    
-
           <div class="card">
               <div class="card-header">
                   <div class="d-inline-block">
@@ -154,7 +142,6 @@ var baseurl = '<?= base_url() ?>';
                   <span id="span_posting_unit" style="color:red"></span>
               </div>
               <div id="posting_unit_div">
-
               </div>
           </div>
           </div>
@@ -164,7 +151,6 @@ var baseurl = '<?= base_url() ?>';
   <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-
   <!-- Morris.js charts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
   <script src="<?= base_url() ?>assets/plugins/morris/morris.min.js"></script>
@@ -182,6 +168,5 @@ var baseurl = '<?= base_url() ?>';
   <script src="<?= base_url() ?>assets/plugins/datepicker/bootstrap-datepicker.js"></script>
   <!-- Bootstrap WYSIHTML5 -->
   <script src="<?= base_url() ?>assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
-
   <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
   <script src="<?= base_url() ?>assets/dist/js/pages/dashboard.js"></script>

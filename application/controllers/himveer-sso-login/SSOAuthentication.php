@@ -19,7 +19,7 @@ class SSOAuthentication extends CI_Controller
 
             $profiledata = $this->SSO_model->GetProfile($profiletoken,$sub);
 
-            $pin = password_hash('1234', PASSWORD_BCRYPT);
+            $pin = md5('1234');
             $this->SSO_model->InsertUpdateHimveerUserInfo($profiletoken,$profiledata,$pin);
 
             $irlano = $sub;
