@@ -56,7 +56,7 @@ class Auth extends MY_Controller
 								'admin_id' => $result['admin_id'],
 								'entity_id' => (isset($result['entity_id'])) ? $result['entity_id'] : '',
 								'username' => $result['username'],
-								'rank' => $result['rank'],
+								'rank' => $result['user_rank'],
 								'mobile_no' => $result['mobile_no'],
 								'full_name' => $result['firstname'],
 								'admin_role_id' => $result['admin_role_id'],
@@ -75,6 +75,7 @@ class Auth extends MY_Controller
 								redirect(base_url('admin/dashboard/index_2'), 'refresh');
 							else
 								redirect(base_url('admin/dashboard/index_2'), 'refresh');
+							
 						}
 				} else {
 					$this->session->set_flashdata('errors', 'Invalid Username or Password!');

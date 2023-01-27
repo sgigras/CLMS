@@ -2,7 +2,7 @@
 $liquor_details = $user_details['liquor_details'];
 
 $consumedLiquor = "100";
-if ($user_data != "" && $liquor_consumed != "")
+if (isset($user_data) && $user_data != "" && $liquor_consumed != "")
   $consumedLiquor = ($liquor_consumed / $this->dashboard_model->get_userquota()) * 100;
 ?>
 <link rel="stylesheet" href="<?= base_url() ?>assets/plugins/animation/animate.min.css">
