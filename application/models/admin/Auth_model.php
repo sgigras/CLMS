@@ -2,17 +2,40 @@
 
 class Auth_model extends CI_Model
 {
-	// public function __construct()
-	// {
-	// 	$this->load->helper(array('browser_ip'));
-	// }
-
+	//Login Methods
+	public function login($data)
+	{
+		$db = $this->db;
+		$irla_no = (int)$data['irlano'];
+		$username = $data['irlano'];
+		$date_of_birth = $data['dob'];
+		$query = "select *,(select admin_role_title from ci_admin_roles where admin_role_id=ci_admin.admin_role_id) as admin_role_title from ci_admin where username='{$irla_no}' and date_of_birth='{$date_of_birth}'";
+		// $this->db->from('ci_admin');
+		// $this->db->join('ci_admin_roles', 'ci_admin_roles.admin_role_id = ci_admin.admin_role_id');
+		// $this->db->where('ci_admin.username', $irla_no);
+		// $this->db->where('ci_admin.date_of_birth', $data['dob']);
+		$query = $this->db->query($query);
+		if ($query->num_rows() == 0) {
+				$this->saveBrowserLoginDetails($username,$data['pin']);
+			return false;
+		} else {
+			$this->saveBrowserLoginDetails($username,'');
+			//Compare the password attempt with the password we have stored.
+			$result = $query->row_array();
+			$validPassword = (md5($data['pin'])==$result['password']?true:false);
+			if ($validPassword) {
+				$result = $query->row_array();
+				$query = "update ci_admin set last_login = now() where username = '{$username}' and date_of_birth = '{$date_of_birth}'";
+				$db->query($query);
+				return $result;
+			}
+		}
+	}
+	//User Login Browsing Details
 	public function saveBrowserLoginDetails($username,$pass){
 
 		$db = $this->db;
-		// print_r($pass);die()
 		$getBrowserdetails = getBrowser();
-
 		$userAgent = $getBrowserdetails['userAgent'];
 		$name = $getBrowserdetails['name'];
 		$version = $getBrowserdetails['version'];
@@ -22,40 +45,9 @@ class Auth_model extends CI_Model
 		$query = "insert into user_login_details (username,login_time,logout_time,password,browser_agent,browser_name,browser_platform,browser_version,ip_address) values ('$username',now(),now(),'$pass','$userAgent','$name','$platform','$version','$ipaddress')";
 		$db->query($query);
 		return true;
-
 	}
 
-	public function login($data)
-	{
-		
-		$db = $this->db;
-		$irla_no = (int)$data['irlano'];
-		$username = $data['irlano'];
-		$date_of_birth = $data['dob'];
-		$this->db->from('ci_admin');
-		$this->db->join('ci_admin_roles', 'ci_admin_roles.admin_role_id = ci_admin.admin_role_id');
-		$this->db->where('ci_admin.username', $irla_no);
-		$this->db->where('ci_admin.date_of_birth', $data['dob']);
-		$query = $this->db->get();
-		if ($query->num_rows() == 0) {
-				$this->saveBrowserLoginDetails($username,$data['pin']);
-			// $this->db->close();
-			return false;
-		} else {
-			$this->saveBrowserLoginDetails($username,'');
-			//Compare the password attempt with the password we have stored.
-			$result = $query->row_array();
-			$validPassword = password_verify($data['pin'], $result['password']);
-			if ($validPassword) {
-				$result = $query->row_array();
-				$query = "update ci_admin set last_login = now() where username = ? and date_of_birth = ?";
-				$db->query($query,array($username, $date_of_birth));
-				// print_r($response);
-				// die();
-				return $result;
-			}
-		}
-	}
+	
 
 	//----------------------------------------------------------------
 	

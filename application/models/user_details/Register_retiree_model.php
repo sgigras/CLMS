@@ -19,9 +19,9 @@ class Register_retiree_model extends CI_Model
     public function fetchRetireeDetails($irlano)
     {
         $db = $this->db;
-        $query = "SELECT bh.id,concat(bh.irla,' - ', bh.rank,'. ',bh.name) AS name 
-                  FROM bsf_hrms_data bh 
-                  WHERE bh.irla like '$irlano%'   AND bh.rank is NOT NULL ";
+        $query = "SELECT bh.username as id,concat(bh.username,' - ', bh.user_rank,'. ',bh.firstname) AS name 
+                  FROM ci_admin bh 
+                  WHERE bh.username like '$irlano%'   AND bh.user_rank is NOT NULL ";
 
         $response = $db->query($query);
         // $db->close();
@@ -46,24 +46,14 @@ class Register_retiree_model extends CI_Model
 
 
         $db = $this->db;
-
-        $query = "SELECT * FROM bsf_hrms_data WHERE id=?";
-        $response = $db->query($query, array($data->perssonel_no));
-        $user_result = $response->result();
-
-
-        $username = $user_result[0]->irla;
-        $date_of_birth = $user_result[0]->date_of_birth;
-        $name = str_replace(".", "", $user_result[0]->name);
-        $name = str_replace("/", "", $name);
-        $user_result[0]->name = $name;
-        $check_user_registered_query = "select count(admin_id) as user_count from ci_admin where username='$username' and date_of_birth='$date_of_birth'";
+        $username = $data->perssonel_no;
+        $check_user_registered_query = "select count(admin_id) as user_count,IFNULL(is_hrms_user,0) as is_hrms_user from ci_admin where username='$username'";
 
         $response = $db->query($check_user_registered_query);
         $result = $response->result();
 
         if ($result[0]->user_count == 0) {
-            if ($user_result[0]->status == "RETIRED") {
+            if ($result[0]->is_hrms_user == 0) {
                 $result_array['message'] = "";
                 $result_array['status'] = "success";
             } else {
@@ -71,11 +61,19 @@ class Register_retiree_model extends CI_Model
                 $result_array['status'] = "Fail";
             }
         } else {
-            $result_array['message'] = "User has already been registered";
-            $result_array['status'] = "Fail";
+            if ($result[0]->is_hrms_user == 1) {
+                $result_array['message'] = "";
+                $result_array['status'] = "success";
+            } else {
+                $result_array['message'] = "User has already been registered";
+                $result_array['status'] = "Fail";
+            }
         }
 
-        $result_array['user_details'] = $user_result;
+        $query = "select * from ci_admin where username='$username'";
+        $response = $db->query($query);
+        $response = $response->result();
+        $result_array['user_details'] = $response;
         $db->close();
         return $result_array;
     }
@@ -115,7 +113,7 @@ class Register_retiree_model extends CI_Model
 
     public function fetchRank($db)
     {
-        $query = "select id,rank from master_rank";
+        $query = "select id,`rank` from master_rank";
         $response = $db->query($query);
         $result = $response->result();
         return $result;

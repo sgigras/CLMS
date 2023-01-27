@@ -27,7 +27,10 @@ CREATE TABLE brewery_order_liquor_details (
   PRIMARY KEY(id)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-CREATE PROCEDURE `SP_ORDER_TO_BREWERY`(IN P_DATA JSON)
+drop procedure SP_ORDER_TO_BREWERY;
+
+create
+    definer = root@localhost procedure SP_ORDER_TO_BREWERY(IN P_DATA json)
 BEGIN
 
 		DECLARE V_APPROVAL_STATUS,V_SWAL_TYPE,V_SWAL_TITLE,V_SWAL_TEXT,V_PURPOSE,V_LIQUOR_NAME,V_LIQUOR_LIST,V_ORDER_CODE,V_GENERATE_ORDER_CODE VARCHAR(225);
@@ -36,18 +39,9 @@ BEGIN
         DECLARE V_USER_ID,V_IRLA,V_CHAIRMAN_ID BIGINT;
 		DECLARE V_LIQUOR_DETAILS_DATA_COUNT,V1,V_TOTAL_QUANTITY,V_LIQUOR_ID ,V_QUANTITY,V_ENTITY_ID,V_BREWERY_ID,V_LIQUOR_DESCRIPTION_ID,V_BREWERY_ORDER_ID INT DEFAULT 0;
         DECLARE V_BASE_PRICE,V_TOTAL_PER_LIQUOR_PRICE,V_TOTAL_COST FLOAT(11,2);
-        
-        DECLARE EXIT HANDLER FOR SQLEXCEPTION
-			BEGIN
-				ROLLBACK;
-				GET DIAGNOSTICS CONDITION 1
-					@P1 = MESSAGE_TEXT, @P2 = RETURNED_SQLSTATE;
-					INSERT INTO sp_error_log_data(page_name, sp_name, data_passed,  error_message, returne_sql_state)
-					VALUES('ORDER TO BREWERY', 'SP_ORDER_TO_BREWERY', P_DATA, @P1, @P2);
-					SET V_SWAL_TYPE = "warning", V_SWAL_TITLE = "unable to place order", V_SWAL_TEXT = "";
-					SELECT V_SWAL_TYPE, V_SWAL_TITLE, V_SWAL_TEXT, @P1, @P2;
-			END;
-		
+
+
+
         START TRANSACTION;
 			SET V_USER_ID = FN_EXTRACT_JSON_DATA(P_DATA,0,'user_id');
 			SET V_BREWERY_ID = FN_EXTRACT_JSON_DATA(P_DATA,0,'brewery_id');
@@ -59,25 +53,25 @@ BEGIN
 			SET V_MESSAGE_LIQUOR_QTY='';
 			SET V_APPROVAL_STATUS = 'P';
             SET V_ORDER_CODE = "";
-            
+
             SELECT chairman INTO V_CHAIRMAN_ID FROM master_entities WHERE id=V_ENTITY_ID;
-			
+
             	WHILE(V_ORDER_CODE="") DO
-					SET V_GENERATE_ORDER_CODE=lpad(conv(floor(rand()*pow(36,8)), 10, 36), 8, 0);  
+					SET V_GENERATE_ORDER_CODE=lpad(conv(floor(rand()*pow(36,8)), 10, 36), 8, 0);
 					IF NOT EXISTS (SELECT id FROM brewery_order WHERE brewery_order_code=V_GENERATE_ORDER_CODE) THEN
 						BEGIN
-							SET V_ORDER_CODE=V_GENERATE_ORDER_CODE; 
+							SET V_ORDER_CODE=V_GENERATE_ORDER_CODE;
 						END;
-					END IF;            
+					END IF;
 				END WHILE;
-            
-            
+
+
 		   INSERT INTO brewery_order
 					(brewery_id,brewery_order_code,approval_status,approval_from,approved_time,created_by,creation_time)
-				VALUES(V_BREWERY_ID,V_ORDER_CODE,V_APPROVAL_STATUS,V_CHAIRMAN_ID,NOW(),V_USER_ID,NOW());
-				
+				VALUES(V_BREWERY_ID,V_ORDER_CODE,V_APPROVAL_STATUS,V_USER_ID,NOW(),V_USER_ID,NOW());
+
 			SELECT id INTO V_BREWERY_ORDER_ID FROM brewery_order ORDER BY brewery_order_code=V_ORDER_CODE DESC LIMIT 1;
-			
+
 			 WHILE(V1<V_LIQUOR_DETAILS_DATA_COUNT) DO
 				BEGIN
 					SET V_LIQUOR_ID  = FN_EXTRACT_JSON_DATA(V_LIQUOR_DETAILS_DATA, V1, 'liquor_entity_id');
@@ -85,7 +79,7 @@ BEGIN
 					SET V_QUANTITY = FN_EXTRACT_JSON_DATA(V_LIQUOR_DETAILS_DATA, V1, 'quantity');
 					SET V_TOTAL_COST = FN_EXTRACT_JSON_DATA(V_LIQUOR_DETAILS_DATA, V1,'total');
 					SET V_TOTAL_QUANTITY=V_TOTAL_QUANTITY+V_QUANTITY;
-				
+
 					INSERT INTO brewery_order_liquor_details
 					(brewery_order_id,liquor_description_id,liquor_brewery_id,total_quantity,liquor_base_price,total_purchase_price,insert_time,inserted_by)
 					VALUES(V_BREWERY_ORDER_ID,V_LIQUOR_ID,V_LIQUOR_ID ,V_QUANTITY,V_BASE_PRICE,V_TOTAL_COST,NOW(),V_USER_ID);
@@ -98,3 +92,41 @@ BEGIN
 	COMMIT;
 		SELECT V_SWAL_TYPE,V_SWAL_TITLE,V_SWAL_TEXT;
 END;
+
+
+
+CREATE TABLE tax_category (
+  id int NOT NULL AUTO_INCREMENT,
+  tax_category varchar(50),
+  created_by varchar(50),
+  created_at datetime,
+  is_active tinyint DEFAULT 1,
+  PRIMARY KEY (id)
+
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1
+
+create table master_tax
+(
+    id int NOT NULL AUTO_INCREMENT,
+    tax_name        varchar(100)                      ,
+    entity_type     int                                ,
+    creation_time   datetime default CURRENT_TIMESTAMP ,
+    created_by      int                                ,
+    tax_category_id int                                
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1
+
+create table bsfdevdb.master_tax_liquor_mapping
+(
+    id int NOT NULL AUTO_INCREMENT,
+    entity_id             int                                ,
+    liquor_description_id int                                ,
+    tax_id                int                                ,
+    tax_percent           float(15, 2)                       ,
+    created_by            int                                ,
+    created_on            datetime default CURRENT_TIMESTAMP ,
+    modified_by           int                                ,
+    modified_on           datetime default CURRENT_TIMESTAMP  on update CURRENT_TIMESTAMP,
+    isactive              tinyint  default 1                 ,
+    tax_type_id           int                                ,
+    tax_category          varchar(50)                        
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1

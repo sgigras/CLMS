@@ -36,21 +36,21 @@ function checkIt(field, photo) {
     document.body.onfocus = null;
     // console.log('checked');
 }
-$("#personnel_photo").click(function () {
+$("#personnel_photo").click(function() {
     checkIt('personnel_photo', personnel_photo_h);
 });
 
-$("#ppo_photo").click(function () {
+$("#ppo_photo").click(function() {
     checkIt('ppo_photo', ppo_photo_h);
 });
-$("#id_card_photo").click(function () {
+$("#id_card_photo").click(function() {
     checkIt('id_card_photo', id_card_photo_h);
 });
-$("#signed_form_photo").click(function () {
+$("#signed_form_photo").click(function() {
     checkIt('signed_form_photo', signed_form_photo_h);
 });
 
-$("#joining_date").ready(function () {
+$("#joining_date").ready(function() {
     var today = new Date().toISOString().split('T')[0];
     // console.log(today);
     $("#joining_date")[0].setAttribute('max', today);
@@ -59,7 +59,7 @@ $("#joining_date").ready(function () {
 // $("#personnel_photo").click(function(){
 //     $("#personnel_photo_h").val(' ');
 // });
-$("#personnel_no").on("change", function () {
+$("#personnel_no").on("change", function() {
     // console.log('change');
     validPersonnelNo("personnel_no", "Personnel No.", 3, 30);
     var personnel_no = $("#personnel_no").val();
@@ -118,7 +118,7 @@ $("#personnel_no").on("change", function () {
                 csrfName: csrfName,
                 perssonel_no: personnel_no
             },
-            success: function (response) {
+            success: function(response) {
                 var data_result = JSON.parse(response);
                 // console.log(result);
                 var status = data_result.status;
@@ -153,9 +153,9 @@ $("#personnel_no").on("change", function () {
                             $("#joining_date").val(date_of_joining_display);
                         }
 
-                        $("#retiree_name").val(result[0].name);
+                        $("#retiree_name").val(result[0].fistname);
                         $("#ppo_no").val(result[0].ppo_no);
-                        $("#email_id").val(result[0].email_id);
+                        $("#email_id").val(result[0].email);
                         $("#mobile_no").val(result[0].mobile_no);
                         $("#aadhar_card_no").val(result[0].adhaar_card);
                         $("#address").val(result[0].permanent_address);
@@ -226,8 +226,8 @@ $("#personnel_no").on("change", function () {
                             $("#force_type").val(result[0].capf_force).trigger('change').prop('disabled', true);
 
                         }
-                        $("#posting_unit_type").val(result[0].posting_unit).trigger('change').prop('disabled', true);
-                        $("#rank").val(result[0].rank).trigger('change').prop('disabled', true);
+                        $("#posting_unit_type").val(result[0].UnitName).trigger('change').prop('disabled', true);
+                        $("#rank").val(result[0].user_rank).trigger('change').prop('disabled', true);
 
                         // if ($("#posting_unit_type").val()) {
                         //     $("#posting_unit_type").trigger('change').prop('disabled', true);
@@ -249,7 +249,7 @@ $("#personnel_no").on("change", function () {
                         icon: 'warning',
                         showConfirmButton: true,
                         toast: true
-                    }).then(function () {
+                    }).then(function() {
 
                         window.location.reload();
 
@@ -257,7 +257,7 @@ $("#personnel_no").on("change", function () {
                 }
 
             },
-            error: function () {
+            error: function() {
                 // alert(DOMAIN + 'custom/Custom/fetchdurations');
                 alert("Error!!");
 
@@ -267,6 +267,7 @@ $("#personnel_no").on("change", function () {
 
 
 });
+
 function isValueAvailable(field) { //validation function
     // console.log(field);
     // console.log($("#" + field).val());
@@ -282,13 +283,12 @@ function isValueAvailableSelect(field) {
     if ($("#" + field).val()) {
         $("#" + field).trigger('change').prop('disabled', true);
 
-    }
-    else {
+    } else {
         $("#" + field).trigger('change').prop('disabled', false);
     }
 }
 
-$(function () {
+$(function() {
 
     $.ajax({
         url: DOMAIN + 'user_details/RegisterRetiree/fetchRetireeInitialFormDetails',
@@ -296,7 +296,7 @@ $(function () {
         data: {
             csrf_test_name: csrfHash
         },
-        success: function (response) {
+        success: function(response) {
             // console.log(response);
             var result = JSON.parse(response);
             // console.log(result);
@@ -323,7 +323,7 @@ $(function () {
             $("#posting_unit_type").html(posting_unit_html);
             $("#rank").html(rank_select_html);
         },
-        error: function (error) {
+        error: function(error) {
             // console.log(error);
 
             Swal.fire({
@@ -338,7 +338,7 @@ $(function () {
     });
 
 
-    $("#date_of_birth").change(function () {
+    $("#date_of_birth").change(function() {
         validateDateOfBirth();
     });
     $("#force_type").select2({ width: '100%', placeholder: 'Select a force' });
@@ -361,17 +361,17 @@ $(function () {
             dataType: 'json',
             delay: 250,
             method: 'POST',
-            data: function (params) {
+            data: function(params) {
                 var query = {
-                    search: params.term,
-                    //                    transporterid: transporterid,
-                    // ats_sign: ats_sign
-                    csrf_test_name: csrfHash
-                }
-                // Query parameters will be ?search=[term]&type=public
+                        search: params.term,
+                        //                    transporterid: transporterid,
+                        // ats_sign: ats_sign
+                        csrf_test_name: csrfHash
+                    }
+                    // Query parameters will be ?search=[term]&type=public
                 return query;
             },
-            processResults: function (data) {
+            processResults: function(data) {
                 // console.log(data);
                 return {
 
@@ -391,7 +391,7 @@ $(function () {
 
 
     // $("#retiree_details").submit(function (event) {
-    $("#register_retiree").click(function (event) {
+    $("#register_retiree").click(function(event) {
         // var retiree_form_data = $(this);
         // document.getElementById("register_retiree").disabled = true;
         validPersonnelNo("personnel_no", "Personnel No.", 3, 30);
@@ -452,9 +452,9 @@ $(function () {
         // console.log(id_card_photo_valiadtion);
         // console.log(signed_form_photo_valiadtion);
         // console.log(date_of_birth_validation_func);
-        if (personnel_no_valiadtion || ppo_no_valiadtion || aadhar_card_no_valiadtion || retiree_name_valiadtion && mobile_no_valiadtion && email_id_valiadtion && date_of_birth_valiadtion
-            || posting_unit_type_valiadtion || rank_valiadtion || force_type_valiadtion
-            || retirement_date_valiadtion || joining_date_valiadtion || address_valiadtion) {
+        if (personnel_no_valiadtion || ppo_no_valiadtion || aadhar_card_no_valiadtion || retiree_name_valiadtion && mobile_no_valiadtion && email_id_valiadtion && date_of_birth_valiadtion ||
+            posting_unit_type_valiadtion || rank_valiadtion || force_type_valiadtion ||
+            retirement_date_valiadtion || joining_date_valiadtion || address_valiadtion) {
 
             Swal.fire({
                 title: 'Kindly check all fields',
@@ -464,8 +464,7 @@ $(function () {
             });
 
             submit_data_error_check = false;
-        }
-        else {
+        } else {
 
             var today = new Date();
             // console.log(today);
@@ -576,8 +575,7 @@ $(function () {
                     if ($('#retiree_name').prop('disabled')) {
                         // console.log("update data")
                         updateDatabase();
-                    }
-                    else {
+                    } else {
                         // console.log('loadData');
                         loadData();
                     }
@@ -837,7 +835,7 @@ function loadData() {
         // beforeSend: function () {
         //     $("#addEntity").attr('disabled', 'disabled');
         // },
-        success: function (response) {
+        success: function(response) {
             // console.log(response);
             var result = JSON.parse(response);
             //                alert('here');
@@ -869,8 +867,8 @@ function loadData() {
                 text: "",
                 icon: result[0].V_SWAL_TYPE,
                 showConfirmButton: true
-                //toast: true
-            }).then(function () {
+                    //toast: true
+            }).then(function() {
 
                 window.location.reload();
 
@@ -879,7 +877,7 @@ function loadData() {
             // }
 
         },
-        error: function (xhr, status, error) {
+        error: function(xhr, status, error) {
             $("#addEntity").removeAttr('disabled');
         }
 
@@ -1021,7 +1019,7 @@ function updateDatabase() {
         data: formData,
         processData: false,
         contentType: false,
-        success: function (response) {
+        success: function(response) {
             // hideLoader();
             var result = JSON.parse(response);
             // console.log(result);
@@ -1029,14 +1027,14 @@ function updateDatabase() {
                 title: result[0].V_SWAL_TITLE,
                 text: result[0].V_SWAL_TEXT,
                 icon: result[0].V_SWAL_TYPE,
-            }).then(function () {
+            }).then(function() {
                 if (result[0].V_SWAL_TYPE === 'success') {
                     window.location.reload();
                 }
             });
 
         },
-        error: function (error) {
+        error: function(error) {
             // hideLoader();
             // console.log(error)
             Swal.fire({

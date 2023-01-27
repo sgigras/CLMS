@@ -33,13 +33,13 @@
                 </div>
               </div>
               
-              <div class="form-group">
+              <!-- <div class="form-group">
                 <label for="lastname" class="col-md-2 control-label"><?= trans('lastname') ?></label>
 
                 <div class="col-md-12">
                   <input type="text" name="lastname" class="form-control" id="lastname" placeholder="">
                 </div>
-              </div>
+              </div> -->
 
               <div class="form-group">
                 <label for="email" class="col-md-2 control-label"><?= trans('email') ?></label>
@@ -62,13 +62,13 @@
                   <input type="password" name="password" class="form-control" id="password" placeholder="">
                 </div>
               </div>
-              <div class="form-group">
+              <!-- <div class="form-group">
                 <label for="address" class="col-md-2 control-label"><?= trans('address') ?></label>
 
                 <div class="col-md-12">
                   <input type="text" name="address" class="form-control" id="address" placeholder="">
                 </div>
-              </div>
+              </div> -->
               <div class="form-group">
                 <div class="col-md-12">
                   <input type="submit" name="submit" value="<?= trans('add_user') ?>" class="btn btn-primary pull-right">

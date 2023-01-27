@@ -3,10 +3,7 @@ $(function () {
     $('.select2').select2()
     getListOfStates();
     getListOfBrand();
-
 })
-
-
 function getListOfStates() {
     var databaseObject = { csrf_test_name: csrfHash };
     $.ajax({
@@ -15,15 +12,10 @@ function getListOfStates() {
         data: databaseObject,
         success: function (response) {
             var obj = JSON.parse(response);
-            //    console.log(obj);
             var htmlsnippet = "";
             htmlsnippet += '<div class="row" style="padding-left:20px">\n';
             for (const key in obj) {
-                // console.log(key);
-                // console.log(`${key}: ${obj[key]['id']}`);
                 if (key % 4 == 0 && (key != 0)) {
-                    // if(key==3){
-                    // alert(key);
                     htmlsnippet += '</div>\n';
                     htmlsnippet += '<br><div class="row" style="padding-left:20px" id="row">\n';
                 }
@@ -40,53 +32,35 @@ function getListOfStates() {
                     '                        </div>\n' +
                     '                    </div>\n';
             }
-            // console.log(htmlsnippet);
             $('#statesdiv').html(htmlsnippet);
         }
     });
 }
-
-
 //fetch brand mapping details with brewery
-
 $('#breweryname').on('select2:select', function (e) {
     e.preventDefault();
     var data = e.params.data;
-    // console.log(data)
     var stockistid = data.id;
-
     var databaseObject = { csrf_test_name: csrfHash, stockistid: stockistid };
-    // console.log(databaseObject);
-
     $.ajax({
         url: baseurl + 'admin/brewery/Brewery/fetchbrandmapped',
         type: 'post',
         data: databaseObject,
         dataType: 'json',
         success: function (response) {
-            // console.log(response);
             $('input[type="checkbox"]').prop("checked", false);
-            // console.log(response.brand_id);
             var strArray = response.brand_id.replace(/"/g, '').replace(/ /g, '').split(',');
-
-            // $('input[type="checkbox"]').prop("checked", false);
             for (var i = 0; i < strArray.length; i++) {
                 $('#' + strArray[i]).prop("checked", true);
             }
-
         }
     });
-
 });
-
-
-
 $('#submitstates').on('click', function (event) {
     var submit_data_error_check = true;
     var someObj = {};
     someObj.fruitsGranted = [];
     someObj.fruitsDenied = [];
-
     var brandnameval = $('#breweryname').val();
     // console.log(states);
     if (brandnameval.length > 0 && brandnameval[0] !== "") {
@@ -98,9 +72,7 @@ $('#submitstates').on('click', function (event) {
         submit_data_error_check = false;
         $('#breweryname_error').html("Please Select A Stockist");
     }
-
     if(submit_data_error_check){
-
     var breweryname = $('#brandname').select2('data');
     var breweryid = breweryname[0].id;
     // alert(breweryid);
@@ -134,9 +106,7 @@ $('#submitstates').on('click', function (event) {
             })
         }
     });
-
 }else{
-
     Swal.fire({
         title: 'Please Select A Brewery From Brewery List',
         text: "",
@@ -147,7 +117,6 @@ $('#submitstates').on('click', function (event) {
     });
 }
 });
-
 //load list of all brand 
 function getListOfBrand() {
     var databaseObject = { csrf_test_name: csrfHash };
@@ -181,7 +150,6 @@ function getListOfBrand() {
         }
     });
 }
-
 //update and assign liquor brand to brewery
 $('#submitbranddetails').on('click', function (event) {
     var submit_data_error_check = true;
@@ -234,10 +202,8 @@ $('#submitbranddetails').on('click', function (event) {
     });
 }
 });
-
 // search brand name from list of showing brnad 
 $('#searchliquor').keyup(function() {
-
         // alert('searchliquor');
         var input = document.getElementById("searchliquor");
         input = input.value.toUpperCase();

@@ -55,8 +55,9 @@ class Admin_roles_model extends CI_Model{
 	//-----------------------------------------------------
 	function delete($id)
 	{		
+		$this->db->set('admin_role_status','0');
 		$this->db->where('admin_role_id',$id);
-		$this->db->delete('ci_admin_roles');
+		$this->db->update('ci_admin_roles');
 	} 
 	
 	//-----------------------------------------------------

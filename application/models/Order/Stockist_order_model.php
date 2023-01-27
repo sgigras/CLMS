@@ -49,8 +49,8 @@ class Stockist_order_model extends CI_Model
             $query = "select entity_id as id,concat(entity_name,' - ',city_district_name,' - ',state) as state
         FROM entity_new_location_mapping where entity_type='Sub-Depot'";
         } else {
-            $query = "select entity_id as id,concat(entity_name,' - ',city_district_name,' - ',state) as state
-            FROM entity_new_location_mapping";
+            $query = "select id as id,concat(entity_name,' - ',state) as state
+            FROM master_entities";
         }
         $response = $db->query($query);
         $data['state_record'] = $response->result();

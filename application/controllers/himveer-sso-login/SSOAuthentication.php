@@ -12,13 +12,14 @@ class SSOAuthentication extends CI_Controller
         {
             //Get Login Token
             $token = $_POST["id_token"];
+            //echo $token;
             $sub = $this->SSO_model->JWTDecode($token);
 
             $profiletoken = $this->SSO_model->GetProfileToken();
 
             $profiledata = $this->SSO_model->GetProfile($profiletoken,$sub);
 
-            $pin = password_hash('1234', PASSWORD_BCRYPT);
+            $pin = md5('1234');
             $this->SSO_model->InsertUpdateHimveerUserInfo($profiletoken,$profiledata,$pin);
 
             $irlano = $sub;

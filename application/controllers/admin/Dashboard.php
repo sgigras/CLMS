@@ -67,22 +67,10 @@ class Dashboard extends My_Controller
 		$data['title'] = 'Dashboard';
 
 		$userid = $this->session->userdata('admin_id');
-		// print_r($_SESSION);
-
 		$data['user_details'] = $this->dashboard_model->get_user_used_quota_liqour_deatils($userid);
-
-	    // $data = $this->loginsession($userid);
-
-
-		// $data['user_details'] = $this->dashboard_model->get_liquor_user_used_quota($userid);
-
-		// echo '<pre>';
-		// print_r($data);
-		// echo '</pre>';
+		$data["user_data"] = $this->dashboard_model->get_userquota();
 		$this->load->view('admin/includes/_header');
-
 		$this->load->view('admin/dashboard/index2', $data);
-
 		$this->load->view('admin/includes/_footer');
 	}
 

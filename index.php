@@ -1,6 +1,6 @@
 <?php
-print_r($_SESSION['sid']);
-print_r($_SESSION['is_admin']);
+// print_r($_SESSION['sid']);
+// print_r($_SESSION['is_admin']);
 // session_start();
 //$_SESSION['test'] = 'Hello ITBP!';
 //print_r($_SESSION['test']);

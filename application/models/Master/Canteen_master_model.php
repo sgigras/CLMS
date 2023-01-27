@@ -20,7 +20,10 @@ class Canteen_master_model extends CI_Model
     public function fetchCanteenList()
     {
         $db = $this->db;
-            $query = "SELECT me.id,me.entity_name,bpu.posting_unit as battalion_unit ,mt.entity_type AS canteen_club,ms.state,CONCAT(ch.username,' (',IFNULL(ch.user_rank,'NA'),') ',IFNULL(ch.firstname,' '),IFNULL(ch.lastname,''),' - ',IFNULL(ch.mobile_no,''))AS chairman,CONCAT(cs.username,' (',IFNULL(cs.user_rank,'NA'),') ',IFNULL(cs.firstname,''),' ',IFNULL(cs.lastname,''),' - ',IFNULL(cs.mobile_no, '')) AS supervisor,CONCAT(ce.username,' (',IFNULL(ce.user_rank,'NA'),') ',IFNULL(ce.firstname,''),' ',IFNULL(ce.lastname,' '),' - ',IFNULL(ce.mobile_no, '')) AS executive 
+            $query = "SELECT me.id,me.entity_name,bpu.posting_unit as battalion_unit ,mt.entity_type AS canteen_club,ms.state,
+            CONCAT(ch.username,' (',IFNULL(ch.user_rank,'NA'),') ',IFNULL(ch.firstname,' '),' - ',IFNULL(ch.mobile_no,''))AS chairman,
+            CONCAT(cs.username,' (',IFNULL(cs.user_rank,'NA'),') ',IFNULL(cs.firstname,''),' - ',IFNULL(cs.mobile_no, '')) AS supervisor,
+            CONCAT(ce.username,' (',IFNULL(ce.user_rank,'NA'),') ',IFNULL(ce.firstname,''),' - ',IFNULL(ce.mobile_no, '')) AS executive 
             FROM master_entities me
             LEFT JOIN bsf_posting_unit bpu ON bpu.id=me.battalion_unit
             INNER JOIN master_state ms ON me.state=ms.id 
@@ -38,8 +41,8 @@ class Canteen_master_model extends CI_Model
     public function fetchCanteenListForChairman($chairmanid)
     {
         $db = $this->db;
-        $query = "SELECT me.id,me.entity_name,mt.entity_type AS canteen_club,ms.state,CONCAT(ch.firstname,' ',IFNULL(ch.lastname,''))AS chairman,
-                CONCAT(IFNULL(cs.firstname,'N.A.'),' ',IFNULL(cs.lastname,'')) AS supervisor,CONCAT(IFNULL(ce.firstname,'N.A.'),' ',IFNULL(ce.lastname,'')) AS executive
+        $query = "SELECT me.id,me.entity_name,mt.entity_type AS canteen_club,ms.state,ch.firstname AS chairman,
+                cs.firstname AS supervisor,ce.firstname AS executive
                 FROM master_entities me 
                 INNER JOIN master_state ms ON me.state=ms.id 
                 INNER JOIN master_entity_type mt ON me.entity_type=mt.id
@@ -53,7 +56,7 @@ class Canteen_master_model extends CI_Model
         return $result;
     }
 
-    public function fetchInitialEntityFormDetails()
+    public function fetchInitialEntityFormDetails($userid='')
     {
         $db = $this->db;
         $data['title'] = trans('add_new_canteen');
@@ -61,9 +64,16 @@ class Canteen_master_model extends CI_Model
         $data['state_record'] = $this->fetchState($db);
         $data['outlet_type_select_option_array'] = $this->fetchEntities($db);
         $data['battalion_unit_select_option_array'] = $this->battalionfetchEntities($db);
-
         $data['distributor_authority_record'] = $this->fetchDistributorAuthority($db);
-        $data['user_details'] = $this->fetchUserDetails($db);
+        $userdetail = $this->fetchUserDetails($db,$userid);
+        if ($userid == '')
+        {
+            $data['user_details'] = $userdetail;
+        }
+        else
+        {
+            $data['user_details'] = $userdetail[0];
+        }
         $db->close();
         return $data;
     }
@@ -86,8 +96,8 @@ class Canteen_master_model extends CI_Model
     public function fetchCities($state_id)
     {
         $db = $this->db;
-        $query = "SELECT id,city_district_name from master_city_district where stateid=?";
-        $response = $db->query($query, array($state_id));
+        $query = "SELECT id,city_district_name from master_city_district where stateid='{$state_id}'";
+        $response = $db->query($query);
         $result = $response->result();
         $db->close();
         return $result;
@@ -96,10 +106,11 @@ class Canteen_master_model extends CI_Model
     public function fetchUserDetails($db, $userid = '')
     {
         if ($userid != '') {
-            $query = "SELECT ca.admin_id AS id,ca.username,concat( bh.rank,'. ',ca.firstname,' ',IFNULL(ca.lastname,''),' - ',bh.irla) AS name
-                  FROM ci_admin ca 
-                  INNER JOIN bsf_hrms_data bh ON bh.irla=ca.username and bh.date_of_birth=ca.date_of_birth 
-                  WHERE ca.firstname IS NOT NULL  AND bh.rank is NOT NULL and ca.admin_id IN ($userid)";
+            $query = "select
+                    *
+                from
+                    master_entities as m1
+                where id='{$userid}'";
             $response = $db->query($query);
             $result = $response->result();
         } else {
@@ -124,8 +135,23 @@ class Canteen_master_model extends CI_Model
         $result = $response->result();
         return $result;
     }
+
+    public function fetchUserList()
+    {
+        $db = $this->db;
+        $query = "SELECT 
+            admin_id,
+            CONCAT(username,' (',IFNULL(user_rank,'N/A'),') ',IFNULL(firstname,'N/A'),' - ',IFNULL(mobile_no,'N/A')) as name
+        from ci_admin 
+        where is_active='1'";
+        $response = $db->query($query);
+        $result = $response->result_array();
+        return $result;
+    }
+
     public function battalionfetchEntities($db)
     {
+        $db = $this->db;
         $query = "SELECT id,posting_unit from bsf_posting_unit";
         $response = $db->query($query);
         $result = $response->result();
@@ -146,7 +172,9 @@ class Canteen_master_model extends CI_Model
     {
         // print_r($data);die();
         $db = $this->db;
-        $response = $db->query("CALL SP_INSERT_UPDATE_CANTEEN_DETAILS(?)", array($data));
+        $query = "CALL SP_INSERT_UPDATE_CANTEEN_DETAILS('{$data}')";
+
+        $response = $db->query($query);
         $db->close();
         return $response->result();
     }
@@ -154,10 +182,9 @@ class Canteen_master_model extends CI_Model
     public function update_canteen_details($data)
     {
         $db = $this->db;
-        // $query = "CALL SP_INSERT_UPDATE_CANTEEN_DETAILS('$data')";
-        // return $query;
-        // $response = $db->query();
-        $response = $db->query("CALL SP_INSERT_UPDATE_CANTEEN_DETAILS(?)", array($data));
+        $query = "CALL SP_INSERT_UPDATE_CANTEEN_DETAILS('{$data}')";
+        
+        $response = $db->query($query);
         $db->close();
         return $response->result();
     }
@@ -250,9 +277,9 @@ class Canteen_master_model extends CI_Model
     public function getUsersDetails($irlano)
     {
         $db = $this->db;
-        $query = "SELECT ca.admin_id AS id,concat( ca.user_rank,'. ',ca.firstname,' ',IFNULL(ca.lastname,''),' - ',ca.username) AS name,ca.username 
+        $query = "SELECT distinct ca.admin_id AS id,concat( ca.user_rank,'. ',ca.firstname,' - ',ca.username) AS name,ca.username 
                   FROM ci_admin ca 
-                   WHERE ca.username like '%$irlano%' and  ca.firstname IS NOT NULL  AND ca.user_rank is NOT NULL group by ca.username ";
+                   WHERE ca.username like '%$irlano%' and  ca.firstname IS NOT NULL  AND ca.user_rank is NOT NULL";
 
         $response = $db->query($query);
         $db->close();

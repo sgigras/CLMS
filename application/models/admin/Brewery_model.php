@@ -25,29 +25,7 @@ class Brewery_model extends CI_Model
 	}
 
 	//-----------------------------------------------------
-	function insert()
-	{
-		$this->db->set('brewery_name', checkIMPalpha($this->input->post('brewery_name')));
-		$this->db->set('address', $this->input->post('breweryaddress'));
-		$this->db->set('contact_person_name', checkIMPalpha($this->input->post('contactperson')));
-		$this->db->set('mobile_no', $this->input->post('mobilenumber'));
-		$this->db->set('mail_id', checkIMPemail($this->input->post('emailaddress')));
-		$this->db->set('state', implode(',', $this->input->post('select_brewerystate')));
-		$this->db->insert('master_brewery');
-	}
 
-	function insertToEntityTable()
-	{
-		$this->db->set('entity_name', $this->input->post('brewery_name'));
-		$this->db->set('entity_type', '1');
-		$this->db->set('address', $this->input->post('breweryaddress'));
-		$this->db->set('chairman_mobileno', $this->input->post('mobilenumber'));
-		$this->db->set('chairman_mailid', $this->input->post('emailaddress'));
-		$this->db->set('state', implode(',', $this->input->post('select_brewerystate')));
-		$this->db->set('creation_time', date('Y-m-d H:i:s'));
-		$this->db->set('created_by', $this->session->userdata('admin_id'));
-		$this->db->insert('master_entities');
-	}
 
 	//-----------------------------------------------------
 	function update()
@@ -215,7 +193,6 @@ class Brewery_model extends CI_Model
 	{
 		$this->db->select("liquor_description_id, concat(brand,' ',liquor_description,' - ',liquor_type) as ln");
 		$this->db->from('liquor_details');
-		$this->db->group_by('ln');
 		$query = $this->db->get();
 		return $query->result_array();
 	}
@@ -223,7 +200,7 @@ class Brewery_model extends CI_Model
 	//Fetch Depot Name from master_entites table
 	function getDepotName()
 	{
-		$this->db->select("me.id,me.entity_name,mt.entity_type AS canteen_club,CONCAT(cc.firstname,' ',IFNULL(cc.lastname,''))AS chairman, CONCAT(IFNULL(cs.firstname,'N.A.'),' ',IFNULL(cs.lastname,'')) AS supervisor,CONCAT(IFNULL(ce.firstname,'N.A.'),' ',IFNULL(ce.lastname,'')) AS executive");
+		$this->db->select("me.id,me.entity_name,mt.entity_type AS canteen_club,cc.firstname AS chairman, cs.firstname AS supervisor,ce.firstname AS executive");
 		$this->db->from('master_entities as me');
 		$this->db->join("master_entity_type as mt", "find_in_set(me.entity_type,mt.id)<> 0", false);
 		$this->db->join("ci_admin as cs", "find_in_set(cs.admin_id,me.supervisor)<> 0", false);
@@ -232,7 +209,7 @@ class Brewery_model extends CI_Model
 		$this->db->where("mt.entity_type not in('brewery','consumer','sub-depot')");
 
 		// $this->db->where('entity_type = 3');
-		$this->db->group_by('entity_name');
+		//$this->db->group_by('entity_name');
 		$query = $this->db->get();
 		return $query->result_array();
 	}
@@ -259,7 +236,6 @@ class Brewery_model extends CI_Model
 	{
 		$this->db->select('id,entity_name');
 		$this->db->from('master_brewery');
-		// $this->db->where('entity_type = 3');
 		$this->db->group_by('brewery_name');
 		$query = $this->db->get();
 		return $query->result_array();
@@ -280,13 +256,13 @@ class Brewery_model extends CI_Model
 		return $query->result_array();
 	}
 
-	//Fetches list of brewery
+	// Brewery Mater Section
+	//List
 	function getBreweryList()
 	{
 
 		$this->db->select('MB.id,MB.brewery_name,MB.address,MB.contact_person_name,MB.mobile_no,MB.mail_id, group_concat(DISTINCT MS.state) as state,group_concat(DISTINCT ME.entity_name) as serving_entity');
 		$this->db->from('master_brewery as MB');
-		// $this->db->join('master_state as MS', 'MS.id = MB.state', 'left');
 		$this->db->join("master_state as MS", "find_in_set(MS.id,MB.state)<> 0", "left", false);
 		$this->db->join("master_entities as ME", "find_in_set(ME.id,MB.serving_entity)<> 0", "left", false);
 		$this->db->group_by('MB.id');
@@ -294,6 +270,128 @@ class Brewery_model extends CI_Model
 		return $query->result_array();
 	}
 
+	//Form
+	public function fetchInitialEntityFormDetails()
+	{
+		$data['title'] = trans('add_new_brewery');
+		$data['mode'] = 'A';
+		$data['state_record'] = $this->getStates();
+		$data['entities_record'] = $this->getentities();
+		return $data;
+	}
+
+	//Add
+	function insert()
+	{
+		$db = $this->db;
+		$brewery_name = checkIMPalpha($this->input->post('brewery_name'));
+		$address= $this->input->post('breweryaddress');
+		$contact_person_name = checkIMPalpha($this->input->post('contactperson'));
+		$mobile_no = $this->input->post('mobilenumber');
+		$mail_id = checkIMPemail($this->input->post('emailaddress'));
+		$state = $this->input->post('select_state');
+		$userid = $this->session->userdata('admin_id');
+		$query = "CALL SP_BREWERY('0',
+			'{$brewery_name}','{$address}','{$contact_person_name}','{$mobile_no}','{$mail_id}','{$state}','{$userid}','A'
+			)";
+		$response = $db->query($query);
+		$db->close();
+		$result = $response->result();
+		return $result;
+	}
+
+	function insertToEntityTable()
+	{
+		$this->db->set('entity_name', $this->input->post('brewery_name'));
+		$this->db->set('entity_type', '4');
+		$this->db->set('address', $this->input->post('breweryaddress'));
+		$this->db->set('chairman_mobileno', $this->input->post('mobilenumber'));
+		$this->db->set('chairman_mailid', $this->input->post('emailaddress'));
+		$this->db->set('state', implode(',', $this->input->post('select_state')));
+		$this->db->set('creation_time', date('Y-m-d H:i:s'));
+		$this->db->set('created_by', $this->session->userdata('admin_id'));
+		$this->db->insert('master_entities');
+	}
+
+	//Update
+	public function fetchBreweryDetails($id)
+	{
+		$this->db->select('MB.id,MB.brewery_name,MB.address,MB.contact_person_name,MB.mobile_no,MB.mail_id, MB.state,MB.serving_entity,MB.isactive');
+		$this->db->from('master_brewery as MB');
+		$this->db->join("master_state as MS", "find_in_set(MS.id,MB.state)<> 0", "left", false);
+		$this->db->join("master_entities as ME", "find_in_set(ME.id,MB.serving_entity)<> 0", "left", false);
+		$this->db->where('MB.id', $id);
+		//$this->db->group_by('MB.id');
+		$query = $this->db->get();
+		$brewery_result = $query->result();
+
+		$data['brewery_data'] = $brewery_result;
+		$state = $brewery_result[0]->state;
+
+		//CONVERTIN COMMA SEPARATED STATE IDS TO ARRAY
+		$stateid_array = explode(",", $state);
+		//$data['brewery_data'][0]->state = $stateid_array;
+
+		$serving_entity = $brewery_result[0]->serving_entity;
+
+		//CONVERTING COMMA SEPARATED ENTITY IDS TO ARRAY
+		$servingentity_array = explode(",", $serving_entity);
+
+		//GET IDS AND NAMES OF STATES MAPPED WITH BREWERY
+		$this->db->select('id,state');
+		$this->db->from('master_state as MS');
+		$this->db->where_in('MS.id', $stateid_array);
+		$statequery = $this->db->get();
+		$stateresult = $statequery->result();
+
+		//GET ENTITIES MAPPED WITH BREWERY
+		$this->db->select('ME.id,ME.entity_name');
+		$this->db->from('master_entities as ME');
+		$this->db->where_in('ME.id', $servingentity_array);
+		$servingentityquery = $this->db->get();
+		$servingentityresult = $servingentityquery->result();
+
+
+		$data['title'] = trans('edit_brewery_list');
+		$data['mode'] = 'E';
+		$data['state_array'] = $stateresult;
+
+		$this->db->from('master_state');
+		$allstatesquery = $this->db->get();
+		$allstatesqueryresponse = $allstatesquery->result();
+
+		$this->db->from('master_entities');
+		$allentitiesquery = $this->db->get();
+		$allentitiesqueryresponse = $allentitiesquery->result_array();
+
+		$data['state_record'] = $allstatesqueryresponse;
+		$data['entities_record'] = $allentitiesqueryresponse;
+		return $data;
+	}
+
+	//Fetches states mapped with brewery
+	function updateBreweryDetails($breweryid)
+	{
+		$db = $this->db;
+		$brewery_name = checkIMPalpha($this->input->post('brewery_name'));
+		$address= $this->input->post('breweryaddress');
+		$contact_person_name = checkIMPalpha($this->input->post('contactperson'));
+		$mobile_no = $this->input->post('mobilenumber');
+		$mail_id = checkIMPemail($this->input->post('emailaddress'));
+		$state = $this->input->post('select_state');
+		$userid = $this->session->userdata('admin_id');
+
+		$query = "CALL SP_BREWERY(
+			'{$breweryid}','{$brewery_name}','{$address}','{$contact_person_name}','{$mobile_no}','{$mail_id}','{$state}','{$userid}','E'
+			)";
+		$response = $db->query($query);
+		$db->close();
+		$result = $response->result();
+		return $result;
+	}
+
+
+	//Band Mapping
 	//Fetches states mapped with brewery
 	function getBreweryMappedList($breweryid)
 	{
@@ -340,88 +438,10 @@ class Brewery_model extends CI_Model
 			return true;
 		}
 	}
-
-	public function fetchInitialEntityFormDetails()
-	{
-		$data['title'] = trans('add_new_brewery');
-		$data['mode'] = 'A';
-		$data['state_record'] = $this->getStates();
-		$data['entities_record'] = $this->getentities();
-		return $data;
-	}
-
-	public function fetchBreweryDetails($id)
-	{
-		$this->db->select('MB.id,MB.brewery_name,MB.address,MB.contact_person_name,MB.mobile_no,MB.mail_id, MB.state,MB.serving_entity,MB.isactive');
-		$this->db->from('master_brewery as MB');
-		// $this->db->join('master_state as MS', 'MS.id = MB.state', 'left');
-		$this->db->join("master_state as MS", "find_in_set(MS.id,MB.state)<> 0", "left", false);
-		$this->db->join("master_entities as ME", "find_in_set(ME.id,MB.serving_entity)<> 0", "left", false);
-		$this->db->where('MB.id', $id);
-		$this->db->group_by('MB.id');
-		$query = $this->db->get();
-		$brewery_result = $query->result();
-
-		$data['brewery_data'] = $brewery_result;
-		$state = $brewery_result[0]->state;
-
-		//CONVERTIN COMMA SEPARATED STATE IDS TO ARRAY
-		$stateid_array = explode(",", $state);
-		$data['brewery_data'][0]->state = $stateid_array;
-
-		$serving_entity = $brewery_result[0]->serving_entity;
-
-		//CONVERTING COMMA SEPARATED ENTITY IDS TO ARRAY
-		$servingentity_array = explode(",", $serving_entity);
-
-		//GET IDS AND NAMES OF STATES MAPPED WITH BREWERY
-		$this->db->select('id,state');
-		$this->db->from('master_state as MS');
-		$this->db->where_in('MS.id', $stateid_array);
-		$statequery = $this->db->get();
-		$stateresult = $statequery->result();
-
-		//GET ENTITIES MAPPED WITH BREWERY
-		$this->db->select('ME.id,ME.entity_name');
-		$this->db->from('master_entities as ME');
-		$this->db->where_in('ME.id', $servingentity_array);
-		$servingentityquery = $this->db->get();
-		$servingentityresult = $servingentityquery->result();
-
-
-		$data['title'] = trans('edit_brewery_list');
-		$data['mode'] = 'E';
-		$data['state_array'] = $stateresult;
-
-		$this->db->from('master_state');
-		$allstatesquery = $this->db->get();
-		$allstatesqueryresponse = $allstatesquery->result();
-
-		$this->db->from('master_entities');
-		$allentitiesquery = $this->db->get();
-		$allentitiesqueryresponse = $allentitiesquery->result_array();
-
-		$data['state_record'] = $allstatesqueryresponse;
-		$data['entities_record'] = $allentitiesqueryresponse;
-		return $data;
-	}
-
-
-
-	//Fetches states mapped with brewery
-	function updateBreweryDetails($breweryid, $data)
-	{
-		$this->db->where('id', $breweryid);
-		$this->db->update('master_brewery', $data);
-		return true;
-	}
-
-
 	public function fetchBreweryLiquorList($entity_id)
 	{
 
 		$db = $this->db;
-
 		$query =  "SELECT lem.id,Concat(ld.brand,' ',ld.liquor_description,' ',ld.liquor_type, ' -- ',lem.selling_price) as liquor
         FROM liquor_entity_mapping lem
         INNER JOIN liquor_details ld
@@ -432,8 +452,6 @@ class Brewery_model extends CI_Model
 		$db->close();
 		return $result;
 	}
-
-
 
 	public function createNewAdditionalSheet($data)
 	{
@@ -449,20 +467,100 @@ class Brewery_model extends CI_Model
 	function fetchOrderRequested($order_id)
 	{
 		$db = $this->db;
-		$query = "SELECT bm.brewery_name,bd.brewery_order_id,bd.liquor_base_price,bd.liquor_brewery_id,bd.total_quantity,bd.total_purchase_price,
-		ca.firstname as requested_by 
-		FROM brewery_order_liquor_details as bd
-		INNER JOIN brewery_order bo ON bo.id = bd.brewery_order_id 
-		INNER JOIN ci_admin ca ON ca.admin_id=bo.created_by
-		INNER JOIN master_brewery bm ON bm.id=bo.brewery_id
-		WHERE bo.id = $order_id";
-
+		$query = "SELECT
+					DISTINCT
+					bo.brewery_order_code,
+					bd.brewery_order_id,
+					bm.brewery_name,
+					ca.firstname as requested_by,
+					bo.approval_status,
+					bo.brewery_order_code,
+					(select firstname from ci_admin where admin_id=bo.approved_by) as approved_by,
+					bo.approved_time,
+					bo.creation_time,
+					bo.approval_status,
+					lm.liquor_description,
+					lb.brand,
+					lt.liquor_type,
+					bd.total_quantity,
+					bd.liquor_base_price,
+					bd.total_purchase_price
+			FROM
+					brewery_order_liquor_details as bd
+						INNER JOIN brewery_order bo
+							ON bo.id = bd.brewery_order_id
+						INNER JOIN ci_admin ca
+							ON ca.admin_id=bo.created_by
+						INNER JOIN master_brewery bm
+							ON bm.id=bo.brewery_id
+						INNER JOIN liquor_description lm
+							ON lm.id=bd.liquor_description_id
+						INNER JOIN liquor_brand lb
+							ON lb.id=lm.liquor_brand_id
+						INNER JOIN liquor_type lt
+                    		ON lt.id=lm.liquor_type_id
+			WHERE bo.brewery_order_code = '".$order_id."'";
 		$response = $db->query($query);
 		$db->close();
-		$result = $response->result();
+		$result = $response->result_array();
 		return $result;
 	}
 
+	function fetchOrderList()
+	{
+		$db = $this->db;
+		$query = "SELECT
+        DISTINCT
+		bd.brewery_order_id,
+		bm.brewery_name,
+		ca.firstname as requested_by,
+        bo.approval_status,
+        bo.brewery_order_code,
+        (select firstname from ci_admin where admin_id=bo.approved_by) as approved_by,
+		bo.approved_time,
+        bo.creation_time,
+		bo.approval_status
+	FROM
+		brewery_order_liquor_details as bd
+			INNER JOIN brewery_order bo
+				ON bo.id = bd.brewery_order_id
+			INNER JOIN ci_admin ca
+				ON ca.admin_id=bo.created_by
+			INNER JOIN master_brewery bm
+				ON bm.id=bo.brewery_id";
+		$response = $db->query($query);
+		$db->close();
+		$result = $response->result_array();
+		return $result;
+	}
+
+	function loadorderToBrewerylist()
+	{
+		$db = $this->db;
+		$query = "SELECT
+        DISTINCT
+		bd.brewery_order_id,
+		bm.brewery_name,
+		ca.firstname as requested_by,
+        bo.approval_status,
+        bo.brewery_order_code,
+        (select firstname from ci_admin where admin_id=bo.approved_by) as approved_by,
+		bo.approved_time,
+        bo.creation_time,
+		bo.approval_status
+	FROM
+		brewery_order_liquor_details as bd
+			INNER JOIN brewery_order bo
+				ON bo.id = bd.brewery_order_id
+			INNER JOIN ci_admin ca
+				ON ca.admin_id=bo.created_by
+			INNER JOIN master_brewery bm
+				ON bm.id=bo.brewery_id order by bo.creation_time desc";
+		$response = $db->query($query);
+		$db->close();
+		$result = $response->result_array();
+		return $result;
+	}
 
 	/// below functions are used for order to brewery
 
@@ -480,6 +578,7 @@ class Brewery_model extends CI_Model
 	}
 
 	//Fetch Brewery List From Database
+
 	function getBrewery()
 	{
 		$this->db->select("id,brewery_name");
@@ -497,5 +596,15 @@ class Brewery_model extends CI_Model
 		$db->close();
 		$result = $response->result();
 		return $result;
+	}
+
+	function approveRejectOrder($data)
+	{
+		$db = $this->db;
+		$query = "UPDATE brewery_order set remarks='".$data["chairman_remark"]."',approval_status='".$data["approval_status"]."',approved_by='".$data["userid"].
+				"',approved_time=NOW(),modification_time=NOW(),modified_by='" .$data["userid"].
+				"' where id='".$data["order_id"]."'";
+		$response = $db->query($query);
+		$db->close();
 	}
 }

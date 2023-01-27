@@ -23,30 +23,38 @@
 						</tr>
 					</thead>
 					<tbody>
-						<?php foreach($records as $record): ?>
+						<?php foreach ($records as $record):
+							extract($record); ?>
+							<?php if($admin_role_id != 6): ?>
 							<tr>
 								<td><?php echo $record['admin_role_id']; ?></td>
 								<td><?php echo $record['admin_role_title']; ?></td>
-								<td><input class='tgl tgl-ios tgl_checkbox' 
-									data-id="<?php echo $record['admin_role_id']; ?>" 
-									id='cb_<?=$record['admin_role_id']?>' 
-									type='checkbox' <?php echo ($record['admin_role_status']==1)? "checked" : ""; ?> />
-									<label class='tgl-btn' for='cb_<?=$record['admin_role_id']?>'></label>
+								<td>
+									<?php if($admin_role_id != 6): ?>
+									<input class='tgl tgl-ios tgl_checkbox' 
+									data-id="<?php echo $admin_role_id; ?>" 
+									id='cb_<?= $admin_role_id;?>' 
+									type='checkbox' <?php echo ($admin_role_status==1)? "checked" : ""; ?> />
+									<label class='tgl-btn' for='cb_<?=$admin_role_id?>'></label>
+									<?php endif;?>
 								</td>
 								<td>
-									<a href="<?php echo site_url("admin/admin_roles/access/".$record['admin_role_id']); ?>" class="btn btn-info btn-xs mr5" >
+									<?php if($admin_role_id != 6): ?>
+									<a href="<?php echo site_url("admin/admin_roles/access/".$admin_role_id); ?>" class="btn btn-info btn-xs mr5" >
 										<i class="fa fa-sliders"></i>
 									</a>
+									<?php endif;?>
 								</td>
 								<td>
-									<?php if(!in_array($record['admin_role_id'],array(1))): ?>
-										<a href="<?php echo site_url("admin/admin_roles/edit/".$record['admin_role_id']); ?>" class="btn btn-warning btn-xs mr5" >
+									<?php if($admin_role_id != 6): ?>
+										<a href="<?php echo site_url("admin/admin_roles/edit/".$admin_role_id); ?>" class="btn btn-warning btn-xs mr5" >
 											<i class="fa fa-edit"></i>
 										</a>
-										<a href="<?php echo site_url("admin/admin_roles/delete/".$record['admin_role_id']); ?>" onclick="return confirm('are you sure to delete?')" class="btn btn-danger btn-xs"><i class="fa fa-remove"></i></a>
+										<!-- <a href="<?php echo site_url("admin/admin_roles/delete/".$admin_role_id); ?>" onclick="return confirm('are you sure to delete?')" class="btn btn-danger btn-xs"><i class="fa fa-remove"></i></a> -->
 									<?php endif;?>
 								</td>
 							</tr>
+							<?php endif;?>
 						<?php endforeach; ?>
 					</tbody>
 				</table>

@@ -1,4 +1,3 @@
-<!-- Select2 -->
 <link rel="stylesheet" href="<?= base_url() ?>assets/plugins/select2/select2.min.css">
 <!-- Content Wrapper. Contains page content -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css">
@@ -20,8 +19,6 @@
        color: #000066; 
     }
 </style>
-<!-- <div class="content-wrapper"> -->
-    <!-- Main content -->
     <section class="content">
         <div class="card card-default color-palette-bo">
             <div class="card-header">
@@ -32,34 +29,21 @@
             </div>
             <div class="card-body">
                 <table style="width:100%">
-                <tr>
-                <th for="brewery" style="text-align:center">Depot Name</th>
-                       <td style="width: 25%;"> <select name="breweryname" id="breweryname" class="form-control select2" data-placeholder="Select Depot">
-                            <option></option>
-                            <?php foreach ($depotlist as $depotlist) : ?>
-                                <option value="<?php echo $depotlist['id'] ?>"><?php echo $depotlist['entity_name'] ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                        <!-- <small style="color:red;" id="breweryname_error"></small></td>
-
-                        <th for="brewery" style="text-align:center">Brewery Name</th>
-                       <th style="width: 25%;"> 
-                        <select name="selectbrewery" id="selectbrewery" class="form-control select2" data-placeholder="Select Brewery">
-                            <option></option>
-                            <?php // foreach ($selectbrewery as $selectbrewery) : ?>
-                                <option value="<?php //echo $selectbrewery['id'] ?>"><?php //echo $selectbrewery['brewery_name'] ?></option>
-                            <?php //endforeach; ?>
-                        </select> -->
-                        <small style="color:red;" id="breweryname_error"></small></th>
-
-                       <th for="liquor" style="text-align:left">&nbsp; Search Liquor</th>
-                       <th><input class="form-control" id="searchliquor" type="text" placeholder="Search."></th>
-                         <?php $this->load->view('admin/includes/_messages.php') ?>
-                             <?php echo form_open(base_url('admin/brewery/Brewery/stateMapping'), 'class="form-horizontal"') ?>
-                            
-                             </tr>
-                        </table>
-                    
+                    <tr>
+                        <th for="brewery" style="text-align:center">Depot Name</th>
+                            <td style="width: 25%;"> <select name="breweryname" id="breweryname" class="form-control select2" data-placeholder="Select Depot">
+                                    <option></option>
+                                    <?php foreach ($depotlist as $depotlist) : ?>
+                                        <option value="<?php echo $depotlist['id'] ?>"><?php echo $depotlist['entity_name'] ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <small style="color:red;" id="breweryname_error"></small></th>
+                            <th for="liquor" style="text-align:left">&nbsp; Search Liquor</th>
+                            <th><input class="form-control" id="searchliquor" type="text" placeholder="Search."></th>
+                        <?php $this->load->view('admin/includes/_messages.php') ?>
+                        <?php echo form_open(base_url('admin/brewery/Brewery/stateMapping'), 'class="form-horizontal"') ?>
+                    </tr>
+                </table>
                 <hr>
                 <div class="form-group">
                    <b> <label for="state" class="col-lg-2 control-label">Select Brand</label></b>
