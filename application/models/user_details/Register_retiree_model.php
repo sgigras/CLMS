@@ -1,57 +1,30 @@
 <?php
-
 defined('BASEPATH') or exit('No direct script access allowed');
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**832342308642
- * Description of Canteen_master_model
- *
- * @author Jitendra Pal
- */
 class Register_retiree_model extends CI_Model
 {
-
-
     public function fetchRetireeDetails($irlano)
     {
         $db = $this->db;
         $query = "SELECT bh.username as id,concat(bh.username,' - ', bh.user_rank,'. ',bh.firstname) AS name 
                   FROM ci_admin bh 
                   WHERE bh.username like '$irlano%'   AND bh.user_rank is NOT NULL ";
-
         $response = $db->query($query);
-        // $db->close();
         $result = $response->result_array();
         $json = array();
         foreach ($result as $value) {
             $json[] = array('id' => $value['id'], 'text' => $value['name']);
         }
-
-        // if (count($json) == 0) {
-        //     $json[] = array('id' => $irlano, 'text' => $irlano);
-        // }
-
         $json[] = array('id' => $irlano, 'text' => $irlano);
         $db->close();
         return $json;
     }
-
-
     public function checkRetireeData($data)
     {
-
-
         $db = $this->db;
         $username = $data->perssonel_no;
         $check_user_registered_query = "select count(admin_id) as user_count,IFNULL(is_hrms_user,0) as is_hrms_user from ci_admin where username='$username'";
-
         $response = $db->query($check_user_registered_query);
         $result = $response->result();
-
         if ($result[0]->user_count == 0) {
             if ($result[0]->is_hrms_user == 0) {
                 $result_array['message'] = "";
@@ -69,7 +42,6 @@ class Register_retiree_model extends CI_Model
                 $result_array['status'] = "Fail";
             }
         }
-
         $query = "select * from ci_admin where username='$username'";
         $response = $db->query($query);
         $response = $response->result();
@@ -77,8 +49,6 @@ class Register_retiree_model extends CI_Model
         $db->close();
         return $result_array;
     }
-
-
     public function verifyRetiree($verification_details)
     {
         $db = $this->db;
@@ -88,18 +58,15 @@ class Register_retiree_model extends CI_Model
         $db->close();
         echo json_encode($result);
     }
-
-
     public function addRetireeData($data)
     {
         $db = $this->db;
-        $query = "CALL SP_ADD_UPDATE_RETIREE_DATA(?)";
-        $response = $db->query($query, array($data));
+        $query = "CALL SP_ADD_UPDATE_RETIREE_DATA($data)";
+        $response = $db->query($query);
         $result = $response->result();
         $db->close();
         return $result;
     }
-    //put your code here
     public function fetchInitialFormDetails()
     {
         $db = $this->db;
@@ -110,7 +77,6 @@ class Register_retiree_model extends CI_Model
         $db->close();
         return $data;
     }
-
     public function fetchRank($db)
     {
         $query = "select id,`rank` from master_rank";
@@ -118,7 +84,6 @@ class Register_retiree_model extends CI_Model
         $result = $response->result();
         return $result;
     }
-
     public function fetchPostingUnit($db)
     {
         $query = "SELECT id,posting_unit FROM bsf_posting_unit";
@@ -126,16 +91,13 @@ class Register_retiree_model extends CI_Model
         $result = $response->result();
         return $result;
     }
-
     public function fetchForce($db)
     {
-
         $query = "SELECT force_code, CONCAT(force_name,' (',force_code,') ') AS force_details FROM clms_force";
         $response = $db->query($query);
         $result = $response->result();
         return $result;
     }
-
     public function insert_retiree_details($user_data)
     {
         $db = $this->db;
@@ -145,8 +107,6 @@ class Register_retiree_model extends CI_Model
         $db->close();
         return $result;
     }
-
-
     public function fetchCanteenList()
     {
         $db = $this->db;
@@ -158,13 +118,12 @@ class Register_retiree_model extends CI_Model
                 INNER JOIN ci_admin cs ON cs.admin_id=me.supervisor 
                 INNER JOIN ci_admin ch ON ch.admin_id=me.chairman 
                 INNER JOIN ci_admin ce ON ce.admin_id=me.executive
-                where mt.entity_type NOT IN ('Brewery','consumer')"; //BREWERy is registered using another page
+                where mt.entity_type NOT IN ('Brewery','consumer')";
         $response = $db->query($query);
         $result = $response->result();
         $db->close();
         return $result;
     }
-
     public function fetchInitialEntityFormDetails()
     {
         $db = $this->db;
@@ -177,7 +136,6 @@ class Register_retiree_model extends CI_Model
         $db->close();
         return $data;
     }
-
     public function fetchState($db)
     {
         $query = "Select id,state from master_state";
@@ -185,14 +143,6 @@ class Register_retiree_model extends CI_Model
         $result = $response->result();
         return $result;
     }
-
-    //    public function fetchClubEntityID() {
-    //        $query = "Select id from master_state";
-    //        $response = $db->query($query);
-    //        $result = $response->result();
-    //        return $result;
-    //    }
-
     public function fetchCities($state_id)
     {
         $db = $this->db;
@@ -202,7 +152,6 @@ class Register_retiree_model extends CI_Model
         $db->close();
         return $result;
     }
-
     public function fetchUserDetails($db)
     {
         $query = "SELECT ca.admin_id AS id,ca.username,concat( bh.rank,'. ',ca.firstname,' ',ca.lastname) AS name
@@ -213,7 +162,6 @@ class Register_retiree_model extends CI_Model
         $result = $response->result();
         return $result;
     }
-
     public function fetchDistributorAuthority($db)
     {
         $query = "Select id,entity_type AS distributor_authority FROM master_entity_type WHERE entity_type NOT IN ('consumer','club')";
@@ -221,7 +169,6 @@ class Register_retiree_model extends CI_Model
         $result = $response->result();
         return $result;
     }
-
     public function fetchEntities($db)
     {
         $query = "SELECT id,entity_type from master_entity_type where entity_type NOT IN ('Brewery','Consumer')";
@@ -229,8 +176,6 @@ class Register_retiree_model extends CI_Model
         $result = $response->result();
         return $result;
     }
-
-
     public function insert_canteen_details($data)
     {
         $db = $this->db;
@@ -238,18 +183,14 @@ class Register_retiree_model extends CI_Model
         $db->close();
         return $response->result();
     }
-
     public function update_canteen_details($data)
     {
         $db = $this->db;
         $query = "CALL SP_INSERT_UPDATE_CANTEEN_DETAILS('$data')";
-        // return $query;
-        // $response = $db->query();
         $response = $db->query("CALL SP_INSERT_UPDATE_CANTEEN_DETAILS(?)", array($data));
         $db->close();
         return $response->result();
     }
-
     public function fetchEntityDetails($id)
     {
         $db = $this->db;
@@ -264,17 +205,12 @@ class Register_retiree_model extends CI_Model
         $data['canteen_club_data'] = $entity_result;
         $store_id = $entity_result[0]->store_id;
         $state_id = $entity_result[0]->state;
-        // $column_name = $entity_result[0]->column_name;
-        // $table_name = $entity_result[0]->details_map_table;
-
         $city_list_query = "SELECT id,city_district_name FROM master_city_district WHERE stateid=?";
         $city_list_response = $db->query($city_list_query, array($state_id));
         $data['city_list'] = $city_list_response->result();
-
         $distributor_name_query = "SELECT id,entity_name as store_name from master_entities where id=?";
         $distributor_name_response = $db->query($distributor_name_query, array($store_id));
         $data['distributor_name_list'] = $distributor_name_response->result();
-
         $data['title'] = trans('edit_new_canteen');
         $data['mode'] = 'E';
         $data['state_record'] = $this->fetchState($db);

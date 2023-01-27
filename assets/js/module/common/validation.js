@@ -6,7 +6,6 @@
  * Jitendra Pal
  * to use common validation on all pages 
  */
-
 var alphabet_regex_pattern = /^[A-Za-z]*$/;
 var email_regex_pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 var alphabet_space_regex_pattern = /^[A-Za-z ]*$/;
@@ -34,7 +33,6 @@ function checkValidInput(field, error_message, regexPattern) {
             $("#" + field).removeClass("is-invalid");
         }
         $("#" + field + "_error").html("").hide();
-
         return true;
     } else {
         //        sumit_data_error_check++;
@@ -43,9 +41,7 @@ function checkValidInput(field, error_message, regexPattern) {
         $("#" + field + "_error").show().html(error_message);
         return false;
     }
-
 }
-
 //developed
 function checkInputEmpty(field, error_message) {
     if ($("#" + field).val().trim() === '') {
@@ -63,7 +59,6 @@ function checkInputEmpty(field, error_message) {
     }
 }
 
-
 function checkUploadImageEmpty(image_field, error_message) {
     console.log(image_field);
     console.log($("#" + image_field + "_h").val());
@@ -80,34 +75,11 @@ function checkUploadImageEmpty(image_field, error_message) {
         return false;
     }
 }
-
-//trying to improve the empty validation function till now not in use under development
-//function checkEmptyInput(field, field_type, error_message) {
-//    var field_value = (field_type === 'image') ? $("#" + field + "_h").val().trim() : $("#" + field).val().trim();
-//    if (field_value === '') {
-//        $("#" + field + "_error").html(error_message);
-//        submit_data_error_check = false;
-//        return true;
-//    } else {
-//
-//    }
-//
-//}
-
-//function addFieldTypeErrorMessage(field_type) {
-//    switch (field_type) {
-////        case 'image';
-//    }
-//}
-
-
-
 //check min and max length of field
 function checkMaxMinLengthValidation(field, error_message, min_length, max_length) {
     var value = $("#" + field).val().length;
     if (value >= min_length && value <= max_length) {
         $("#" + field + "_error").html("").hide();
-
         return true;
     } else {
         $("#" + field + "_error").show().html(error_message);
@@ -115,12 +87,10 @@ function checkMaxMinLengthValidation(field, error_message, min_length, max_lengt
         return false;
     }
 }
-
 //check exact length of field
 function checkExactLengthValidation(field, error_message, exact_length) {
     var value = $("#" + field).val().length;
     console.log(value);
-
     if (value === parseInt(exact_length)) {
         $("#" + field + "_error").html("").hide();
         return true;
@@ -130,4 +100,3 @@ function checkExactLengthValidation(field, error_message, exact_length) {
         return false;
     }
 }
-

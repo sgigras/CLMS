@@ -1,7 +1,5 @@
 <?php
-
 $resultArray = (isset($city_district_name)) ? $city_district_name : new stdClass;
-
 ?>
 <script>
     var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
@@ -21,12 +19,7 @@ $resultArray = (isset($city_district_name)) ? $city_district_name : new stdClass
         </div>
         <form action="/action_page_binary.asp" method="post" enctype="multipart/form-data">
             <div class="card-body">
-
-                <!-- For Messages -->
                 <?php $this->load->view('admin/includes/_messages.php');   ?>
-                <?php
-                // $redirect_url =  'user_details/RegisterRetiree/index';
-                ?>
                 <div class="row">
                     <div class="col-6">
                         <?php
@@ -36,9 +29,7 @@ $resultArray = (isset($city_district_name)) ? $city_district_name : new stdClass
                     <div class="col-6">
                         <?php $this->load->view('master/alphabet_space_field', array("field_id" => "retiree_name", "label" => "name", "max_length" => "50", "place_holder" => "Enter a name", "value" => "")); ?>
                     </div>
-
                 </div>
-                <!-- <br> -->
                 <div class="row">
                     <div class="col-4">
                         <?php $this->load->view('master/numeric_field', array("field_id" => "mobile_no", "label" => "mobile_no", "max_length" => "10", "place_holder" => "Enter a mobile no", "value" => "")); ?>
@@ -51,7 +42,6 @@ $resultArray = (isset($city_district_name)) ? $city_district_name : new stdClass
                         <span id="date_of_birth_error" class="text-danger"></span>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-4">
                         <?php
@@ -67,7 +57,6 @@ $resultArray = (isset($city_district_name)) ? $city_district_name : new stdClass
                         ?>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-4">
                         <?php $this->load->view('master/numeric_field', array("field_id" => "ppo_no", "label" => "ppo_no", "max_length" => "25", "place_holder" => "Enter a PPO No Ex.121542", "value" => "")); ?>
@@ -87,9 +76,8 @@ $resultArray = (isset($city_district_name)) ? $city_district_name : new stdClass
                         <?php $this->load->view('master/date_field', array("field_id" => "retirement_date", "label" => "date_of_retireement", "place_holder" => "Select Retirement Date", "value" => "")); ?>
                     </div>
                 </div>
-
                 <div class="row">
-                    <div class="col-3">
+                    <div class="col-4">
                         <div class="card" style="height: 295px;">
                             <div class="card-header" style="padding-bottom:3px; background-color:#7ac2c4;">
                                 <h5 class="text-center text-white">Personnel Photo</h5>
@@ -99,7 +87,7 @@ $resultArray = (isset($city_district_name)) ? $city_district_name : new stdClass
                             </div>
                         </div>
                     </div>
-                    <div class="col-3">
+                    <div class="col-4">
                         <div class="card" style="height: 295px;">
                             <div class="card-header" style="padding-bottom:3px; background-color:#7ac2c4;">
                                 <h5 class="text-center text-white">PPO Photo</h5>
@@ -109,7 +97,7 @@ $resultArray = (isset($city_district_name)) ? $city_district_name : new stdClass
                             </div>
                         </div>
                     </div>
-                    <div class="col-3">
+                    <div class="col-4">
                         <div class="card" style="height: 295px;">
                             <div class="card-header" style="padding-bottom:3px; background-color:#7ac2c4;">
                                 <h5 class="text-center text-white">ID Card Photo</h5>
@@ -119,22 +107,7 @@ $resultArray = (isset($city_district_name)) ? $city_district_name : new stdClass
                             </div>
                         </div>
                     </div>
-                    <div class="col-3">
-                        <div class="card" style="height: 295px">
-                            <div class="card-header" style="padding-bottom:3px; background-color:#7ac2c4;">
-                                <h5 class="text-center text-white">Signed Form Photo</h5>
-                            </div>
-                            <div class="card-body">
-                                <?php $this->load->view('master/photo_upload_field', array("field_id" => "signed_form_photo", "name" => "signed_form_photo", "css_class" => "photostyle", "width" => "150px", "height" => "150px", "image_title" => "")) ?>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-
-
-
-                <!-- <br> -->
-
                 <div class="form-group">
                     <div class="col-md-12">
                         <button id="register_retiree" class="btn btn-primary pull-right">Register</button>

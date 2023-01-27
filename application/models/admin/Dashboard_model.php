@@ -32,7 +32,10 @@ class Dashboard_model extends CI_Model
 		$this->db->where('rank', $this->session->userdata('rank'));
 		$query = $this->db->get();
 		$result = $query->result_array();
-		return $result[0]['id'];
+		if (count($result) > 0)
+			return $result[0]['id'];
+		else
+			return '0';
 	}
 	public function get_userquota()
 	{
@@ -43,7 +46,11 @@ class Dashboard_model extends CI_Model
 		// $query = $this->db->get();
 		$response = $this->db->query($query);
 		$resultarray = $response->result_array();
-		return $resultarray[0]['quota'];
+		if (count($resultarray) > 0) {
+			return $resultarray[0]['quota'];
+		} else {
+			return '';
+		}
 	}
 
 	public function get_user_used_quota_liqour_deatils($userid)

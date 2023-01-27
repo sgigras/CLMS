@@ -29,6 +29,7 @@ $cur_tab = $this->uri->segment(2)==''?'dashboard': $this->uri->segment(2);
             foreach ($menu as $nav)
             {
                 extract($nav);
+                $fa_icon = isset($fa_icon) ? $fa_icon : "";
         ?>
                 <li id="<?= $controller_name ?>" class="nav-item <?= ($has_submenu == 1) ? 'has-treeview' : '' ?> has-treeview">
                   <a href="<?= base_url($controller_name) ?>" class="nav-link">
