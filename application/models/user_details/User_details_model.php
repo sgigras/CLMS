@@ -128,17 +128,10 @@ class User_details_model extends CI_Model
     public function update_user($irla, $dob, $mobile, $email)
     {
         $dob = ($dob == "" ? date('Y-m-d h:i:s') : $dob);
-        $query = "UPDATE ci_admin SET mobile_no=$mobile,email='$email' WHERE username=$irla AND date_of_birth='$dob'";
-        echo $query;
-        die;
         $db = $this->db;
-        $query = "UPDATE bsf_hrms_data SET mobile_no=$mobile,email_id='$email' WHERE irla=$irla AND date_of_birth='$dob'";
+        $query = "UPDATE ci_admin SET mobile_no=$mobile,email='$email' WHERE username=$irla AND date_of_birth='$dob'";
         $response = $db->query($query);
-        if ($response) {
-            $query_ciadmin = "UPDATE ci_admin SET mobile_no=$mobile,email='$email' WHERE username=$irla AND date_of_birth='$dob'";
-            $response_ciadmin = $db->query($query_ciadmin);
-            $message = "User Updated Successfully !!";
-        }
+        $message = "User Updated Successfully !!";
         $db->close();
         return $message;
     }
@@ -559,11 +552,10 @@ class User_details_model extends CI_Model
     public function getOtp($irla_no)
     {
         $db = $this->db;
-        $query = "select otp_code from otp_log where  irla_no='$irla_no' and isactive=1 order by id desc limit 1";
+        $query = "select otp_code from otp_log where irla_no='$irla_no' and isactive=1 order by id desc limit 1";
         $response = $db->query($query);
         $result = $response->result();
         return $result;
-        // echo json_encode($response);
     }
     public function removeMacBinding($irla_no)
     {

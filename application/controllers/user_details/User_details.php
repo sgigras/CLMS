@@ -8,17 +8,9 @@ class User_details extends My_Controller
         $this->load->model('user_details/User_details_model', 'user_details_model');
         $this->load->model('admin/dashboard_model', 'dashboard_model');
     }
-    // public function index()
-    // {
-    //     // $this->load->view('admin/includes/_header');
-    //     $this->load->view('master/master_user');
-    //     // $this->load->view('admin/includes/_footer');
-    // }
     public function index()
     {
         $data['all_users'] = $this->dashboard_model->get_all_users();
-        // $data['active_users'] = $this->dashboard_model->get_active_users();
-        // $data['deactive_users'] = $this->dashboard_model->get_deactive_users();
         $data['title'] = 'Dashboard';
         $this->load->view('admin/includes/_header', $data);
         $this->load->view('admin/dashboard/index', $data);
@@ -80,25 +72,18 @@ class User_details extends My_Controller
     }
     public function update_user()
     {
-        echo "h";
         $irla = $this->input->post("irla");
         $dob = $this->input->post("dob");
         $mobile = $this->input->post("mobile");
         $email = $this->input->post("email");
         $response = $this->user_details_model->update_user($irla, $dob, $mobile, $email);
-        die;
         echo json_encode($response);
     }
     public function GetUserdetails()
     {
         $irla_no = $this->input->post("irlano");
-        // echo $irla_no;
         $response = $this->user_details_model->fetchUserDetails($irla_no);
-        // $count_response= $this->user_details_model->fetchCountUserDetails();
         $user_details_array = array();
-        // echo '<pre>';
-        // print_r($response);
-        // echo '</pre>';
         $i = 1;
         foreach ($response as $row) {
             $row['sr_no'] = $i++;
@@ -109,9 +94,6 @@ class User_details extends My_Controller
             }
             $user_details_array[] = $row;
         }
-        // echo '<pre>';
-        // print_r($user_details_array);
-        // echo '</pre>';die();
         $this->load->view('master_forms/edit_user', array("user_details_array" => $user_details_array));
     }
     public function GetPostingUnit()
@@ -133,7 +115,6 @@ class User_details extends My_Controller
             $user_details_array[] = $row;
         }
         $this->load->view('master/master_user', array("user_details_array" => $user_details_array));
-        //    echo json_encode($user_details_array);
     }
     public function viewPostinUnit()
     {
@@ -164,14 +145,12 @@ class User_details extends My_Controller
     }
     public function getRetireeData()
     {
-        // echo "Hello";
         $report_type = $this->input->post('report_type');
         $data = $this->user_details_model->fetchRetireeDetails($report_type);
         $this->load->view('user_details/get_RetireeReportTable', $data);
     }
     public function getRetireeCanteenData()
     {
-        // echo "Hello";
         $report_type = $this->input->post('report_type');
         $entity_id = $this->input->post('entity_id');
         $data = $this->user_details_model->fetchRetireeCanteenDetails($report_type, $entity_id);
@@ -181,10 +160,10 @@ class User_details extends My_Controller
     public  function displayRanks()
     {
         $rank_quota_data = $this->user_details_model->fetchAllRankQuotaRecords();
-        $data['title'] = trans('liquor_rank_quota_list'); // header of the page
-        $data['add_url'] = 'master/Liquor_mapping/addLiquorMappingDetails'; //url for adding new product on form submission
-        $data['add_title'] = trans('liquor_rank'); //add button titl on list page
-        $data['table_head'] = LIQUOR_RANK_QUOTA_LIST; //from application/helpers/bsf_form list_field_helper //use to create table 
+        $data['title'] = trans('liquor_rank_quota_list');
+        $data['add_url'] = 'master/Liquor_mapping/addLiquorMappingDetails';
+        $data['add_title'] = trans('liquor_rank');
+        $data['table_head'] = LIQUOR_RANK_QUOTA_LIST;
         $data['table_data'] = $rank_quota_data;
         $data['table_mode'] = "LIQUOR_RANK_QUOTA_LIST";
         $data['edit_url'] = 'user_details/User_details/editRankQuotaDetails';
