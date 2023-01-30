@@ -80,10 +80,6 @@ $resultArray = (isset($brewery_data)) ? $brewery_data[0] : new stdClass;
     var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
     var csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
     var baseurl = "<?php echo base_url(); ?>";
-    $("#brewery_name").prop("disabled", true);
-    $("#contactperson").prop("disabled", true);
-    $("#mobilenumber").prop("disabled", true);
-    $("#emailaddress").prop("disabled", true);
 </script>
 <!--</div>-->
 <script src="<?= base_url() ?>assets/js/module/common/validation.js"></script>

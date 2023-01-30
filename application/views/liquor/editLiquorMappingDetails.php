@@ -24,9 +24,6 @@
                                 </div>
                             </div>
                             <div class='row'>
-                            <div class='col-md-4'>
-                                    <?php $this->load->view('master/display_data_label_field', array("field_id" => "base_price_display", "label" => "base_price", "max_length" => "5", "place_holder" => "Base Price", "value" => getValue('base_price', $liquor_data[0]))); ?>
-                                </div>
                                 <div class='col-md-4'>
                                     <?php $this->load->view('master/display_data_label_field', array("field_id" => "purchase_price_display", "label" => "purchase_price", "max_length" => "5", "place_holder" => "Sell Price", "value" => getValue('purchase_price', $liquor_data[0]))); ?>
                                 </div>

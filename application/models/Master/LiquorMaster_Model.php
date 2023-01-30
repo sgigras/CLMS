@@ -5,11 +5,15 @@ class LiquorMaster_Model extends CI_Model
     public function fetchAllLiquorRecords()
     {
         $db = $this->db;
-         $query = "select (select brewery_name from master_brewery where id = ml.brewery_id) as brewery_name,ml.id,lb.brand as liquor_brand,ml.liquor_description as liquor_name,
-                    mat.liquor_type as liquor_type,concat(lm.liquor_ml,' ML') as bottle_size from liquor_description ml
-                    inner join liquor_type mat on mat.id=ml.liquor_type_id
-                    inner join liquor_brand lb on lb.id=ml.liquor_brand_id
-                    inner join liquor_ml lm on lm.id=ml.liquor_ml_id";
+         $query = "select
+                        ml.id,
+                        ml.liquor_description as liquor_name,
+                        FN_GET_BREWERY_NAME(ml.brewery_id) as brewery_name,
+                        FN_GET_LIQUOR_BRAND(ml.liquor_brand_id) as liquor_brand,
+                        FN_GET_LIQUOR_TYPE(ml.liquor_type_id) as liquor_type,
+                        FN_GET_LIQUOR_ML(ml.liquor_ml_id) as bottle_size
+                    from liquor_description ml
+                    ";
 
         $response = $db->query($query);
         $result = $response->result();
@@ -99,7 +103,6 @@ class LiquorMaster_Model extends CI_Model
     {
         $db = $this->db;
         $query = "CALL SP_INSERT_UPDATE_LIQUOR_DETAILS('".$product_data."')";
-        $query = "CALL SP_INSERT_UPDATE_LIQUOR_DETAILS(?)";
         $response = $db->query($query, array($product_data));
         $result = $response->result();
         $db->close();

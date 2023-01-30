@@ -204,55 +204,11 @@
                 header('Location: ' . $_SERVER['HTTP_REFERER']);
             }
         }
-
-        // public function displayDeliveryCartSummary($cart_id, $cart_total_details_type)
-        // {
-        //     $page_labels = unserialize($cart_total_details_type); //to fetch page labels
-
-        //     $response = $this->cart_model->fetchCartDetalis($cart_id);
-
-        //     if (count($response) > 0) {
-        //         $cart_details['cart_type'] = $response[0]['cart_type'];
-        //         $cart_details['cart_id'] = $response[0]['cart_id'];
-        //         $cart_details['cart_table_data'] = $response;
-        //     }
-        //     // echo '<pre>';
-        //     // print_r($cart_details);
-        //     // echo '</pre>';
-        //     // die();
-        //     $data = array_merge($page_labels, $cart_details);
-        //     $this->load->view('admin/includes/_header');
-        //     $this->load->view('cart/summary', $data);
-        //     $this->load->view('admin/includes/_footer');
-        // }
-
-        // public function fetchDeliveryOrderDetails($order_code)
-        // {
-
-        //     $response = $this->order_model->fetchOrderCartDetails($order_code);
-
-        //     if (count($response) > 0) {
-        //         $cart_details['cart_type'] = $response[0]['cart_type'];
-        //         $cart_details['cart_id'] = $response[0]['cart_id'];
-        //         $cart_details['cart_table_data'] = $response;
-        //     }
-
-        //     $data = array_merge($page_labels, $cart_details);
-        //     $this->load->view('cart/cart_collapsible', $data);
-        // }
-
         public function printReceipt()
         {
             if (isset($_SESSION["print_reciept"])) {
                 $cart_order_code = $_SESSION["print_reciept"];
                 $data['brewerysummary'] = $this->order_model->fetchPrintReceipt($cart_order_code);
-                // $receipt_data['canteen_name'] = $response[0]['entity_name'];
-                // $receipt_data['name'] = $response[0]['name'];
-                // $receipt_data['canteen_address'] = $response[0]['canteen_address'];
-                // $receipt_data['irla'] = $response[0]['irla'];
-                // $receipt_data['order_code'] = $response[0]['order_code'];
-                // $receipt_data['liquor_details'] = $response;
-
                 $this->load->view('admin/includes/_header');
                 $this->load->view('order/invoice', $data);
             } else {

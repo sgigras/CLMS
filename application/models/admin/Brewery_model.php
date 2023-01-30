@@ -191,27 +191,37 @@ class Brewery_model extends CI_Model
 	//Fetch Brand name from liquor_details table
 	function getBrandName()
 	{
-		$this->db->select("liquor_description_id, concat(brand,' ',liquor_description,' - ',liquor_type) as ln");
-		$this->db->from('liquor_details');
-		$query = $this->db->get();
-		return $query->result_array();
+		$query = "select
+					ld.id liquor_description_id,
+					ld.liquor_description,
+					ld.liquor_image,
+					FN_GET_LIQUOR_TYPE(ld.liquor_type_id) liquor_type,
+					FN_GET_BREWERY_NAME(ld.brewery_id) brewery,
+					FN_GET_BRAND_NAME(ld.liquor_brand_id) brand,
+					FN_GET_BOTTEL_SIZE(ld.liquor_bottle_size_id) bottle_size,
+					FN_GET_LIQUOR_ML(ld.liquor_ml_id) liquor_ml
+			from liquor_description as ld";
+		$response = $this->db->query($query);
+		return $response->result_array();
 	}
 
 	//Fetch Depot Name from master_entites table
 	function getDepotName()
 	{
-		$this->db->select("me.id,me.entity_name,mt.entity_type AS canteen_club,cc.firstname AS chairman, cs.firstname AS supervisor,ce.firstname AS executive");
-		$this->db->from('master_entities as me');
-		$this->db->join("master_entity_type as mt", "find_in_set(me.entity_type,mt.id)<> 0", false);
-		$this->db->join("ci_admin as cs", "find_in_set(cs.admin_id,me.supervisor)<> 0", false);
-		$this->db->join("ci_admin as cc", "find_in_set(cc.admin_id,me.chairman)<> 0", false);
-		$this->db->join("ci_admin as ce", "find_in_set(ce.admin_id,me.executive)<> 0", false);
-		$this->db->where("mt.entity_type not in('brewery','consumer','sub-depot')");
-
-		// $this->db->where('entity_type = 3');
-		//$this->db->group_by('entity_name');
-		$query = $this->db->get();
-		return $query->result_array();
+		$query = "SELECT
+				me.id,
+				me.entity_name,
+				mt.entity_type AS canteen_club,
+				FN_GET_USER_WITH_RANK_AND_IRLA(me.chairman) AS chairman,
+				FN_GET_USER_WITH_RANK_AND_IRLA(me.supervisor) AS supervisor,
+				FN_GET_USER_WITH_RANK_AND_IRLA(ME.executive) executive
+				FROM
+					master_entities AS me
+					INNER JOIN
+					master_entity_type AS mt ON me.entity_type=mt.id AND mt.id IN (2,4,5)
+				";
+		$response = $this->db->query($query);
+		return $response->result_array();
 	}
 
 

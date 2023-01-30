@@ -3,10 +3,7 @@
 $resultArray = (isset($liquor_data)) ? $liquor_data[0] : new stdClass;
 $liquor_data_array = (isset($liquor_data_list)) ? $liquor_data_list : array();
 $liquor_entity_array = (isset($liquor_entity_list)) ? $liquor_entity_list : array();
-
-/* $distributor_name_select_array = (isset($distributor_name_list)) ? $distributor_name_list : array(); */
 ?>
-<!--<div class="content-wrapper" style="margin-top: 55px;min-height: 580.08px !important;">-->
 <!-- Main content -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css">
 <section class="content">
@@ -23,11 +20,7 @@ $liquor_entity_array = (isset($liquor_entity_list)) ? $liquor_entity_list : arra
             </div>
         </div>
         <div class="card-body">
-
-            <!-- For Messages -->
-            <?php // $this->load->view('admin/includes/_messages.php')   
             ?>
-
             <?php
             $redirect_url = ($mode == 'A') ? 'master/Liquor_mapping/addLiquorMappingDetails' : 'master/Liquor_mapping/editLiquorMappingDetails/' . getValue('id', $resultArray);
             echo form_open(base_url($redirect_url), array('class' => 'form-horizontal', 'id' => 'liquor_mapping_details_form'), 'class="form-horizontal"');
@@ -70,8 +63,6 @@ $liquor_entity_array = (isset($liquor_entity_list)) ? $liquor_entity_list : arra
                                 <div class='col'>
                                     <?php $entity_id = $this->session->userdata('entity_id') ?>
                                     <input type="hidden" name="entity" id="entity" value="<?= $entity_id ?>">
-                                    <?php // $this->load->view('master/select_field', array("field_id" => "entity", "label" => "entity", "place_holder" => "Select an entity", "option_record" => $liquor_entity_array, "option_value" => "id", "option_text" => "entity_name", "selected_value" => getValue('entity_name', $resultArray))); 
-                                    ?>
                                 </div>
                             </div>
                             <div class='row'>
@@ -86,18 +77,8 @@ $liquor_entity_array = (isset($liquor_entity_list)) ? $liquor_entity_list : arra
                                     </div>
                                 </div>
                                 <div class='row'>
-                                    <!-- <div class='col-sm-4' id="base_price_div">
-                                         <input type="text" name="price[]" class="form-control calcEvent price" id="price" placeholder="" required> 
-                                        <?php // $this->load->view('master/price_field', array("field_id" => "base_price", "label" => "base_price", "max_length" => "8", "place_holder" => "Base Price", "value" => ""));
-                                        ?>
-                                    </div> -->
                                     <div class='col-sm-4'>
-                                        <!-- <input type="hidden" name="sell_price" id="sell_price" value=""> -->
-
                                         <?php $this->load->view('master/price_field', array("field_id" => "purchase_price", "label" => "purchase_price", "max_length" => "8", "place_holder" => "Purchase Price", "value" => "")) ?>
-                                        <!-- <input type="hidden" name="hid_purchase_price" id="hid_purchase_price"> -->
-                                        <?php // $this->load->view('master/display_data_label_field', array("field_id" => "sell_price_display", "label" => "sell_price", "max_length" => "5", "place_holder" => "Sell Price", "value" => "0")); 
-                                        ?>
                                     </div>
                                     <div class='col-sm-4'>
                                         <?php $this->load->view('master/price_field', array("field_id" => "sell_price", "label" => "sell_price", "max_length" => "8", "place_holder" => "Sell Price", "value" => "")); ?>
@@ -139,12 +120,8 @@ $liquor_entity_array = (isset($liquor_entity_list)) ? $liquor_entity_list : arra
         </div>
         <div id="myModal" class="modal fade" aria-modal="true" role="dialog">
             <div class="modal-dialog modal-lg" style="max-width: 60%;">
-
                 <!-- Modal content-->
                 <div class="modal-content">
-                    <!-- <div class="modal-header">
-                        <h4 class="modal-title" id="modalHeader"></h4>
-                    </div> -->
                     <div class="modal-body p-0">
                         <table id="liquortable" class="table table-hover table-bordered mb-0" style="border-collapse: collapse !important; border: none !important;" width="100%">
                             <thead style="background-color: darkorange;">
@@ -157,7 +134,6 @@ $liquor_entity_array = (isset($liquor_entity_list)) ? $liquor_entity_list : arra
                             <tbody>
                                 <tr>
                                     <td rowspan="10"><img id="liquor_display_image" height="400px" width="300px"></td>
-                                    <!-- <td id="liquor_display_type"></td> -->
                                 </tr>
                                 <tr>
                                     <td>Liquor Type</td>
@@ -194,10 +170,6 @@ $liquor_entity_array = (isset($liquor_entity_list)) ? $liquor_entity_list : arra
                                 <tr>
                                     <td>Re-Order Level</td>
                                     <td id="liquor_display_reorder_level"></td>
-                                </tr>
-                                <tr>
-                                    <!-- <td>Re-Order Level</td> -->
-                                    <!-- <td colspan="3"></td> -->
                                 </tr>
                             </tbody>
                         </table>

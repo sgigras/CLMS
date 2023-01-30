@@ -21,7 +21,6 @@ class Alcohol_masterAPI extends MY_Controller
         $data['add_title'] = trans('add_alcohol_type');
         $data['table_head'] = ALCOHOL_MASTER;
         $data['table_data'] = $liquor_data;
-        $data['edit_url'] = 'master/Alcohol_masterAPI/editalcoholNames';
         $data['csrf_url'] = 'master/CanteenMaster';
         $this->load->view('admin/includes/_header');
         $this->load->view('master/masterTableView', $data);
@@ -66,44 +65,7 @@ class Alcohol_masterAPI extends MY_Controller
             $this->load->view('master_forms/alcoholMasterview', $data);
             $this->load->view('admin/includes/_footer');
         }
-    }
-
-    public function editalcoholNames($id)
-    {
-        $this->rbac->check_operation_access(); // check opration permission
-
-
-        if ($this->input->post('submit')) {
-            $this->form_validation->set_rules('alcohol_name', 'Alcohol name', 'trim|required');
-            $data = array(
-                'alcohol_type' => checkIMP($this->input->post('alcohol_name')),
-                'created_by' => $this->session->userdata('admin_id'),
-                'id' => $id,
-            );
-            if ($this->form_validation->run() == FALSE) {
-                $data = array(
-                    'errors' => validation_errors()
-                );
-
-                $this->session->set_flashdata('errors', $data['errors']);
-                redirect(base_url('master/Alcohol_masterAPI/editalcoholNames/' . getValue('id', $resultArray)), 'refresh');
-            }
-
-            $result = $this->master_model->update_liquor_name($data);
-            if ($result) {
-                $this->session->set_flashdata('form_data', 'Alcohol name Updated successfully');
-                redirect(base_url('master/Alcohol_masterAPI/index'), 'refresh');
-            }
-        } else {
-            $data['title'] = trans('edit_alcohol_name');
-            $details = $this->master_model->fetchAlcoholDetails($id);
-            $data['alcohol_type'] = $details[0];
-            $data['mode'] = 'E';
-            $this->load->view('admin/includes/_header');
-            $this->load->view('master_forms/alcoholMasterview', $data);
-            $this->load->view('admin/includes/_footer');
-        }
-    }
+    }    
 
 
     //LIQUOR MM MASTERAPI FUNCTIONS ADDED
@@ -116,7 +78,6 @@ class Alcohol_masterAPI extends MY_Controller
         $data['add_title'] = trans('add_alcohol_quantity');
         $data['table_head'] = ALCOHOL_MM_MASTER;
         $data['table_data'] = $tax_data;
-        $data['edit_url'] = 'master/Alcohol_masterAPI/addAlcoholQuantity';
         $data['csrf_url'] = 'master/CanteenMaster';
 
         $this->load->view('admin/includes/_header');
@@ -156,7 +117,7 @@ class Alcohol_masterAPI extends MY_Controller
             $this->load->view('master_forms/alcoholMMview', $data);
             $this->load->view('admin/includes/_footer');
         }
-    }
+    }    
     //LIQUOR MM MASERAPI FUNCTION END
 
 
@@ -243,7 +204,6 @@ class Alcohol_masterAPI extends MY_Controller
                 'brewery_id' => $this->input->post('brewery_name'),
             );
             $response = $this->CheckEntityMasterForm();
-            // print_r($data);die();
             if ($response['success']) {
                 $response['model_response'] = $this->insert_update_liquor_details($data);
             }

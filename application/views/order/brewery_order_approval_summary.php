@@ -10,8 +10,8 @@ var order_code = '<?= $brewery_order_code ?>';
     <div class="card card-default" style="box-shadow: none;">
         <div class="card-header">
             <div class="d-inline-block">
-                <h3 class="card-title"> <i class="<?= $fa_form_icon ?>"></i>
-                    <?= trans($title) ?></h3>
+                <h3 class="card-title"> <i class="<?= (isset($fa_form_icon)?$fa_form_icon:"") ?>"></i>
+                    <?= (isset($title)?trans($title):"") ?></h3>
             </div>
         </div>
         <div class="card-body" style="padding:30px;">
@@ -74,9 +74,9 @@ var order_code = '<?= $brewery_order_code ?>';
                             </div>
                             <br>
                             <div class="d-inline-block float-right">
-                                <button type="button" class=" btn btn-primary float-left" name="approve" id="approve" onclick="approve_reject_order('A')"><i class="<?= $fa_button_icon1 ?>"></i>Approve</button>
+                                <button type="button" class=" btn btn-primary float-left" name="approve" id="approve" onclick="approve_reject_order('A')"><i class="<?= (isset($fa_button_icon1)?$fa_button_icon1:"") ?>"></i>Approve</button>
                                 &nbsp;&nbsp;
-                                <button type="button" class="btn btn-secondary float-right" name="reject" id="reject" onclick="approve_reject_order('R')"><i class="<?= $fa_button_icon2 ?>"></i>Reject</button>
+                                <button type="button" class="btn btn-secondary float-right" name="reject" id="reject" onclick="approve_reject_order('R')"><i class="<?= (isset($fa_button_icon2)?$fa_button_icon2:"") ?>"></i>Reject</button>
                             </div>
                         </div>
                     </div>
