@@ -27,8 +27,9 @@
                         }
                         
                         ?>
-
+                        <?php if (isset($edit_url)){ ?>
                         <th style="border-color: #DA0037">Action</th>
+                        <?php }?>
                     </tr>
                 </thead>
                 <tbody>
@@ -42,7 +43,9 @@
                             echo "<td style='border-color: #DA0037'>" . $record[$data_key[1]] . "</td>";
                         }
                         $id = $record['id'];
-                        echo "<td style='border-color: #DA0037'><a href='" . site_url($edit_url . "/" . $id) . "' class='btn btn-primary btn-xs mr5' style='background-color:#035397;'><i class='fa fa-edit'></i></a></td></tr>";
+                        if (isset($edit_url)) {
+                            echo "<td style='border-color: #DA0037'><a href='" . site_url($edit_url . "/" . $id) . "' class='btn btn-primary btn-xs mr5' style='background-color:#035397;'><i class='fa fa-edit'></i></a></td></tr>";
+                        }
                     }
                     ?>
                 </tbody>

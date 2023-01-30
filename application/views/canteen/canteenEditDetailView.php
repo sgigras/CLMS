@@ -67,12 +67,12 @@ $ID = getValue('id', $user_details)
                 <div class="col-6">
                     <?php $this->load->view('master/select_field', array("field_id" => "select_supervisor", "CSS_CLASS" => "select_canteen_user", "label" => "supervisor", "place_holder" => "Select a supervisor", "option_record" => $userlist, "option_value" => "admin_id", "option_text" => "name", "selected_value" => getValue('supervisor', $user_details))); ?>
                 </div>
-                <?php if ($this->user_details->authorised_distributor_entity_type_id != 0){?>
+                <?php if (isset($this->user_details->authorised_distributor_entity_type_id) && $this->user_details->authorised_distributor_entity_type_id != 0){?>
                 <div class="col-6" id="distribute_authority">
                     <?php $this->load->view('master/select_field', array("field_id" => "select_distrubuting_authority", "label" => "distrubuting_authority", "place_holder" => "Select a distributor authority", "option_record" => $distributor_authority_record, "option_value" => "id", "type" => "hidden", "option_text" => "distributor_authority", "selected_value" => getValue('authorised_distributor', $user_details))); ?>
                 </div>
                 <?php }?>
-                <?php if ($this->user_details->authorised_distributor != 0){ ?>
+                <?php if (isset($this->user_details->authorised_distributor) && $this->user_details->authorised_distributor != 0){ ?>
                 <div class="col-6" id="distrubuting_authority_1" style="display: none;">
                     <?php $this->load->view('master/select_field', array("field_id" => "select_distributor_name", "label" => "distributor_name", "place_holder" => "Select a distributor name", "option_record" => $distributor_name_select_array, "option_value" => "id", "option_text" => "name", "selected_value" => getValue('store_id', $user_details))); ?>
                 </div> 
@@ -93,12 +93,8 @@ $ID = getValue('id', $user_details)
     var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
     var csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
     var baseurl = "<?php echo base_url(); ?>";
-    $("#outlet_type").prop("disabled", true);
-    $("#battalion_unit").prop("disabled", true);
-    $("#canteen_name").prop("disabled", true);
-    $("#select_state").prop("disabled", true);
-    $("#select_city").prop("disabled", true);
-    $("#address").prop("disabled", true);
+    $("#outlet_type").select2({disabled:'readonly'});
+    $("#battalion_unit").select2({disabled:'readonly'});
 </script>
 <!--</div>-->
 <script src="<?= base_url() ?>assets/js/module/common/validation.js"></script>

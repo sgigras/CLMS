@@ -63,36 +63,7 @@ class Dashboard_model extends CI_Model
 		$response = $db->query($query);
 
 		$result['liquor_consumed'] = $response->result_array();
-
-		$query = "SELECT 
-					cd.id as cart_id,
-					Concat(ld.brand,'',ld.liquor_description,'',ld.bottle_size,'',ld.liquor_ml,' ml') as liquor_name,
-					cd.order_code as order_code, 
-					ld.liquor_description_id as liquor_id, 
-					cd.cart_type,
-					ld.liquor_type,
-					ld.liquor_ml,
-					ld.liquor_image,
-					cl.liquor_entity_id,
-					cd.liquor_count, 
-					concat(cl.quantity,'_',lem.id,'_',cd.id) as quantity, 
-					(lem.selling_price * total_cost_bottles) as total_cost, 
-					lem.selling_price as selling_price, 
-					unit_cost_lot_size as unit_lot_cost, 
-					total_cost_bottles as total_quantity_cost,
-					cd.ordered_to_entity_id,
-					cd.order_from_id,
-					CONCAT(entity_name,' - ',city_district_name,',',state) AS canteen_details, 
-					cl.is_liquor_removed as is_liquor_removed 
-				FROM 
-					cart_details cd 
-						INNER JOIN cart_liquor cl ON cd.id=cl.cart_id 
-						INNER JOIN liquor_entity_mapping lem ON lem.id=cl.liquor_entity_id 
-						INNER JOIN entity_location_mapping elm on elm.entity_id=cd.ordered_to_entity_id 
-						INNER JOIN liquor_details ld ON ld.liquor_description_id=lem.liquor_description_id 
-				where order_from_id='{$userid}' and cd.is_order_placed=1 and cd.cart_type='consumer' 
-				and cl.is_liquor_removed=0 
-				order by cd.id desc limit 1";
+		$liquor_details_query = "CALL SP_GET_USER_LATEST_ORDER_DETAIL('{$userid}')";
 		$liquor_details_response = $db->query($query);
 		$result['liquor_details'] = $liquor_details_response->result_array();
 
@@ -121,9 +92,4 @@ class Dashboard_model extends CI_Model
 		$result = $response->result();
 		return $result[0]->logged_in_users;
 	}
-	
-	// $response = $this->db->query($query);
-	// $result = $response->result();
-	// return $result[0]->COUNT_ID;
-
 }

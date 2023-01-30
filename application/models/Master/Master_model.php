@@ -218,6 +218,13 @@ class Master_model extends CI_Model {
         return $response;
     }
 
+	public function updateAlcoholQuantity($data){
+    	$db = $this->db;
+        $response= $db->insert('liquor_ml', $data);
+        $db->close();
+        return $response;
+    }
+
 	// function to get liquor brand list from database table-----------
 
 

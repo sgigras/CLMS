@@ -1,43 +1,27 @@
 <?php
-
 defined('BASEPATH') or exit('No direct script access allowed');
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of Canteen_master_model
- *
- * @author Jitendra Pal
- */
 class Canteen_master_model extends CI_Model
 {
-
-    //put your code here
-
     public function fetchCanteenList()
     {
         $db = $this->db;
-            $query = "SELECT me.id,me.entity_name,bpu.posting_unit as battalion_unit ,mt.entity_type AS canteen_club,ms.state,
-            CONCAT(ch.username,' (',IFNULL(ch.user_rank,'NA'),') ',IFNULL(ch.firstname,' '),' - ',IFNULL(ch.mobile_no,''))AS chairman,
-            CONCAT(cs.username,' (',IFNULL(cs.user_rank,'NA'),') ',IFNULL(cs.firstname,''),' - ',IFNULL(cs.mobile_no, '')) AS supervisor,
-            CONCAT(ce.username,' (',IFNULL(ce.user_rank,'NA'),') ',IFNULL(ce.firstname,''),' - ',IFNULL(ce.mobile_no, '')) AS executive 
-            FROM master_entities me
-            LEFT JOIN bsf_posting_unit bpu ON bpu.id=me.battalion_unit
-            INNER JOIN master_state ms ON me.state=ms.id 
-            INNER JOIN master_entity_type mt ON me.entity_type=mt.id
-            INNER JOIN ci_admin cs ON cs.admin_id=me.supervisor 
-            INNER JOIN ci_admin ch ON ch.admin_id=me.chairman 
-            INNER JOIN ci_admin ce ON ce.admin_id=me.executive
-            where mt.entity_type NOT IN ('Brewery','consumer')"; //BREWERy is registered using another page
+            $query = "SELECT 
+                me.id,
+                me.entity_name,
+                IFNULL(mt.entity_type,'N/A') AS canteen_club,
+                FN_GET_USER_WITH_RANK_AND_IRLA(me.supervisor) supervisor,
+                FN_GET_USER_WITH_RANK_AND_IRLA(me.chairman) chairman,
+                FN_GET_USER_WITH_RANK_AND_IRLA(me.executive) executive,
+                FN_GET_STATENAME(me.state) state,
+                FN_GET_UNITNAME(me.battalion_unit) battalion_unit
+            FROM
+                master_entities me
+                left JOIN master_entity_type mt ON me.entity_type = mt.id and me.entity_type in (1,2)";
         $response = $db->query($query);
         $result = $response->result();
         $db->close();
         return $result;
     }
-
     public function fetchCanteenListForChairman($chairmanid)
     {
         $db = $this->db;
@@ -49,13 +33,12 @@ class Canteen_master_model extends CI_Model
                 INNER JOIN ci_admin cs ON cs.admin_id=me.supervisor 
                 INNER JOIN ci_admin ch ON ch.admin_id=me.chairman 
                 INNER JOIN ci_admin ce ON ce.admin_id=me.executive
-                where mt.entity_type NOT IN ('Brewery','consumer') AND me.chairman='$chairmanid'"; //BREWERy is registered using another page
+                where mt.entity_type NOT IN ('Brewery','consumer') AND me.chairman='$chairmanid'";
         $response = $db->query($query);
         $result = $response->result();
         $db->close();
         return $result;
     }
-
     public function fetchInitialEntityFormDetails($userid='')
     {
         $db = $this->db;
@@ -77,7 +60,6 @@ class Canteen_master_model extends CI_Model
         $db->close();
         return $data;
     }
-
     public function fetchState($db)
     {
         $query = "Select id,state from master_state";
@@ -85,14 +67,6 @@ class Canteen_master_model extends CI_Model
         $result = $response->result();
         return $result;
     }
-
-    //    public function fetchClubEntityID() {
-    //        $query = "Select id from master_state";
-    //        $response = $db->query($query);
-    //        $result = $response->result();
-    //        return $result;
-    //    }
-
     public function fetchCities($state_id)
     {
         $db = $this->db;
@@ -102,7 +76,6 @@ class Canteen_master_model extends CI_Model
         $db->close();
         return $result;
     }
-
     public function fetchUserDetails($db, $userid = '')
     {
         if ($userid != '') {
@@ -119,7 +92,6 @@ class Canteen_master_model extends CI_Model
         }
         return $result;
     }
-
     public function fetchDistributorAuthority($db)
     {
         $query = "Select id,entity_type AS distributor_authority FROM master_entity_type WHERE entity_type NOT IN ('consumer','club')";
@@ -127,7 +99,6 @@ class Canteen_master_model extends CI_Model
         $result = $response->result();
         return $result;
     }
-
     public function fetchEntities($db)
     {
         $query = "SELECT id,entity_type from master_entity_type where entity_type NOT IN ('Brewery','Consumer')";
@@ -135,7 +106,6 @@ class Canteen_master_model extends CI_Model
         $result = $response->result();
         return $result;
     }
-
     public function fetchUserList()
     {
         $db = $this->db;
@@ -148,7 +118,6 @@ class Canteen_master_model extends CI_Model
         $result = $response->result_array();
         return $result;
     }
-
     public function battalionfetchEntities($db)
     {
         $db = $this->db;
@@ -157,7 +126,6 @@ class Canteen_master_model extends CI_Model
         $result = $response->result();
         return $result;
     }
-
     public function fetchDistrubutors($distrubtor_authority)
     {
         $db = $this->db;
@@ -167,39 +135,30 @@ class Canteen_master_model extends CI_Model
         $db->close();
         return $result;
     }
-
     public function insert_canteen_details($data)
     {
-        // print_r($data);die();
         $db = $this->db;
         $query = "CALL SP_INSERT_UPDATE_CANTEEN_DETAILS('{$data}')";
-
         $response = $db->query($query);
         $db->close();
         return $response->result();
     }
-
     public function update_canteen_details($data)
     {
         $db = $this->db;
-        $query = "CALL SP_INSERT_UPDATE_CANTEEN_DETAILS('{$data}')";
+        $query = "CALL SP_INSERT_UPDATE_CANTEEN_DETAILS('".$data."')";
         
         $response = $db->query($query);
         $db->close();
         return $response->result();
     }
-
     public function update_chairman_canteen_details($data)
     {
         $db = $this->db;
-        // $query = "CALL SP_INSERT_UPDATE_CANTEEN_DETAILS('$data')";
-        // return $query;
-        // $response = $db->query();
         $response = $db->query("CALL SP_UPDATE_CHAIRMAN_CANTEEN_DETAILS(?)", array($data));
         $db->close();
         return $response->result();
     }
-
     public function fetchEntityDetails($id)
     {
         $db = $this->db;
@@ -213,18 +172,12 @@ class Canteen_master_model extends CI_Model
         $store_id = $entity_result[0]->store_id;
         $state_id = $entity_result[0]->state;
         $userid = $entity_result[0]->chairman . "," . $entity_result[0]->supervisor . "," . $entity_result[0]->executive;
-        // $userid = $entity_result[0]->chairman;
-        // $column_name = $entity_result[0]->column_name;
-        // $table_name = $entity_result[0]->details_map_table;
-
         $city_list_query = "SELECT id,city_district_name FROM master_city_district WHERE stateid=?";
         $city_list_response = $db->query($city_list_query, array($state_id));
         $data['city_list'] = $city_list_response->result();
-
         $distributor_name_query = "SELECT id,entity_name as store_name from master_entities where id=?";
         $distributor_name_response = $db->query($distributor_name_query, array($store_id));
         $data['distributor_name_list'] = $distributor_name_response->result();
-
         $data['title'] = trans('edit_new_canteen');
         $data['mode'] = 'E';
         $data['state_record'] = $this->fetchState($db);
@@ -232,11 +185,9 @@ class Canteen_master_model extends CI_Model
         $data['user_details'] = $this->fetchUserDetails($db, $userid);
         $data['outlet_type_select_option_array'] = $this->fetchEntities($db);
         $data['battalion_unit_select_option_array'] = $this->battalionfetchEntities($db);
-
         $db->close();
         return $data;
     }
-
     public function fetchChairmanEntityDetails($id)
     {
         $db = $this->db;
@@ -250,18 +201,12 @@ class Canteen_master_model extends CI_Model
         $store_id = $entity_result[0]->store_id;
         $state_id = $entity_result[0]->state;
         $userid = $entity_result[0]->chairman . "," . $entity_result[0]->supervisor . "," . $entity_result[0]->executive;
-        // $userid = $entity_result[0]->chairman;
-        // $column_name = $entity_result[0]->column_name;
-        // $table_name = $entity_result[0]->details_map_table;
-
         $city_list_query = "SELECT id,city_district_name FROM master_city_district WHERE stateid=?";
         $city_list_response = $db->query($city_list_query, array($state_id));
         $data['city_list'] = $city_list_response->result();
-
         $distributor_name_query = "SELECT id,entity_name as store_name from master_entities where id=?";
         $distributor_name_response = $db->query($distributor_name_query, array($store_id));
         $data['distributor_name_list'] = $distributor_name_response->result();
-
         $data['title'] = trans('edit_new_canteen');
         $data['mode'] = 'E';
         $data['state_record'] = $this->fetchState($db);
@@ -269,31 +214,22 @@ class Canteen_master_model extends CI_Model
         $data['user_details'] = $this->fetchUserDetails($db, $userid);
         $data['outlet_type_select_option_array'] = $this->fetchEntities($db);
         $data['battalion_unit_select_option_array'] = $this->battalionfetchEntities($db);
-
         $db->close();
         return $data;
     }
-
     public function getUsersDetails($irlano)
     {
         $db = $this->db;
-        $query = "SELECT distinct ca.admin_id AS id,concat( ca.user_rank,'. ',ca.firstname,' - ',ca.username) AS name,ca.username 
+        $query = "SELECT distinct ca.admin_id AS id,concat(IFNULL(ca.user_rank,'N/A'),'. ',ca.firstname,' - ',ca.username) AS name,ca.username 
                   FROM ci_admin ca 
-                   WHERE ca.username like '%$irlano%' and  ca.firstname IS NOT NULL  AND ca.user_rank is NOT NULL";
-
+                   WHERE ca.username like '%$irlano%' and  ca.firstname IS NOT NULL";
         $response = $db->query($query);
         $db->close();
         $result = $response->result_array();
         $json = array();
-        // $result
-        // if (count($result) > 0) {
         foreach ($result as $value) {
             $json[] = array('id' => $value['id'], 'text' => $value['name']);
         }
-
-        // } else {
-        //     $json[] = array('id' => $irlano, 'text' => $irlano);
-        // }
         $db->close();
         return $json;
     }

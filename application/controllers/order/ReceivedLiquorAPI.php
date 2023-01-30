@@ -1,8 +1,6 @@
 <?php
-
 class ReceivedLiquorAPI extends MY_Controller
 {
-
     public function __construct()
     {
         parent::__construct();
@@ -10,8 +8,6 @@ class ReceivedLiquorAPI extends MY_Controller
         auth_check(); // check login auth
         // $this->rbac->check_module_access();
     }
-
-
     public function index()
     {
         $data['title'] = 'received_liquor';
@@ -19,13 +15,10 @@ class ReceivedLiquorAPI extends MY_Controller
         $this->load->view('order/received_liquor', $data);
         $this->load->view('admin/includes/_footer');
     }
-
     public function fetchReceivedLiquor()
     {
         $order_code = $this->input->post('order_code');
         $result = $this->received_model->fetchReceivedLiquor($order_code);
-        // if()
-        // print_r($result);
         if (count($result) > 0) {
             if ($result[0]["is_order_delivered"] == '0') {
                 echo '<h6 style="color:red"> Order is not dispatched Yet</h6>';
@@ -38,7 +31,6 @@ class ReceivedLiquorAPI extends MY_Controller
             echo '<h6 style="color:red"> No liquor found for the given order code </h6>';
         }
     }
-
     public function received_liquor()
     {
         $order_data = array(
@@ -48,11 +40,7 @@ class ReceivedLiquorAPI extends MY_Controller
             'damage_quantity_flag' => $this->input->post('damage_quantity_flag'),
             'entity_id' => $this->session->userdata('entity_id')
         );
-
         $response = $this->received_model->received_liquor(json_encode($order_data));
-        // print_r($response);
-
-
         echo json_encode($response);
     }
 }
