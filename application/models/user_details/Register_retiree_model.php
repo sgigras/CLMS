@@ -61,7 +61,7 @@ class Register_retiree_model extends CI_Model
     public function addRetireeData($data)
     {
         $db = $this->db;
-        $query = "CALL SP_ADD_UPDATE_RETIREE_DATA($data)";
+        $query = "CALL SP_ADD_UPDATE_RETIREE_DATA('{$data}')";
         $response = $db->query($query);
         $result = $response->result();
         $db->close();
