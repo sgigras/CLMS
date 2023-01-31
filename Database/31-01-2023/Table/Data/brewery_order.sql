@@ -1,0 +1,3 @@
+insert into itbp_clds.brewery_order (id, brewery_id, brewery_order_code, approval_status, approval_from, approved_by, approved_time, created_by, creation_time, modification_time, modified_by, remarks, entityid)
+values  (1, 19, '15S3LNMK', 'A', null, 1, '2023-01-30 18:48:29', 1547, '2023-01-30 18:33:39', '2023-01-30 18:48:29', 1, 'Approved', 1107),
+        (2, 19, '9K5KOJEK', 'A', null, 1547, '2023-01-30 23:10:20', 1547, '2023-01-30 23:04:07', '2023-01-30 23:10:20', 1547, 'Approved', 1108);
