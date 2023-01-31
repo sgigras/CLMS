@@ -39,19 +39,6 @@ extract($brewerysummary[0]);
   }
 </style>
 <!-- Content Wrapper. Contains page content -->
-<!-- <div class="content-wrapper"> -->
-<!-- Content Header (Page header) -->
-<div class="content-header">
-  <div class="container-fluid">
-    <div class="row mb-2">
-      <div class="col-sm-12">
-        <h1 class="m-0 text-dark animate__animated animate__backInDown">Invoice</h1>
-      </div><!-- /.col -->
-    </div><!-- /.row -->
-  </div><!-- /.container-fluid -->
-</div>
-<!-- /.content-header -->
-
 <!-- Main content -->
 <section class="content">
   <div class="container-fluid">
@@ -75,7 +62,7 @@ extract($brewerysummary[0]);
           </div>
           <div class="row">
             <div  class="col-12 text-left">
-                To,<br>Mr.Pernod Recard India(P)
+                To,<br><?php echo $brewery_name;?>
             </div>
           </div>
           <br/><br/>
@@ -97,17 +84,11 @@ extract($brewerysummary[0]);
                     <div class="card card-info card-outline " style="margin-bottom:0px !important">
             <div class="card-header" style="background-color: #007bff;">
                 <div style="display:flex;font-size: 1px !important;">
-                    <h3 class="card-title">Name &nbsp;</h3>
+                    <h3 class="card-title">Brewery Name &nbsp;</h3>
                     <h4 class="card-title"><?= '' . ' : ' . $brewery_name ?></h4>
                     &nbsp;
                     <h3 class="card-title" style="border-left: solid 1px; padding-left:15px;">Code &nbsp;</h3>
                     <h4 class="card-title"><?= '' . ' : ' . $brewery_order_code ?></h4>
-                    &nbsp;
-                    <h3 class="card-title" style="border-left: solid 1px; padding-left:15px;">By &nbsp;</h3>
-                    <h4 class="card-title"><?= '' . ' : ' . $requested_by ?></h4>
-                    &nbsp;
-                    <h3 class="card-title" style="border-left: solid 1px; padding-left:15px;">Status&nbsp;</h3>
-                    <h4 class="card-title"><?= '' . ' : ' . $approval_status ?></h4>
                 </div>
             </div>
             <div class="card-body p-0 mb-0">

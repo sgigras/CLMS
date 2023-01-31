@@ -1,8 +1,8 @@
 $(function() {
     //Initialize Select2 Elements
-    $('.select2').select2()
-    getListOfStates();
-    getListOfBrand();
+    $('.select2').select2() /
+        // getListOfStates();
+        getListOfBrand();
 })
 
 function getListOfStates() {
@@ -131,20 +131,21 @@ function getListOfBrand() {
             var htmlsnippet = "";
             htmlsnippet += '<div class="row" style="padding-left:20px">\n';
             for (const key in obj) {
-                if (key % 1 == 0 && (key != 0)) {
+                if (key % 1 == 2 && (key != 0)) {
                     htmlsnippet += '</div>\n';
                     htmlsnippet += '<div class="row" style="padding-left:20px" id="row">\n';
                 }
-                htmlsnippet += '              <div class="col-md-6 brandItemMain">\n' +
+                htmlsnippet += '        <div class="col-md-6 brandItemMain">\n' +
                     '                        <div class="pretty p-svg p-round p-jelly">\n' +
-                    '                            <input id="' + obj[key]['liquor_description_id'] + '" type="checkbox" />\n' +
-                    '                            <div class="state p-primary">\n' +
-                    '                                <!-- svg path -->\n' +
-                    '                                <svg class="svg svg-icon" viewBox="0 0 20 20">\n' +
-                    '                                    <path d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z" style="stroke: white;fill:white;"></path>\n' +
-                    '                                </svg>\n' +
-                    '                                <label class="brandItem">' + obj[key]['brand'] + '(' + obj[key]['liquor_type'] + ') < /label>\n' +
-                    '                            </div>\n' +
+                    '                            <div class="state p-primary">\n';
+
+                htmlsnippet += '                 <input id="' + obj[key]['liquor_description_id'] + '" type="checkbox" />\n';
+                if (obj[key]['brand'] == obj[key]["liquor_description"]) {
+                    htmlsnippet += '<label style="font-size: 15px;" class="brandItem">' + obj[key]['brand'] + '(' + obj[key]['liquor_type'] + ')</label>\n';
+                } else {
+                    htmlsnippet += '<label style="font-size: 15px;" class="brandItem">' + obj[key]['brand'] + " " + obj[key]['liquor_description'] + '(' + obj[key]['liquor_type'] + ')</label>\n';
+                }
+                htmlsnippet += '                 </div>\n' +
                     '                        </div>\n' +
                     '                    </div>\n';
             }

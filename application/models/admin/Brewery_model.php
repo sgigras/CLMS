@@ -214,11 +214,11 @@ class Brewery_model extends CI_Model
 				mt.entity_type AS canteen_club,
 				FN_GET_USER_WITH_RANK_AND_IRLA(me.chairman) AS chairman,
 				FN_GET_USER_WITH_RANK_AND_IRLA(me.supervisor) AS supervisor,
-				FN_GET_USER_WITH_RANK_AND_IRLA(ME.executive) executive
+				FN_GET_USER_WITH_RANK_AND_IRLA(me.executive) executive
 				FROM
 					master_entities AS me
 					INNER JOIN
-					master_entity_type AS mt ON me.entity_type=mt.id AND mt.id IN (2,4,5)
+					master_entity_type AS mt ON me.entity_type=mt.id AND mt.id IN (1)
 				";
 		$response = $this->db->query($query);
 		return $response->result_array();
