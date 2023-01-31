@@ -124,9 +124,9 @@ class BreweryMaster extends MY_Controller
             $data['brewery_statemappedlist'] = $this->brewery_model->getBreweryMappedList($breweryid);
         }
         $data['title'] = trans('brewery_state_mapping');
-        $data['brewerylist'] = $this->brewery_model->getBreweryList();
-        $data['depotlist'] = $this->brewery_model->getDepotName();
-        $data['selectbrewery'] = $this->brewery_model->getAllBrewery();
+        // $data['brewerylist'] = $this->brewery_model->getBreweryList();
+        // $data['depotlist'] = $this->brewery_model->getDepotName();
+        // $data['selectbrewery'] = $this->brewery_model->getAllBrewery();
         $this->load->view('admin/includes/_header');
         $this->load->view('admin/brewery/state_mapping_view', $data);
         $this->load->view('admin/includes/_footer');

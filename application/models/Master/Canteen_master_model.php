@@ -121,7 +121,7 @@ class Canteen_master_model extends CI_Model
     public function battalionfetchEntities($db)
     {
         $db = $this->db;
-        $query = "SELECT id,posting_unit from bsf_posting_unit";
+        $query = "SELECT id,UnitName posting_unit from itbp_posting_unit";
         $response = $db->query($query);
         $result = $response->result();
         return $result;
