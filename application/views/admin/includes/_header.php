@@ -72,6 +72,10 @@
         .select2-invalid-border {
             border-color: #dc3545 !important;
         }
+        .control-sidebar-dark
+        {
+            display:none;
+        }
     </style>
 </head>
 <body class="hold-transition sidebar-mini <?= (isset($bg_cover)) ? 'bg-cover' : '' ?> p-0">

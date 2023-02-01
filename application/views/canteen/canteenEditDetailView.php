@@ -1,14 +1,13 @@
 <!-- Content Wrapper. Contains page content -->
 <?php
-// echo '<pre>';
-// print_r($user_details);
-// die;
 $resultArray = (isset($userlist)) ? $userlist[0] : new stdClass;
 $city_select = (isset($city_select_array)) ? $city_select_array : array();
 $entityttype = (isset($outlet_type_select_option_array)) ? $outlet_type_select_option_array : array();
 $distributor_name_select_array = (isset($distributor_name_list)) ? $distributor_name_list : array();
 $user_details = (isset($user_details)) ? $user_details : array();
-$ID = getValue('id', $user_details)
+$ID = getValue('id', $user_details);
+$entity_type = getValue('entity_type', $user_details);
+$distributor_entity_id = trim(getValue('authorised_distributor_entity_type_id', $user_details));
 ?>
 <!--<div class="content-wrapper" style="margin-top: 55px;min-height: 580.08px !important;">-->
 <!-- Main content -->
@@ -67,14 +66,15 @@ $ID = getValue('id', $user_details)
                 <div class="col-6">
                     <?php $this->load->view('master/select_field', array("field_id" => "select_supervisor", "CSS_CLASS" => "select_canteen_user", "label" => "supervisor", "place_holder" => "Select a supervisor", "option_record" => $userlist, "option_value" => "admin_id", "option_text" => "name", "selected_value" => getValue('supervisor', $user_details))); ?>
                 </div>
-                <?php if (isset($this->user_details->authorised_distributor_entity_type_id) && $this->user_details->authorised_distributor_entity_type_id != 0){?>
+                <?php if (isset($entity_type) && $entity_type != 1){?>
                 <div class="col-6" id="distribute_authority">
                     <?php $this->load->view('master/select_field', array("field_id" => "select_distrubuting_authority", "label" => "distrubuting_authority", "place_holder" => "Select a distributor authority", "option_record" => $distributor_authority_record, "option_value" => "id", "type" => "hidden", "option_text" => "distributor_authority", "selected_value" => getValue('authorised_distributor', $user_details))); ?>
                 </div>
                 <?php }?>
-                <?php if (isset($this->user_details->authorised_distributor) && $this->user_details->authorised_distributor != 0){ ?>
-                <div class="col-6" id="distrubuting_authority_1" style="display: none;">
-                    <?php $this->load->view('master/select_field', array("field_id" => "select_distributor_name", "label" => "distributor_name", "place_holder" => "Select a distributor name", "option_record" => $distributor_name_select_array, "option_value" => "id", "option_text" => "name", "selected_value" => getValue('store_id', $user_details))); ?>
+                <input type="hidden" name="hdnselect_distributor_name" id="hdnselect_distributor_name" value="<?php echo $distributor_entity_id;?>"/>
+                <?php if (isset($entity_type) && $entity_type != 1){ ?>
+                <div class="col-6" id="distrubuting_authority_1">
+                    <?php $this->load->view('master/select_field', array("field_id" => "select_distributor_name", "label" => "distributor_name", "place_holder" => "Select a distributor name", "option_record" => $distributor_name_select_array, "option_value" => "id", "option_text" => "name", "selected_value" => $distributor_entity_id)); ?>
                 </div> 
                 <?php } ?>
                 <div class="form-group">

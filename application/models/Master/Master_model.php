@@ -11,7 +11,7 @@ class Master_model extends CI_Model {
 // function to get tax list from database table-----------
 	public function fetchTaxnameList(){
 		$db = $this->db;
-		$query =  "SELECT mt.id, mt.tax_name, tc.tax_category, DATE_FORMAT(mt.creation_time, '%d-%m-%Y') as creation_time, mt.created_by FROM master_tax as mt left join tax_category as tc on mt.tax_category_id = tc.id";
+		$query =  "CALL SP_GET_TAX_LIST()";
 		$response= $db->query($query);
 		$result = $response->result();
 		$db->close();
@@ -67,9 +67,8 @@ class Master_model extends CI_Model {
 
 	public function fetchTaxDetails($id){
 		$db = $this->db;
-		$tax_query =  "SELECT mt.id, mt.tax_name, tc.tax_category, mt.creation_time, mt.created_by FROM master_tax as mt left join tax_category as tc on mt.tax_category_id = tc.id where mt.id = ?";
-		$tax_response = $db->query($tax_query, array($id));
-
+		$tax_query =  "CALL SP_GET_TAX_MASTER_DETAIL({$id});";
+		$tax_response = $db->query($tax_query);
 		$tax_result = $tax_response->result();
 		$db->close();
 		return $tax_result;

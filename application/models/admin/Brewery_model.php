@@ -208,19 +208,10 @@ class Brewery_model extends CI_Model
 	//Fetch Depot Name from master_entites table
 	function getDepotName()
 	{
-		$query = "SELECT
-				me.id,
-				me.entity_name,
-				mt.entity_type AS canteen_club,
-				FN_GET_USER_WITH_RANK_AND_IRLA(me.chairman) AS chairman,
-				FN_GET_USER_WITH_RANK_AND_IRLA(me.supervisor) AS supervisor,
-				FN_GET_USER_WITH_RANK_AND_IRLA(me.executive) executive
-				FROM
-					master_entities AS me
-					INNER JOIN
-					master_entity_type AS mt ON me.entity_type=mt.id AND mt.id IN (1)
-				";
-		$response = $this->db->query($query);
+		$db = $this->db;
+		$query = "CALL GET_DEPOT_BRAND_MAPPING_LIST()";
+		$response = $db->query($query);
+		$db->close();
 		return $response->result_array();
 	}
 
@@ -236,10 +227,6 @@ class Brewery_model extends CI_Model
 		$query = $this->db->get();
 		return $query->result_array();
 	}
-
-
-
-
 
 	//Fetch Brewery Name from master_brewery table
 	function getBreweryName()
@@ -271,12 +258,14 @@ class Brewery_model extends CI_Model
 	function getBreweryList()
 	{
 
-		$this->db->select('MB.id,MB.brewery_name,MB.address,MB.contact_person_name,MB.mobile_no,MB.mail_id, group_concat(DISTINCT MS.state) as state,group_concat(DISTINCT ME.entity_name) as serving_entity');
-		$this->db->from('master_brewery as MB');
-		$this->db->join("master_state as MS", "find_in_set(MS.id,MB.state)<> 0", "left", false);
-		$this->db->join("master_entities as ME", "find_in_set(ME.id,MB.serving_entity)<> 0", "left", false);
-		$this->db->group_by('MB.id');
-		$query = $this->db->get();
+		// $this->db->select('MB.id,MB.brewery_name,MB.address,MB.contact_person_name,MB.mobile_no,MB.mail_id, group_concat(DISTINCT MS.state) as state,group_concat(DISTINCT ME.entity_name) as serving_entity');
+		// $this->db->from('master_brewery as MB');
+		// $this->db->join("master_state as MS", "find_in_set(MS.id,MB.state)<> 0", "left", false);
+		// $this->db->join("master_entities as ME", "find_in_set(ME.id,MB.serving_entity)<> 0", "left", false);
+		// $this->db->group_by('MB.id');
+		$db = $this->db;
+		$query = "CALL SP_GET_BREWERY_list()";
+		$query = $db->query();
 		return $query->result_array();
 	}
 
@@ -326,16 +315,17 @@ class Brewery_model extends CI_Model
 	//Update
 	public function fetchBreweryDetails($id)
 	{
-		$this->db->select('MB.id,MB.brewery_name,MB.address,MB.contact_person_name,MB.mobile_no,MB.mail_id, MB.state,MB.serving_entity,MB.isactive');
-		$this->db->from('master_brewery as MB');
-		$this->db->join("master_state as MS", "find_in_set(MS.id,MB.state)<> 0", "left", false);
-		$this->db->join("master_entities as ME", "find_in_set(ME.id,MB.serving_entity)<> 0", "left", false);
-		$this->db->where('MB.id', $id);
-		//$this->db->group_by('MB.id');
-		$query = $this->db->get();
-		$brewery_result = $query->result();
-
-		$data['brewery_data'] = $brewery_result;
+		$db = $this->db;
+		// $this->db->select('MB.id,MB.brewery_name,MB.address,MB.contact_person_name,MB.mobile_no,MB.mail_id, MB.state,MB.serving_entity,MB.isactive');
+		// $this->db->from('master_brewery as MB');
+		// $this->db->join("master_state as MS", "find_in_set(MS.id,MB.state)<> 0", "left", false);
+		// $this->db->join("master_entities as ME", "find_in_set(ME.id,MB.serving_entity)<> 0", "left", false);
+		// $this->db->where('MB.id', $id);
+		// //$this->db->group_by('MB.id');
+		// $query = $this->db->get();
+		$query = "CALL SP_GET_BREWERY_DETAIL('{$id}')";
+		$brewery_result = $db->query();
+		$data['brewery_data'] = $brewery_result->result();
 		$state = $brewery_result[0]->state;
 
 		//CONVERTIN COMMA SEPARATED STATE IDS TO ARRAY
@@ -452,11 +442,7 @@ class Brewery_model extends CI_Model
 	{
 
 		$db = $this->db;
-		$query =  "SELECT lem.id,Concat(ld.brand,' ',ld.liquor_description,' ',ld.liquor_type, ' -- ',lem.selling_price) as liquor
-        FROM liquor_entity_mapping lem
-        INNER JOIN liquor_details ld
-        ON lem.liquor_description_id=ld.liquor_description_id
-        WHERE lem.entity_id = $entity_id";
+		$query = "CALL SP_GET_BREWERY_LIQUOR_LIST('{$entity_id}')";
 		$response = $db->query($query);
 		$result = $response->result();
 		$db->close();
@@ -477,39 +463,7 @@ class Brewery_model extends CI_Model
 	function fetchOrderRequested($order_id)
 	{
 		$db = $this->db;
-		$query = "SELECT
-					DISTINCT
-					bo.brewery_order_code,
-					bd.brewery_order_id,
-					bm.brewery_name,
-					ca.firstname as requested_by,
-					bo.approval_status,
-					bo.brewery_order_code,
-					(select firstname from ci_admin where admin_id=bo.approved_by) as approved_by,
-					bo.approved_time,
-					bo.creation_time,
-					bo.approval_status,
-					lm.liquor_description,
-					lb.brand,
-					lt.liquor_type,
-					bd.total_quantity,
-					bd.liquor_base_price,
-					bd.total_purchase_price
-			FROM
-					brewery_order_liquor_details as bd
-						INNER JOIN brewery_order bo
-							ON bo.id = bd.brewery_order_id
-						INNER JOIN ci_admin ca
-							ON ca.admin_id=bo.created_by
-						INNER JOIN master_brewery bm
-							ON bm.id=bo.brewery_id
-						INNER JOIN liquor_description lm
-							ON lm.id=bd.liquor_description_id
-						INNER JOIN liquor_brand lb
-							ON lb.id=lm.liquor_brand_id
-						INNER JOIN liquor_type lt
-                    		ON lt.id=lm.liquor_type_id
-			WHERE bo.brewery_order_code = '".$order_id."'";
+		$query = "CALL SP_GET_DEPT_BREWERY_ORDER_FOR_PRINT('".$order_id."')";
 		$response = $db->query($query);
 		$db->close();
 		$result = $response->result_array();
@@ -519,25 +473,7 @@ class Brewery_model extends CI_Model
 	function fetchOrderList()
 	{
 		$db = $this->db;
-		$query = "SELECT
-        DISTINCT
-		bd.brewery_order_id,
-		bm.brewery_name,
-		ca.firstname as requested_by,
-        bo.approval_status,
-        bo.brewery_order_code,
-        (select firstname from ci_admin where admin_id=bo.approved_by) as approved_by,
-		bo.approved_time,
-        bo.creation_time,
-		bo.approval_status
-	FROM
-		brewery_order_liquor_details as bd
-			INNER JOIN brewery_order bo
-				ON bo.id = bd.brewery_order_id
-			INNER JOIN ci_admin ca
-				ON ca.admin_id=bo.created_by
-			INNER JOIN master_brewery bm
-				ON bm.id=bo.brewery_id";
+		$query = "CALL SP_GET_DEPO_SUBDEPRT_ORDER_LIST()";
 		$response = $db->query($query);
 		$db->close();
 		$result = $response->result_array();
@@ -547,25 +483,7 @@ class Brewery_model extends CI_Model
 	function loadorderToBrewerylist()
 	{
 		$db = $this->db;
-		$query = "SELECT
-        DISTINCT
-		bd.brewery_order_id,
-		bm.brewery_name,
-		ca.firstname as requested_by,
-        bo.approval_status,
-        bo.brewery_order_code,
-        (select firstname from ci_admin where admin_id=bo.approved_by) as approved_by,
-		bo.approved_time,
-        bo.creation_time,
-		bo.approval_status
-	FROM
-		brewery_order_liquor_details as bd
-			INNER JOIN brewery_order bo
-				ON bo.id = bd.brewery_order_id
-			INNER JOIN ci_admin ca
-				ON ca.admin_id=bo.created_by
-			INNER JOIN master_brewery bm
-				ON bm.id=bo.brewery_id order by bo.creation_time desc";
+		$query = "CALL SP_GET_DEPO_SUBDEPRT_ORDER_LIST()";
 		$response = $db->query($query);
 		$db->close();
 		$result = $response->result_array();

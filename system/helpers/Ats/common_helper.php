@@ -1,5 +1,4 @@
 <?php
-
 function CheckLogin($data) {
     $CI = & get_instance();
     $user_logged_in = $CI->session->userdata('user_logged_in');
@@ -37,7 +36,6 @@ function CheckLogin($data) {
         }
     }
 }
-
 function JsonDataFilter($data) {
     $filteredData = array_filter($data, function ($el) {
         $filter = array($GLOBALS["JsonDataFilterValue"]);
@@ -45,7 +43,6 @@ function JsonDataFilter($data) {
     });
     return $filteredData;
 }
-
 function MenuJsonDataFilter($data) {
     $filteredData = array_filter($data, function ($el) {
         $filter = array($GLOBALS["LEFT_SIDE_BAR_MENU"]);
@@ -53,29 +50,23 @@ function MenuJsonDataFilter($data) {
     });
     return $filteredData;
 }
-
 function getLookupValue($result, $lookup_code) {
     return array_key_exists($lookup_code, $result) ? $result[$lookup_code] : (array_key_exists(strtoupper($lookup_code), $result) ? $result[strtoupper($lookup_code)] : "");
 }
-
 function getValue($id, $result) {
-    return property_exists($result, $id) ? $result->$id : (property_exists($result, strtoupper($id)) ? $result->strtoupper($id) : "");
+    return property_exists($result, $id) ? trim($result->$id) : (property_exists($result, strtoupper($id)) ? $result->strtoupper($id) : "");
 }
-
 function getDateValue($result, $id) {
     return array_key_exists($id, $result) ? date("d-m-Y", strtotime($result[$id])) : (array_key_exists(strtoupper($id), $result) ? date("d-m-Y", strtotime($result[strtoupper($id)])) : date("d-m-Y"));
     //return date("m-d-Y");
 }
-
 function getDateTimeValue($result, $id) {
     return array_key_exists($id, $result) ? date("Y-m-d H:m:s", strtotime($result[$id])) : (array_key_exists(strtoupper($id), $result) ? date("Y-m-d H:m:s", strtotime($result[strtoupper($id)])) : date("Y-m-d H:m:s"));
     //return date("m-d-Y");
 }
-
 function getCheckedValue($result, $id, $value) {
     return array_key_exists($id, $result) ? ($result[$id] == $value ? "checked" : "") : (array_key_exists(strtoupper($id), $result) ? ($result[strtoupper($id)] == $value ? "checked" : "") : "");
 }
-
 function getImage($filename, $foldername) {
     if ($filename != "") {
         $filepath = UPLOAD_PATH . $foldername . "/" . $filename;
@@ -89,7 +80,6 @@ function getImage($filename, $foldername) {
     }
     return $filepath;
 }
-
 function uploadFileName($data, $keyName, $foldername, $concat_string = "") {
     if ($_FILES[$keyName]['name'] != "") {
         $CI = & get_instance();
@@ -112,7 +102,6 @@ function uploadFileName($data, $keyName, $foldername, $concat_string = "") {
     }
     return $data;
 }
-
 function checkselectedvalue($dataarray, $val) {
     $flag = false;
     for ($i = 0; $i < count($dataarray); $i++) {
@@ -121,7 +110,6 @@ function checkselectedvalue($dataarray, $val) {
     }
     return false;
 }
-
 function timeDifference($SECS_STOPG) {
     if ($days = intval((floor($SECS_STOPG / 86400))))
         $SECS_STOPG = $SECS_STOPG % 86400;
@@ -131,66 +119,52 @@ function timeDifference($SECS_STOPG) {
         $SECS_STOPG = $SECS_STOPG % 60;
     if ($seconds = intval((floor($SECS_STOPG / 1))))
         $SECS_STOPG = $SECS_STOPG % 1;
-
     $SECS_STOPG = intval($SECS_STOPG);
     $str_day = $str_hour = $str_minute = $str_second = "";
-
     if ($days == 1)
         $str_day = $days . " Day";
     else if ($days > 1)
         $str_day = $days . " Days";
-
     if ($hours == 1)
         $str_hour = $hours . " Hour";
     else if ($hours > 1)
         $str_hour = $hours . " Hours";
-
     if ($minutes == 1)
         $str_minute = $minutes . " Minute";
     else if ($minutes > 1)
         $str_minute = $minutes . " Minutes";
-
     if ($seconds == 1)
         $str_second = $seconds . " Second";
     else if ($seconds > 1)
         $str_second = $seconds . " Seconds";
-
     return $str_day . " " . $str_hour . " " . $str_minute;
 }
-
 function epochsecDifference($START_TIME, $END_TIME) {
     //Seperate all values of the start date.
     $st_arr = explode(' ', $START_TIME);
     $st_arr1 = explode('-', $st_arr[0]);
     $st_arr2 = explode(':', $st_arr[1]);
-
     $st_year = $st_arr1[0];
     $st_month = $st_arr1[1];
     $st_day = $st_arr1[2];
     $st_hour = $st_arr2[0];
     $st_min = $st_arr2[1];
     $st_sec = $st_arr2[2];
-
     //Seperate all values of the end date.
     $end_arr = explode(' ', $END_TIME);
     $end_arr1 = explode('-', $end_arr[0]);
     $end_arr2 = explode(':', $end_arr[1]);
-
     $end_year = $end_arr1[0];
     $end_month = $end_arr1[1];
     $end_day = $end_arr1[2];
     $end_hour = $end_arr2[0];
     $end_min = $end_arr2[1];
     $end_sec = $end_arr2[2];
-
     $epoch_1 = @mktime($end_hour, $end_min, $end_sec, $end_month, $end_day, $end_year);
     $epoch_2 = @mktime($st_hour, $st_min, $st_sec, $st_month, $st_day, $st_year);
-
     $diff_seconds = $epoch_1 - $epoch_2;
-
     return $diff_seconds;
 }
-
 function ARRAYTOSTRING($JSON) {
     $coalplanningStr = "";
     $ii = 0;
@@ -208,7 +182,6 @@ function ARRAYTOSTRING($JSON) {
     }
     return $coalplanningStr;
 }
-
 function logToFile($filename, $msg) {
     // open file
     $fd = fopen($filename, "a");
@@ -219,7 +192,6 @@ function logToFile($filename, $msg) {
     // close file
     fclose($fd);
 }
-
 function getcurlresponse($URL) {
     $headers = array('Accept: application/text', 'Content-Type: application/text');
     $ch = curl_init($URL);
@@ -235,7 +207,6 @@ function getcurlresponse($URL) {
     curl_close($ch);  // Seems like good practice
     return $result;
 }
-
 //function SEND_PUSH_NOTIFICATION($USER_GCMID, $TITLE, $MESSAGE, $NOTIF_DATA) 
 //{
 //    define('API_ACCESS_KEY', 'AIzaSyAU8y0xALjCssvcDJ0I0aOwYD3TX9O8GSg');//BALCO PROJECT    
@@ -284,7 +255,6 @@ function getcurlresponse($URL) {
 ////    echo "</pre>";
 ////    return '..SENT>>'.$TITLE;
 //}
-
 function ChangePasswordMail($Username, $Password, $Firstname, $userid) {
     $CI = & get_instance();
     $CI->load->library('Ats/Atsuser');

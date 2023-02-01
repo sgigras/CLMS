@@ -133,9 +133,14 @@ $(document).ready(function() {
             }
         });
     });
+
     if ($("#select_distrubuting_authority").length > 0 && $("#select_distrubuting_authority").val().trim() != "") {
         console.log($("#select_distrubuting_authority").val().trim());
         $("#select_distrubuting_authority").trigger("change");
+        if ($("#hdnselect_distributor_name").length > 0) {
+            var select_distributor_name_value = ($("#hdnselect_distributor_name").length > 0 ? $("#hdnselect_distributor_name").val() : "")
+            $("#select_distributor_name").val(select_distributor_name_value)
+        }
     }
     $("#select_state").change(function() {
         checkInputEmpty("select_state", "Kindly select a state");

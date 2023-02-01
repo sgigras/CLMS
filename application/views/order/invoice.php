@@ -48,8 +48,8 @@ extract($brewerysummary[0]);
               <div class="col-12 text-center">
                 <div id="printableArea">
                 <div style="margin-top: 50px;text-align:center">
-                <h5>DTE General</h5>
-                <h5>Block 2 CGO Complex</h5>
+                <h5><?php echo $depot_name;?></h5>
+                <h5><?php echo $depot_address;?></h5>
             </div>
             <div class="row">
               <div  class="col-6 text-left">
@@ -63,6 +63,8 @@ extract($brewerysummary[0]);
           <div class="row">
             <div  class="col-12 text-left">
                 To,<br><?php echo $brewery_name;?>
+                <br/>
+                <?php echo $brewer_address;?>
             </div>
           </div>
           <br/><br/>

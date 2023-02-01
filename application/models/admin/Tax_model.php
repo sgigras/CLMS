@@ -1,20 +1,16 @@
 <?php
 class Tax_model extends CI_Model
 {
-
 	public function __construct()
 	{
 		parent::__construct();
 	}
-
-
 	function getTaxes()
 	{
 		$this->db->from('master_tax');
 		$query = $this->db->get();
 		return $query->result_array();
 	}
-
 	function getTaxTypeId()
 	{
 		$this->db->select('tax_type_id');
@@ -22,16 +18,12 @@ class Tax_model extends CI_Model
 		$query = $this->db->get();
 		return $query->result_array();
 	}
-
-
-
 	function getStates()
 	{
 		$this->db->from('master_state');
 		$query = $this->db->get();
 		return $query->result_array();
 	}
-
 	function getDepots()
 	{
 		$this->db->from('master_entities');
@@ -39,7 +31,6 @@ class Tax_model extends CI_Model
 		$query = $this->db->get();
 		return $query->result_array();
 	}
-
 	function getLiquor_Brands()
 	{
 		$this->db->select('liquor_description_id AS id,CONCAT(brand," ",liquor_type," ",liquor_description," ",bottle_size," ",liquor_ml," ml ") AS liquor_name');
@@ -53,17 +44,14 @@ class Tax_model extends CI_Model
 		$query = $this->db->get();
 		return $query->result_array();
 	}
-
 	function getBSFMarginData($stateid, $liquortypeid)
 	{
 		$query = $this->db->get_where('states_liquor_margin', array('stateid' => $stateid, 'liquortypeid' => $liquortypeid));
 		return $query->result_array();
 	}
-
 	function mapnewBSFMarginData($stateid, $liquortypeid, $priceperbottle)
 	{
 		$query = $this->db->get_where('states_liquor_margin', array('stateid' => $stateid, 'liquortypeid' => $liquortypeid));
-
 		if ($query->num_rows() > 0) {
 			$this->db->where(array('stateid' => $stateid, 'liquortypeid' => $liquortypeid));
 			$this->db->update('states_liquor_margin', array('amount' => $priceperbottle));
@@ -74,15 +62,13 @@ class Tax_model extends CI_Model
 			return true;
 		}
 	}
-
 	public function fetchEntities()
 	{
-		$query = "SELECT id,entity_type from master_entity_type where entity_type IN ('Depot','Sub-Depot')";
+		$query = "SELECT id,entity_type from master_entity_type where id IN (1,2)";
 		$response = $this->db->query($query);
 		$result = $response->result();
 		return $result;
 	}
-
 	public function fetchTaxCategories(){
 		$query = "select id,tax_category from tax_category";
 		$response = $this->db->query($query);
@@ -95,46 +81,17 @@ class Tax_model extends CI_Model
 		$result = $response->result();
 		return $result;
 	}
-
-
 	//Fetches states mapped with tax
 	function getliquortaxMappedList($liquoridlist, $entity_id)
 	{
 		$liquoridlist = $this->db->escape($liquoridlist);
-		// print($statesidlist);
 		$liquoridlist = str_replace("'", "", $liquoridlist);
-		// print($liquoridlist);
-		// die();
-		// $taxid = $this->db->escape(explode(',', $taxid));
-		// $liquoridlist = $this->db->escape(explode(',', $liquoridlist));
 		$liquoridlist = array_map('intval', explode(',', $liquoridlist));
 		$liquoridlist = implode("','", $liquoridlist);
-		// $fetchtaxmapping = "SELECT ms.id,ms.state,IFNULL((SELECT sm.tax_percent from states_taxes_mapping sm where sm.taxid= $taxid and sm.stateid=ms.id  ),'0') as interest_percent,
-		// (SELECT sm.isactive from states_taxes_mapping sm where sm.taxid= $taxid and sm.stateid=ms.id  ) as isactive,(SELECT sm.id from states_taxes_mapping sm where sm.taxid= $taxid and sm.stateid=ms.id  ) as mappingid
-		// FROM master_state ms where ms.id in('$statesidlist')";
-
-		$fetchtaxmapping = "SELECT mt.id as taxid,mtlm.id as mappingid,tc.id as tax_category_id,mtlm.liquor_description_id,concat(mt.tax_name,' - ',tc.tax_category) as tax_name,mtlm.tax_percent,mtlm.isactive,mtlm.tax_type_id FROM master_tax mt inner join tax_category tc on tc.id = mt.tax_category_id LEFT JOIN master_tax_liquor_mapping mtlm ON mt.id = mtlm.tax_id AND mtlm.liquor_description_id in('9') AND mtlm.entity_id='$entity_id' and mt.entity_type=(SELECT entity_type FROM master_entities WHERE id='$entity_id') where tc.id !=1 order by tc.id;";
+		$fetchtaxmapping = "CALL SP_GET_ENTITY_TAX_LIST('{$liquoridlist}','{$entity_id}')";
 		$fetchtaxmappingresponse = $this->db->query($fetchtaxmapping);
-
-		
-
-
-
-		// $this->db->select('ST.id as mappingid,MS.state,MT.tax_name,ST.tax_amount');
-		// $this->db->from('states_taxes_mapping AS ST');
-		// $this->db->join('master_state as MS', 'MS.id = ST.stateid', 'left');
-		// $this->db->join('master_tax as MT', 'MT.id = ST.taxid', 'left');
-		// $this->db->where_in('taxid', $taxid);
-		// $this->db->where_in('stateid', $statesidlist);
-		// $query = $this->db->get();
-		// return $query;
-		// $querypreview=$this->db->last_query();
-		// print_r($fetchtaxmappingresponse);
-		// die();
-		// return $query->result_array();
 		return $fetchtaxmappingresponse->result_array();
 	}
-
 	//ENABLE DISABLE MAPPING OF TAX WITH STATE
 	function change_status()
 	{
@@ -142,7 +99,6 @@ class Tax_model extends CI_Model
 		$this->db->where('id', $this->input->post('id'));
 		$this->db->update('master_tax_liquor_mapping');
 	}
-
 	//MAP NEW TAXES TO STATE
 	public function addTaxToLiquor($data)
 	{
@@ -154,8 +110,6 @@ class Tax_model extends CI_Model
 			return true;
 		}
 	}
-
-
 	function updateTaxToLiquor($data)
 	{
 		$this->db->set('tax_percent', $data['tax_percent']);

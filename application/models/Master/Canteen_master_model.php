@@ -147,7 +147,8 @@ class Canteen_master_model extends CI_Model
     {
         $db = $this->db;
         $query = "CALL SP_INSERT_UPDATE_CANTEEN_DETAILS('".$data."')";
-        
+        echo $query;
+        die;
         $response = $db->query($query);
         $db->close();
         return $response->result();

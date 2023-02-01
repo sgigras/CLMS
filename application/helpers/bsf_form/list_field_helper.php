@@ -23,7 +23,7 @@ define("RETIREE_VERIFICATION_STATUS", serialize(array("canteen_name:entity_name"
 
 define("LIQUOR_BRAND_MASTER", serialize(array("liquor_brand:liquor_brand")));
 define("USER_DETAILS_TABLE", serialize(array("irla_no:irla", "name:name", "mobile_no:mobile_no", "date_of_birth:date_of_birth", "rank:rank", "present_appointment:present_appoitment", "status:status", "location_name:location_name", "district_name:district_name", "state_name:state_name", "email_id:email_id", "creation_time:creation_time", "posting_unit:posting_unit", "frontier:frontier", "registration_status:registration_status")));
-define("TAX_MASTER", serialize(array("tax_name:tax_name", "tax_category:tax_category")));
+define("TAX_MASTER", serialize(array("tax_name:tax_name", "tax_category:tax_category", "entity_type:entity_type")));
 define("ALCOHOL_MASTER", serialize(array("liquor_type:liquor_type")));
 define("CITY_MSTER", serialize(array("city_name:city_district_name", "state:state")));
 define("ALCOHOL_MM_MASTER", serialize(array("alcohol_quantity_in_mm:liquor_ml")));

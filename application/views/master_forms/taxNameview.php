@@ -1,12 +1,5 @@
-<!-- Author: SUJIT N. MISHRA
-Created on:23/10/2021
-Scope: Tax master view
-Source:
--->
 <?php
-
 $resultArray = (isset($tax_name)) ? $tax_name : new stdClass;
-
 ?>
 <section class="content">
     <div class="card card-default">
@@ -40,7 +33,6 @@ $resultArray = (isset($tax_name)) ? $tax_name : new stdClass;
             echo form_open(base_url($redirect_url), 'class="form-horizontal"');
             ?>
             <div class="row">
-
                 <div class="col-6">
                     <?php $this->load->view('master/alpha_numeric_space_field', array("field_id" => "tax_name", "label" => "tax_name", "max_length" => "50", "place_holder" => "Enter tax name", "name" => "tax_name", "value" => getValue('tax_name', $resultArray))); ?>
                 </div>
@@ -50,8 +42,6 @@ $resultArray = (isset($tax_name)) ? $tax_name : new stdClass;
                 <div class="col-6">
                     <?php $this->load->view('master/select_field', array("field_id" => "tax_category", "label" => "select_tax_category", "place_holder" => "Select Tax Category", "option_record" => $outlet_type_select_option_array1, "option_value" => "id", "option_text" => "tax_category", "selected_value" => getValue('tax_category', $resultArray))); ?>
                 </div>
-
-
             </div>
             <div class="form-group">
                 <div class="col-md-12">
@@ -60,7 +50,6 @@ $resultArray = (isset($tax_name)) ? $tax_name : new stdClass;
             </div>
             <?php echo form_close(); ?>
         </div>
-
     </div>
 </section>
 <script>
@@ -72,4 +61,3 @@ $resultArray = (isset($tax_name)) ? $tax_name : new stdClass;
     });
 </script>
 <script src="<?= base_url() ?>assets/js/module/common/validation.js"></script>
-<script src="<?= base_url() ?>assets/js/module/common/citymaster.js"></script>
